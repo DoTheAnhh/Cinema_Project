@@ -1,244 +1,140 @@
-import { useEffect, useState } from "react"
-import { Moviee, MovieType } from "../type"
-import { API, LOCALHOST, REQUEST_MAPPING } from "../../APIs/typing"
-import axios from "axios"
-import { Col, Input, Pagination, Row, Select, Space, Table, Tag, DatePicker } from "antd"
-import { Dayjs } from "dayjs"
-const { RangePicker } = DatePicker;
-
+import React, { useEffect, useState } from 'react'
+import { MovieType } from '../type';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { API, LOCALHOST, REQUEST_MAPPING } from '../../APIs/typing';
+import { Button, Form, Input, message, Popconfirm, Select } from 'antd';
 
 const Movie: React.FC = () => {
 
-  const [movies, setMovies] = useState<Moviee[]>([])
+    const [movieName, setMovieName] = useState<string>("");
+    const [banner, setBanner] = useState<string>("");
+    const [duration, setDuration] = useState<number>(0);
+    const [releaseDate, setReleaseDate] = useState<Date | string>("");
+    const [movieType, setMovieType] = useState<MovieType[] | null>([]);
 
-  const [searchTerm, setSearchTerm] = useState<string>("")
+    const [movieTypes, setMovieTypes] = useState<MovieType[]>([])
 
-  const [movieType, setMovieType] = useState<string>("")
+    const navigator = useNavigate();
+    const { id } = useParams()
 
-  const [currentPage, setCurrentPage] = useState<number>(0); // State để theo dõi trang hiện tại
-  const [pageSize, setPageSize] = useState<number>(5); // Số mục trên mỗi trang
-  const [totalMovie, setTotalMovie] = useState<number>(0); // Tổng số phần tử
+    const movie = { movieName, banner, duration, releaseDate, movieType }
 
-  const [movieTypes, setMovieTypes] = useState<MovieType[]>([])
+    const fetchMovieType = async () => {
+        try {
+          const res = await axios.get<MovieType[]>(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.GETALL_MOVIE_TYPE);
+          setMovieTypes(res.data); // Cập nhật danh sách MovieType vào state
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          return [];
+        }
+      };
 
-  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, null])
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target;
-    setSearchTerm(value);
-
-    if (value === "") {
-      setCurrentPage(0);
+    const fetchMovie = async (id: number) => {
+        try {
+            const res = await axios.get(LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE + '/{id}')
+            const movieData = res.data
+            setMovieName(movieData.movieName)
+            setBanner(movieData.banner)
+            setDuration(movieData.duration)
+            setReleaseDate(movieData.releaseDate)
+            if(movieData.movieType){
+                setMovieType([{
+                    id: movieData.movieType.id,
+                    movieTypeName: movieData.movieType.movieTypeName
+                }])
+            } else {
+                setMovieType(null)
+            }
+        } catch (err) {
+            console.error('Error fetching movie: ', err);
+        }
     }
-    handleSearch(value, movieType, dateRange, currentPage, pageSize);
-  };
 
-  const handleMovieTypeChange = (value: string) => {
-    setMovieType(value);
-    handleSearch(searchTerm, value, dateRange, currentPage, pageSize);
-  };
-
-  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
-    if (dates) {
-      setDateRange(dates);
-      handleSearch(searchTerm, movieType, dates, currentPage, pageSize);
-    } else {
-      setDateRange([null, null]);
-      handleSearch(searchTerm, movieType, [null, null], currentPage, pageSize);
+    const validateForm = (): boolean => {
+        if(!movieName.trim()){
+            message.error("Movie name is required")
+            return false;
+        }
+        if(!movieType){
+            message.error("Movie type is required")
+        }
+        if(duration === undefined || isNaN(duration)){
+            message.error("Duration is required")
+            return false;
+        }
+        if(releaseDate === undefined || isNaN(duration)){
+            message.error("Release date is required")
+            return false;
+        }
+        if(!banner.trim()){
+            message.error("Banner is required")
+            return false;
+        }
+        return true;
     }
-  };
 
-  const handleSearch = async (
-    searchMovieName: string,
-    selectedMovieType: any,
-    dateRange: [Dayjs | null, Dayjs | null],
-    page: number,
-    size: number
-  ) => {
-    try {
-      let url = LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.SEARCH_MOVIE + `?page=${page}&size=${size}`;
+    const backToList = () => {
+        navigator("/dotheanh/movies");
+    };
 
-      if (searchMovieName) {
-        url += `&movieName=${encodeURIComponent(searchMovieName)}`;
-      }
+    const options = movieTypes.map((type) => ({
+        value: type.id.toString(),
+        label: type.movieTypeName,
+      }));
 
-      if (selectedMovieType) {
-        selectedMovieType.forEach((type: any) => {
-          url += `&movieType=${encodeURIComponent(type)}`;
-        });
-      }
-
-      if (dateRange[0] && dateRange[1]) {
-        url += `&fromDate=${dateRange[0].format('YYYY-MM-DD')}&toDate=${dateRange[1].format('YYYY-MM-DD')}`;
-      }
-
-      const res = await axios.get(url);
-      setMovies(res.data.content); // Đảm bảo cập nhật dữ liệu cùng định dạng
-      setTotalMovie(res.data.totalElements); // Cập nhật tổng số phần tử
-    } catch (error) {
-      console.error("Error searching:", error);
-    }
-  };
-
-  const fetchMovie = async (page: number, size: number): Promise<Moviee[]> => {
-    try {
-      const res = await axios.get(LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE, {
-        params: {
-          page: page,
-          size: size,
-        },
-      });
-      setTotalMovie(res.data.totalElements); // Cập nhật tổng số phần tử
-      return res.data.content; // Trả về mảng Employee[]
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return []; // Trả về một mảng trống trong trường hợp lỗi
-    }
-  };
-
-  const fetchMovieType = async () => {
-    try {
-      const res = await axios.get<MovieType[]>(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.GETALL_MOVIE_TYPE);
-      setMovieTypes(res.data); // Cập nhật danh sách MovieType vào state
-    } catch (error) {
-      console.error("Error fetching data:", error);
-      return [];
-    }
-  };
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    fetchMovie(page, pageSize);
-  };
-
-  const handlePageSizeChange = (size: number) => {
-    setPageSize(size);
-    setCurrentPage(0);
-    fetchMovie(0, size);
-  };
-
-  useEffect(() => {
-    fetchMovie(currentPage, pageSize).then((data) => {
-      const sortedMovie = data;
-      setMovies(sortedMovie);
-    });
-  }, [currentPage, pageSize]);
-
-  useEffect(() => {
-    fetchMovieType();
-  }, []);
-
-  const options = movieTypes.map((type) => ({
-    value: type.id.toString(),
-    label: type.movieTypeName,
-  }));
-
-  const columns = [
-    {
-      title: 'Movie name',
-      dataIndex: 'movieName',
-      key: 'movieName',
-      align: "center" as const,
-      render: (movieName: string) => <span style={{ fontWeight: 'bold', fontSize: '25px' }}>{movieName}</span>,
-
-    },
-    {
-      title: 'Duration',
-      dataIndex: 'duration',
-      key: 'duration',
-      align: "center" as const,
-      render: (duration: number) => `${duration} Minutes`,
-    },
-    {
-      title: 'Release date',
-      dataIndex: 'releaseDate',
-      key: 'releaseDate',
-      align: "center" as const,
-      render: (releaseDate: string) => {
-        const date = new Date(releaseDate);
-        const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
-        return formattedDate;
-      },
-    },
-    {
-      title: "Movie type",
-      dataIndex: "movieTypes",
-      key: "movieTypes",
-      align: "center" as const,
-      render: (movieTypes: any[]) =>
-        movieTypes.map((type: any) => (
-          <Tag color="green" key={type.movieTypeName} style={{ fontSize: '14px', padding: '6px 12px', margin: '4px' }}>
-            {type.movieTypeName}
-          </Tag>
-        )),
-    },
-    {
-      title: "Banner",
-      dataIndex: 'banner',
-      key: "banner",
-      align: "center" as const,
-      render: (banner: any) => (
-        <img
-          src={banner}
-          alt="Banner"
-          style={{ width: '100px', height: '150px' }}
-        />
-      ),
-    }
-  ]
+    useEffect(() => {
+        fetchMovieType()
+        if(id){
+            fetchMovie(Number(id))
+        }
+    }, [id])
 
   return (
-    <>
-      <div className="mt-3 mb-3">
-        <Input
-          value={searchTerm}
-          onChange={handleChange}
-          placeholder="Search by movie name ..."
-          allowClear
-          style={{ width: "100%" }}
-        />
-      </div>
-      <div className="container mt-3">
-        <Row gutter={[16, 16]} align="middle" style={{ marginTop: 20, marginBottom: 20, marginLeft: -8 }}>
-          <Col xs={24} md={10} lg={3}>
-            <Select
+    <div className="container mt-5">
+      <Form layout="vertical">
+        <Form.Item label="Movie name" required>
+          <Input value={movieName} onChange={(e) => setMovieName(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Duration" required>
+          <Input type='number' value={duration} onChange={(e) => setDuration(Number(e.target.value))} />
+        </Form.Item>
+        {/* <Form.Item label="Release date" required>
+          <Input type='Date' value={releaseDate} onChange={(e) => setReleaseDate(e.target.value)} />
+        </Form.Item> */}
+        <Form.Item label="Banner" required>
+          <Input value={banner} onChange={(e) => setBanner(e.target.value)} />
+        </Form.Item>
+        <Form.Item label="Position" required>
+        <Select
               mode="multiple"
               allowClear
               placeholder="Movie type"
-              onChange={handleMovieTypeChange}
               options={options}
               style={{ width: '300px', maxHeight: '300px', overflow: 'auto' }}
             />
-          </Col>
-          <Col xs={24} md={12} lg={3} style={{ marginLeft: 250 }}>
-            <Space direction="vertical" size={12}>
-              <RangePicker
-                style={{ width: 300, marginTop: -3 }}
-                placeholder={['From date', 'To date']}
-                onChange={handleDateChange}
-              />
-            </Space>
-          </Col>
-        </Row>
-      </div>
-      <Table
-        className="table table-striped mt-3"
-        columns={columns}
-        dataSource={movies}
-        rowKey="id"
-        pagination={false}
-        bordered
-      />
-      <Pagination
-        style={{ marginTop: 20 }}
-        className="pagination-container"
-        current={currentPage}
-        pageSize={pageSize}
-        total={totalMovie}
-        onChange={handlePageChange}
-        onShowSizeChange={handlePageSizeChange}
-      />
-    </>
+        </Form.Item>
+        <Form.Item>
+          <Popconfirm
+            title="Are you sure to submit this Employee ?"
+            //onConfirm={() => handleAddOrUpdateEmployee()}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="primary">Submit</Button>
+          </Popconfirm>
+          <Popconfirm
+            title="Are you sure back to list ?"
+            className="ms-2"
+            onConfirm={backToList}
+            okText="Yes"
+            cancelText="No">
+            <Button type="default">Back to list</Button>
+          </Popconfirm>
+        </Form.Item>
+      </Form>
+    </div>
   )
 }
+
 export default Movie

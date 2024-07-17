@@ -5,6 +5,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import Home from "../Home";
+import ListMovie from "../Movie/components/ListMovie";
 import Movie from "../Movie/components/Movie";
 
 const Layouts: React.FC = () => {
@@ -20,7 +21,7 @@ const Layouts: React.FC = () => {
             <Link to="/dotheanh/home">Home</Link>
           </Menu.Item>
           <Menu.Item key="2" icon={<ProductOutlined />}>
-            <Link to="/dotheanh/movies">Movie Manage</Link>
+            <Link to="/dotheanh/movies">Movie manage</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -36,7 +37,8 @@ const Layouts: React.FC = () => {
         <Content style={{ margin: "24px 16px", padding: 24, minHeight: 280 }}>
           <Routes>
             <Route path="/home" element={<Home />} />
-            <Route path="/movies" element={<Movie />} />
+            <Route path="/movies" element={<ListMovie />} />
+            <Route path="/movies/insert-movie" element={<Movie />} />
           </Routes>
         </Content>
       </Layout>

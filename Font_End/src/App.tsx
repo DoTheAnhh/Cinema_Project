@@ -1,7 +1,9 @@
 import './App.css'
 import Home from './components/Layout';
 import Login from './components/Login';
+import ListMovie from './components/Movie/components/ListMovie';
 import Movie from './components/Movie/components/Movie';
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 interface RouteComponent {
@@ -27,31 +29,38 @@ function App() {
         },
         {
           path: '/movies',
-          element: Movie
+          element: ListMovie,
+          children: [
+            {
+              path: '/insert-movie',
+              element: Movie
+            }
+          ]
         }
       ]
     }
   ];
 
+  const renderRoutes = (children: RouteComponent[] = [], path = '') => {
+    return children.map((route) => {
+      const currentPath = path + route.path;
+       return (
+        <Route
+          key={currentPath}
+          path={currentPath}
+          element={<route.element />}
+        >
+          {route?.children && renderRoutes(route.children, currentPath)}
+        </Route>
+      )
+    })
+  }
+
   return (
     <>
       <BrowserRouter>
       <Routes>
-        {routes.map((route, index) => (
-          <Route
-            key={index}
-            path={route.path}
-            element={<route.element />}
-          >
-            {route.children && route.children.map(child => (
-              <Route
-                key={`${route.path}-${child.path}`}
-                path={`${route.path}/${child.path}`}
-                element={<child.element />}
-              />
-            ))}
-          </Route>
-        ))}
+        {renderRoutes(routes)}
       </Routes>
     </BrowserRouter>
     </>
