@@ -1,11 +1,11 @@
 package com.example.cinema_project.serivce;
 
+import com.example.cinema_project.dto.MovieDTO;
 import com.example.cinema_project.entity.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.sql.Date;
-import java.util.List;
 import java.util.Optional;
 
 public interface MovieService {
@@ -14,11 +14,11 @@ public interface MovieService {
 
     Optional<Movie> findById(Long id);
 
-    Movie add(Movie movie);
+    Movie add(MovieDTO movieDTO);
 
-    Movie edit(Movie movie, Long id);
+    Movie edit(MovieDTO movieDTO, Long id);
 
     void delete(Long id);
 
-    Page<Movie> searchMovie(String movieName, String releaseDate, String[] movieType, Date startDate, Date endDate, int page, int size);
+    Page<Movie> searchMovie(String movieName, String releaseDate, Long[] movieType, Date startDate, Date endDate, int page, int size);
 }

@@ -32,7 +32,11 @@ function App() {
           element: ListMovie,
           children: [
             {
-              path: '/insert-movie',
+              path: '/movie-detail',
+              element: Movie
+            },
+            {
+              path: '/movie-detail/:id',
               element: Movie
             }
           ]

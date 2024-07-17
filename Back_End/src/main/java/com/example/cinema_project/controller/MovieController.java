@@ -1,19 +1,18 @@
 package com.example.cinema_project.controller;
 
+import com.example.cinema_project.dto.MovieDTO;
 import com.example.cinema_project.entity.Movie;
 import com.example.cinema_project.serivce.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
 import java.text.Normalizer;
-import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -26,7 +25,7 @@ public class MovieController {
     MovieService movieService;
 
     @GetMapping("")
-    public Page<Movie> getAllEmployees(@PageableDefault(size = 5 ) Pageable pageable) {
+    public Page<Movie> getAllEmployees(@PageableDefault(size = 5) Pageable pageable) {
         return movieService.findAll(pageable);
     }
 
@@ -38,20 +37,20 @@ public class MovieController {
     }
 
     @PostMapping("/insert-movie")
-    public ResponseEntity<Movie> addMovie(@RequestBody Movie movie) {
-        return new ResponseEntity<>(movieService.add(movie), HttpStatus.CREATED);
+    public ResponseEntity<Movie> addMovie(@RequestBody MovieDTO movieDTO) {
+        return new ResponseEntity<>(movieService.add(movieDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("edit-movie/{id}")
-    public ResponseEntity<Movie> editMovie(@PathVariable Long id, @RequestBody Movie movie) {
+    @PutMapping("/edit-movie/{id}")
+    public ResponseEntity<Movie> editMovie(@PathVariable Long id, @RequestBody MovieDTO movieDTO) {
         try {
-            return new ResponseEntity<>(movieService.edit(movie, id), HttpStatus.OK);
+            return new ResponseEntity<>(movieService.edit(movieDTO, id), HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @DeleteMapping("delete-movie/{id}")
+    @DeleteMapping("/delete-movie/{id}")
     public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
         movieService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -61,10 +60,10 @@ public class MovieController {
     public ResponseEntity<Page<Movie>> searchMovie(
             @RequestParam(required = false) String movieName,
             @RequestParam(required = false) String releaseDate,
-            @RequestParam(required = false) String[] movieType,
+            @RequestParam(required = false) Long[] movieType,
             @RequestParam(required = false) Date fromDate,
             @RequestParam(required = false) Date toDate,
-            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size) {
 
         if (movieName != null) {

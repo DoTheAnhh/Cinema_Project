@@ -15,7 +15,7 @@ public class MovieSpecification {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("movieName"), "%" + movieName + "%");
     }
 
-    public static Specification<Movie> hasMovieType(String[] movieTypes) {
+    public static Specification<Movie> hasMovieType(Long[] movieTypes) {
         return (root, query, criteriaBuilder) -> {
             if (movieTypes == null || movieTypes.length == 0) {
                 return null;
@@ -24,23 +24,12 @@ public class MovieSpecification {
             List<Predicate> predicates = new ArrayList<>();
             Join<Movie, MovieType> movieTypeJoin = root.join("movieTypes", JoinType.INNER);
 
-            List<Long> validMovieTypeIds = new ArrayList<>();
-            for (String type : movieTypes) {
-                if (type != null && !type.trim().isEmpty()) {
-                    try {
-                        validMovieTypeIds.add(Long.parseLong(type));
-                    } catch (NumberFormatException ex) {
-                        ex.printStackTrace();
-                    }
+            for (Long typeId : movieTypes) {
+                if (typeId != null) {
+                    predicates.add(criteriaBuilder.equal(movieTypeJoin.get("id"), typeId));
                 }
             }
 
-            // Tạo các Predicate cho mỗi movieType hợp lệ
-            for (Long typeId : validMovieTypeIds) {
-                predicates.add(criteriaBuilder.equal(movieTypeJoin.get("id"), typeId));
-            }
-
-            // Kết hợp các Predicate bằng OR
             return criteriaBuilder.or(predicates.toArray(new Predicate[0]));
         };
     }

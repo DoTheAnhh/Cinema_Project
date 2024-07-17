@@ -2,9 +2,10 @@ import { useEffect, useState } from "react"
 import { Moviee, MovieType } from "../type"
 import { API, LOCALHOST, REQUEST_MAPPING } from "../../APIs/typing"
 import axios from "axios"
-import { Col, Input, Pagination, Row, Select, Space, Table, Tag, DatePicker, Button } from "antd"
+import { Col, Input, Pagination, Row, Select, Space, Table, Tag, DatePicker, Button, Tooltip } from "antd"
 import { Dayjs } from "dayjs"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
+import { EditFilled, MoreOutlined } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 
 
@@ -23,6 +24,8 @@ const ListMovie: React.FC = () => {
   const [movieTypes, setMovieTypes] = useState<MovieType[]>([])
 
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, null])
+
+  const navigator = useNavigate()
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
@@ -57,7 +60,7 @@ const ListMovie: React.FC = () => {
     size: number
   ) => {
     try {
-      let url = LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.SEARCH_MOVIE + `?page=${page}&size=${size}`;
+      let url = LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.SEARCH_MOVIE + `?page=${page - 1}&size=${size}`;
 
       if (searchMovieName) {
         url += `&movieName=${encodeURIComponent(searchMovieName)}`;
@@ -85,7 +88,7 @@ const ListMovie: React.FC = () => {
     try {
       const res = await axios.get(LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE, {
         params: {
-          page: page,
+          page: page - 1,
           size: size,
         },
       });
@@ -116,6 +119,10 @@ const ListMovie: React.FC = () => {
     setPageSize(size);
     setCurrentPage(0);
     fetchMovie(0, size);
+  };
+
+  const editMovie = (id: number) => {
+    navigator(`/dotheanh/movies/movie-detail/${id}`);
   };
 
   useEffect(() => {
@@ -185,6 +192,23 @@ const ListMovie: React.FC = () => {
           style={{ width: '100px', height: '150px' }}
         />
       ),
+    },
+    {
+      title: "Action",
+      key: "action",
+      align: "center" as const,
+      render: (record: Moviee) => (
+        <div style={{ display: "flex", alignItems: "center" }}>
+          <Tooltip title="Edit">
+            <Button
+              type="primary"
+              style={{ marginLeft: 10 }}
+              onClick={() => editMovie(record.id)}
+              icon={<EditFilled />}
+            />
+          </Tooltip>
+        </div>
+      ),
     }
   ]
 
@@ -196,7 +220,7 @@ const ListMovie: React.FC = () => {
           onChange={handleChange}
           placeholder="Search by movie name ..."
           allowClear
-          style={{ width: "100%" }}
+          style={{ width: "100%", height: 35 }}
         />
       </div>
       <div className="container mt-3">
@@ -221,8 +245,8 @@ const ListMovie: React.FC = () => {
             </Space>
           </Col>
           <Col xs={24} md={12} lg={3} style={{ marginLeft: 500 }}>
-            <Button type="primary">
-              <Link to="/dotheanh/movies/insert-movie">New movie</Link>
+            <Button type="primary" style={{ marginLeft: 10 }}>
+              <Link to="/dotheanh/movies/movie-detail">New movie</Link>
             </Button>
           </Col>
         </Row>

@@ -38,7 +38,8 @@ const Layouts: React.FC = () => {
           <Routes>
             <Route path="/home" element={<Home />} />
             <Route path="/movies" element={<ListMovie />} />
-            <Route path="/movies/insert-movie" element={<Movie />} />
+            <Route path="/movies/movie-detail" element={<Movie />} />
+            <Route path="/movies/movie-detail/:id" element={<Movie />} />
           </Routes>
         </Content>
       </Layout>
