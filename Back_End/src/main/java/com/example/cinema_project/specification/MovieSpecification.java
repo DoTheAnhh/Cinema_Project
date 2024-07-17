@@ -2,11 +2,10 @@ package com.example.cinema_project.specification;
 
 import com.example.cinema_project.entity.Movie;
 import com.example.cinema_project.entity.MovieType;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
-import jakarta.persistence.criteria.Join;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,10 +13,6 @@ public class MovieSpecification {
 
     public static Specification<Movie> hasName(String movieName) {
         return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("movieName"), "%" + movieName + "%");
-    }
-
-    public static Specification<Movie> hasReleaseDate(String releaseDate) {
-        return (root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("releaseDate"), "%" + releaseDate + "%");
     }
 
     public static Specification<Movie> hasMovieType(String[] movieTypes) {
@@ -50,4 +45,12 @@ public class MovieSpecification {
         };
     }
 
+    public static Specification<Movie> hasReleaseDateBetween(Date fromDate, Date toDate) {
+        return (Root<Movie> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) -> {
+            if (fromDate != null && toDate != null) {
+                return criteriaBuilder.between(root.get("releaseDate"), fromDate, toDate);
+            }
+            return criteriaBuilder.conjunction();
+        };
+    }
 }

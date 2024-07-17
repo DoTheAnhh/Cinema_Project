@@ -11,6 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,19 +60,19 @@ public class IMovieService implements MovieService {
     }
 
     @Override
-    public Page<Movie> searchMovie(String movieName, String releaseDate, String[] movieType, int page, int size) {
+    public Page<Movie> searchMovie(String movieName, String releaseDate, String[] movieType, Date startDate, Date endDate, int page, int size) {
         Specification<Movie> movieSpecification = Specification.where(null);
 
         if (movieName != null && !movieName.trim().isEmpty()) {
             movieSpecification = movieSpecification.and(MovieSpecification.hasName(movieName));
         }
 
-        if (releaseDate != null && !releaseDate.trim().isEmpty()) {
-            movieSpecification = movieSpecification.and(MovieSpecification.hasReleaseDate(releaseDate));
-        }
-
         if (movieType != null && movieType.length > 0) {
             movieSpecification = movieSpecification.and(MovieSpecification.hasMovieType(movieType));
+        }
+
+        if (startDate != null && endDate != null) {
+            movieSpecification = movieSpecification.and(MovieSpecification.hasReleaseDateBetween(startDate, endDate));
         }
 
         Pageable pageable = PageRequest.of(page, size);

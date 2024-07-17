@@ -3,6 +3,7 @@ import { Moviee, MovieType } from "../type"
 import { API, LOCALHOST, REQUEST_MAPPING } from "../../APIs/typing"
 import axios from "axios"
 import { Col, Input, Pagination, Row, Select, Space, Table, Tag, DatePicker } from "antd"
+import { Dayjs } from "dayjs"
 const { RangePicker } = DatePicker;
 
 
@@ -20,6 +21,8 @@ const Movie: React.FC = () => {
 
   const [movieTypes, setMovieTypes] = useState<MovieType[]>([])
 
+  const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, null])
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = event.target;
     setSearchTerm(value);
@@ -27,17 +30,28 @@ const Movie: React.FC = () => {
     if (value === "") {
       setCurrentPage(0);
     }
-    handleSearch(value, movieType, currentPage, pageSize);
+    handleSearch(value, movieType, dateRange, currentPage, pageSize);
   };
 
   const handleMovieTypeChange = (value: string) => {
     setMovieType(value);
-    handleSearch(searchTerm, value, currentPage, pageSize);
+    handleSearch(searchTerm, value, dateRange, currentPage, pageSize);
+  };
+
+  const handleDateChange = (dates: [Dayjs | null, Dayjs | null] | null) => {
+    if (dates) {
+      setDateRange(dates);
+      handleSearch(searchTerm, movieType, dates, currentPage, pageSize);
+    } else {
+      setDateRange([null, null]);
+      handleSearch(searchTerm, movieType, [null, null], currentPage, pageSize);
+    }
   };
 
   const handleSearch = async (
     searchMovieName: string,
     selectedMovieType: any,
+    dateRange: [Dayjs | null, Dayjs | null],
     page: number,
     size: number
   ) => {
@@ -52,6 +66,10 @@ const Movie: React.FC = () => {
         selectedMovieType.forEach((type: any) => {
           url += `&movieType=${encodeURIComponent(type)}`;
         });
+      }
+
+      if (dateRange[0] && dateRange[1]) {
+        url += `&fromDate=${dateRange[0].format('YYYY-MM-DD')}&toDate=${dateRange[1].format('YYYY-MM-DD')}`;
       }
 
       const res = await axios.get(url);
@@ -95,8 +113,8 @@ const Movie: React.FC = () => {
 
   const handlePageSizeChange = (size: number) => {
     setPageSize(size);
-    setCurrentPage(0); // Trở về trang đầu tiên khi thay đổi kích thước trang
-    fetchMovie(0, size); // Gọi hàm fetchEmployee với trang đầu tiên và kích thước trang mới
+    setCurrentPage(0);
+    fetchMovie(0, size);
   };
 
   useEffect(() => {
@@ -192,9 +210,13 @@ const Movie: React.FC = () => {
               style={{ width: '300px', maxHeight: '300px', overflow: 'auto' }}
             />
           </Col>
-          <Col xs={24} md={12} lg={3} style={{marginLeft: 250 }}>
+          <Col xs={24} md={12} lg={3} style={{ marginLeft: 250 }}>
             <Space direction="vertical" size={12}>
-              <RangePicker style={{width: 300, marginTop: -3}} placeholder={['From date', 'To date']}/>
+              <RangePicker
+                style={{ width: 300, marginTop: -3 }}
+                placeholder={['From date', 'To date']}
+                onChange={handleDateChange}
+              />
             </Space>
           </Col>
         </Row>

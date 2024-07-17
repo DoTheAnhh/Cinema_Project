@@ -4,6 +4,7 @@ import com.example.cinema_project.entity.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,5 +20,5 @@ public interface MovieService {
 
     void delete(Long id);
 
-    Page<Movie> searchMovie(String movieName, String releaseDate, String[] movieType, int page, int size);
+    Page<Movie> searchMovie(String movieName, String releaseDate, String[] movieType, Date startDate, Date endDate, int page, int size);
 }
