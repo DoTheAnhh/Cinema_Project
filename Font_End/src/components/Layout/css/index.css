@@ -1,0 +1,17 @@
+.custom-sider {
+    background-color: #ffffff; /* Màu nền tùy chỉnh, ví dụ: xanh lá cây */
+  }
+  
+  /* Màu nền khi collapsed */
+  .custom-sider.collapsed {
+    background-color: #ffffff; /* Màu nền trắng khi collapsed */
+  }
+  
+  .ant-layout-sider-trigger {
+    background-color: #ffffff !important; /* Đặt màu nền trắng cho trigger */
+    border-top: 1px solid #f0f0f0;
+  }
+  
+  .ant-layout-sider.collapsed .ant-layout-sider-trigger {
+    background-color: #ffffff !important; /* Đặt màu nền trắng cho trigger khi collapsed */
+  }

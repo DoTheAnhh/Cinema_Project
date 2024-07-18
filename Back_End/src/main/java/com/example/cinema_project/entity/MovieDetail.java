@@ -5,7 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,15 +20,19 @@ public class MovieDetail {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "movie_id")
-    private Movie movie;
+    private Movie movies;
 
     private String directorName;
 
-    @ManyToOne
-    @JoinColumn(name = "actor_id")
-    private Actor actor;
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "movie_detail_actor",
+            joinColumns = @JoinColumn(name = "movie_detail_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+    private Set<Actor> actors = new HashSet<>();
 
     private String trailer;
 

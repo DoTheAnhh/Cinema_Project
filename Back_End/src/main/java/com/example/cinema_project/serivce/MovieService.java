@@ -18,7 +18,5 @@ public interface MovieService {
 
     Movie edit(MovieDTO movieDTO, Long id);
 
-    void delete(Long id);
-
     Page<Movie> searchMovie(String movieName, String releaseDate, Long[] movieType, Date startDate, Date endDate, int page, int size);
 }

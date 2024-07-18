@@ -83,11 +83,6 @@ public class IMovieService implements MovieService {
     }
 
     @Override
-    public void delete(Long id) {
-        movieRepo.deleteById(id);
-    }
-
-    @Override
     public Page<Movie> searchMovie(String movieName, String releaseDate, Long[] movieType, Date startDate, Date endDate, int page, int size) {
         Specification<Movie> movieSpecification = Specification.where(null);
 

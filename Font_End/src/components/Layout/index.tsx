@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu, Button, theme } from 'antd';
 import { HomeOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ProductOutlined } from "@ant-design/icons";
 import { Link, Route, Routes } from "react-router-dom";
 import Sider from "antd/es/layout/Sider";
@@ -7,10 +7,15 @@ import { Content, Header } from "antd/es/layout/layout";
 import Home from "../Home";
 import ListMovie from "../Movie/components/ListMovie";
 import Movie from "../Movie/components/Movie";
+import './css/index.css'
+import ListMovieDetail from "../MovieDetail/component/ListMovieDetail";
 
 const Layouts: React.FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);
+  const {
+    token: { colorBgContainer },
+  } = theme.useToken();
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -21,12 +26,15 @@ const Layouts: React.FC = () => {
             <Link to="/dotheanh/home">Home</Link>
           </Menu.Item>
           <Menu.Item key="2" icon={<ProductOutlined />}>
-            <Link to="/dotheanh/movies">Movie manage</Link>
+            <Link to="/dotheanh/movies">Movies</Link>
+          </Menu.Item>
+          <Menu.Item key="3" icon={<ProductOutlined />}>
+            <Link to="/dotheanh/movie-details">Movie detail</Link>
           </Menu.Item>
         </Menu>
       </Sider>
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }}>
+        <Header style={{ padding: 0, background: colorBgContainer }}>
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -40,6 +48,7 @@ const Layouts: React.FC = () => {
             <Route path="/movies" element={<ListMovie />} />
             <Route path="/movies/movie-detail" element={<Movie />} />
             <Route path="/movies/movie-detail/:id" element={<Movie />} />
+            <Route path="/movie-details" element={<ListMovieDetail />} />
           </Routes>
         </Content>
       </Layout>

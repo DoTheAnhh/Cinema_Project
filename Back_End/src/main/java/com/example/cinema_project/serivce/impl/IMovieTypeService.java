@@ -4,8 +4,6 @@ import com.example.cinema_project.entity.MovieType;
 import com.example.cinema_project.repository.MovieTypeRepository;
 import com.example.cinema_project.serivce.MovieTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -84,7 +84,6 @@ const Movie: React.FC = () => {
     try {
       const data = {
         ...movie,
-        movieTypes: movieType.map((res: any) => res.value)
       };
       console.log(data);
       if (id) {

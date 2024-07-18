@@ -25,7 +25,7 @@ public class MovieController {
     MovieService movieService;
 
     @GetMapping("")
-    public Page<Movie> getAllEmployees(@PageableDefault(size = 5) Pageable pageable) {
+    public Page<Movie> getAllMovie(@PageableDefault(size = 5) Pageable pageable) {
         return movieService.findAll(pageable);
     }
 
@@ -48,12 +48,6 @@ public class MovieController {
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-    }
-
-    @DeleteMapping("/delete-movie/{id}")
-    public ResponseEntity<Void> deleteMovie(@PathVariable Long id) {
-        movieService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @GetMapping("/search-movies")

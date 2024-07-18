@@ -5,7 +5,7 @@ import axios from "axios"
 import { Col, Input, Pagination, Row, Select, Space, Table, Tag, DatePicker, Button, Tooltip } from "antd"
 import { Dayjs } from "dayjs"
 import { Link, useNavigate } from "react-router-dom"
-import { EditFilled, MoreOutlined } from "@ant-design/icons";
+import { EditFilled } from "@ant-design/icons";
 const { RangePicker } = DatePicker;
 
 
@@ -60,7 +60,7 @@ const ListMovie: React.FC = () => {
     size: number
   ) => {
     try {
-      let url = LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.SEARCH_MOVIE + `?page=${page - 1}&size=${size}`;
+      let url = LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.SEARCH_MOVIE + `?page=${page}&size=${size}`;
 
       if (searchMovieName) {
         url += `&movieName=${encodeURIComponent(searchMovieName)}`;
@@ -164,10 +164,11 @@ const ListMovie: React.FC = () => {
       align: "center" as const,
       render: (releaseDate: string) => {
         const date = new Date(releaseDate);
-        const formattedDate = `${String(date.getDate()).padStart(2, '0')}-${String(date.getMonth() + 1).padStart(2, '0')}-${date.getFullYear()}`;
+        const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
         return formattedDate;
       },
     },
+    
     {
       title: "Movie type",
       dataIndex: "movieTypes",
@@ -260,7 +261,7 @@ const ListMovie: React.FC = () => {
         bordered
       />
       <Pagination
-        style={{ marginTop: 20 }}
+        style={{ marginTop: 50, justifyContent: 'center' }}
         className="pagination-container"
         current={currentPage}
         pageSize={pageSize}

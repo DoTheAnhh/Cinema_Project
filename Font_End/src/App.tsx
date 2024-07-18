@@ -5,6 +5,7 @@ import ListMovie from './components/Movie/components/ListMovie';
 import Movie from './components/Movie/components/Movie';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ListMovieDetail from './components/MovieDetail/component/ListMovieDetail';
 
 interface RouteComponent {
   path: string;
@@ -40,6 +41,10 @@ function App() {
               element: Movie
             }
           ]
+        },
+        {
+          path: '/movie-details',
+          element: ListMovieDetail
         }
       ]
     }
