@@ -5,10 +5,10 @@ import { Link, Route, Routes } from "react-router-dom";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import Home from "../Home";
-import ListMovie from "../Movie/components/ListMovie";
-import Movie from "../Movie/components/Movie";
 import './css/index.css'
-import ListMovieDetail from "../MovieDetail/component/ListMovieDetail";
+import ListMovieDetail from "../MovieDetail/ListMovieDetail";
+import ListMovie from "../Movie/ListMovie";
+import Movie from "../Movie/Movie";
 
 const Layouts: React.FC = () => {
 

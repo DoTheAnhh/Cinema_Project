@@ -1,11 +1,11 @@
 import './App.css'
 import Home from './components/Layout';
 import Login from './components/Login';
-import ListMovie from './components/Movie/components/ListMovie';
-import Movie from './components/Movie/components/Movie';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import ListMovieDetail from './components/MovieDetail/component/ListMovieDetail';
+import ListMovieDetail from './components/MovieDetail/ListMovieDetail';
+import ListMovie from './components/Movie/ListMovie';
+import Movie from './components/Movie/Movie';
 
 interface RouteComponent {
   path: string;

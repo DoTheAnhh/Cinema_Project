@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { MovieType } from '../type';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { API, LOCALHOST, REQUEST_MAPPING } from '../../APIs/typing';
 import { Button, Form, Input, message, Popconfirm, Select } from 'antd';
+import { MovieTypee } from '../Types';
+import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 
 const Movie: React.FC = () => {
 
@@ -13,7 +13,7 @@ const Movie: React.FC = () => {
   const [releaseDate, setReleaseDate] = useState<any>("");
   const [movieType, setMovieType] = useState<string[]>([]);
 
-  const [movieTypes, setMovieTypes] = useState<MovieType[]>([])
+  const [movieTypes, setMovieTypes] = useState<MovieTypee[]>([])
 
   const navigator = useNavigate();
   const { id } = useParams()
@@ -22,7 +22,7 @@ const Movie: React.FC = () => {
 
   const fetchMovieType = async () => {
     try {
-      const res = await axios.get<MovieType[]>(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.GETALL_MOVIE_TYPE);
+      const res = await axios.get<MovieTypee[]>(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.GETALL_MOVIE_TYPE);
       setMovieTypes(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -39,7 +39,7 @@ const Movie: React.FC = () => {
       setDuration(movieData.duration)
       setReleaseDate(movieData.releaseDate)
       if (movieData.movieTypes) {
-        const mappedMovieTypes = movieData.movieTypes.map((type: MovieType) => ({
+        const mappedMovieTypes = movieData.movieTypes.map((type: MovieTypee) => ({
           value: type.id.toString(),
           label: type.movieTypeName,
         }));

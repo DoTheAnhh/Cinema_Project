@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react"
-import { Moviee, MovieType } from "../type"
-import { API, LOCALHOST, REQUEST_MAPPING } from "../../APIs/typing"
 import axios from "axios"
 import { Col, Input, Pagination, Row, Select, Space, Table, Tag, DatePicker, Button, Tooltip } from "antd"
 import { Dayjs } from "dayjs"
 import { Link, useNavigate } from "react-router-dom"
 import { EditFilled } from "@ant-design/icons";
+import { Moviee, MovieTypee } from "../Types"
+import { API, LOCALHOST, REQUEST_MAPPING } from "../APIs/typing"
 const { RangePicker } = DatePicker;
 
 
@@ -21,7 +21,7 @@ const ListMovie: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(5); // Số mục trên mỗi trang
   const [totalMovie, setTotalMovie] = useState<number>(0); // Tổng số phần tử
 
-  const [movieTypes, setMovieTypes] = useState<MovieType[]>([])
+  const [movieTypes, setMovieTypes] = useState<MovieTypee[]>([])
 
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, null])
 
@@ -102,7 +102,7 @@ const ListMovie: React.FC = () => {
 
   const fetchMovieType = async () => {
     try {
-      const res = await axios.get<MovieType[]>(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.GETALL_MOVIE_TYPE);
+      const res = await axios.get<MovieTypee[]>(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.GETALL_MOVIE_TYPE);
       setMovieTypes(res.data); // Cập nhật danh sách MovieType vào state
     } catch (error) {
       console.error("Error fetching data:", error);

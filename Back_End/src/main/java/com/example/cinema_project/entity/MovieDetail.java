@@ -36,7 +36,5 @@ public class MovieDetail {
 
     private String trailer;
 
-    private Date movieDate;
-
     private String content;
 }
