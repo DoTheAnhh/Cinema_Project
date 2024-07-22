@@ -3,7 +3,7 @@ import { Actorr, Moviee } from '../Types'
 import { useNavigate, useParams } from 'react-router-dom'
 import axios from 'axios'
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing'
-import { Button, Form, Input, message, Popconfirm, Select } from 'antd'
+import { Button, Form, Input, message, Popconfirm, Select, Image } from 'antd'
 import TextArea from 'antd/es/input/TextArea'
 
 const MovieDetail: React.FC = () => {
@@ -14,6 +14,8 @@ const MovieDetail: React.FC = () => {
   const [content, setContent] = useState<string>("")
   const [actor, setActor] = useState<number[]>([])
 
+  const [bannerUrl, setBannerUrl] = useState<string>('');
+
   const [actors, setActors] = useState<Actorr[]>([])
   const [movies, setMovies] = useState<Moviee[]>([])
 
@@ -23,24 +25,24 @@ const MovieDetail: React.FC = () => {
 
   const fetchMovieDetail = async (id: number) => {
     try {
-        const res = await axios.get(LOCALHOST + REQUEST_MAPPING.MOVIE_DETAIL + API.MOVIE_DETAIL.GETALL_MOVIE_DETAIL + `/${id}`)
-        const movieDetailData = res.data
-        setContent(movieDetailData.content)
-        setDirectorName(movieDetailData.directorName)
-        setTrailer(movieDetailData.trailer)
-        setMovie(movieDetailData.movies?.movieName)
-        if (movieDetailData.actors) {
-            const mappedActors = movieDetailData.actors.map((act: Actorr) => act.id.toString());
-            setActor(mappedActors);
-        } else {
-            setActor([]);
-        }
-        console.log('res.data', res.data);
-        
+      const res = await axios.get(LOCALHOST + REQUEST_MAPPING.MOVIE_DETAIL + API.MOVIE_DETAIL.GETALL_MOVIE_DETAIL + `/${id}`)
+      const movieDetailData = res.data
+      setContent(movieDetailData.content)
+      setDirectorName(movieDetailData.directorName)
+      setTrailer(movieDetailData.trailer)
+      setMovie(movieDetailData.movies?.movieName)
+      if (movieDetailData.actors) {
+        const mappedActors = movieDetailData.actors.map((act: Actorr) => act.id.toString());
+        setActor(mappedActors);
+      } else {
+        setActor([]);
+      }
+      console.log('res.data', res.data);
+
     } catch (err) {
-        console.error('Error fetching movie: ', err);
+      console.error('Error fetching movie: ', err);
     }
-}
+  }
 
   const fetchActor = async () => {
     try {
@@ -71,6 +73,10 @@ const MovieDetail: React.FC = () => {
   })), [movies]);
 
   const validateForm = (): boolean => {
+    if (!movie) {
+      message.error("Movie name is required")
+      return false;
+    }
     if (!trailer.trim()) {
       message.error("Trailer name is required")
       return false;
@@ -101,7 +107,7 @@ const MovieDetail: React.FC = () => {
         directorName: directorName,
         content: content,
         actor: actor,
-    };
+      };
       if (id) {
         await axios.put(LOCALHOST + REQUEST_MAPPING.MOVIE_DETAIL + API.MOVIE_DETAIL.EDIT_MOVIE_DETAIL + `/${id}`, data);
       } else {
@@ -111,6 +117,14 @@ const MovieDetail: React.FC = () => {
     } catch (e) {
       console.error('Error adding item: ', e);
     }
+  };
+
+  const handleMovieChange = (value: any) => {
+    const selectedMovie = movies.find(movie => movie.id.toString() === value);
+    if (selectedMovie) {
+      setBannerUrl(selectedMovie.banner);
+    }
+    setMovie(value);
   };
 
   const backToList = () => {
@@ -127,36 +141,49 @@ const MovieDetail: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
-      <div className="container mt-5" style={{ width: 500 }}>
+      <div className="container mt-5" style={{ width: 800 }}>
         <Form layout="vertical">
-          <Form.Item label="Movie name" required>
-            <Select
-              placeholder="Movie name"
-              style={{ width: '100%', maxHeight: '300px', overflow: 'auto' }}
-              value={movie}
-              options={optionsMovie}
-              onChange={(value) => setMovie(value)}
-            />
-          </Form.Item>
-          <Form.Item label="Director name" required>
-            <Input placeholder='Director name' value={directorName} onChange={(e) => setDirectorName(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Actor name" required>
-            <Select
-              mode="multiple"
-              placeholder="Actor"
-              options={optionsActor}
-              style={{ width: '100%', maxHeight: '300px', overflow: 'auto' }}
-              value={actor}
-              onChange={(value) => setActor(value)}
-            />
-          </Form.Item>
-          <Form.Item label="Trailer" required>
-            <Input placeholder='Trailer' value={trailer} onChange={(e) => setTrailer(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Content" required>
-            <TextArea placeholder='Content' value={content} onChange={(e) => setContent(e.target.value)} />
-          </Form.Item>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <div style={{ flex: 1 }}>
+              <Form.Item label="Movie name" required>
+                <Select
+                  placeholder="Movie name"
+                  style={{ width: '100%', maxHeight: '300px', overflow: 'auto' }}
+                  value={movie}
+                  options={optionsMovie}
+                  onChange={handleMovieChange}
+                />
+              </Form.Item>
+              <Form.Item label="Director name" required>
+                <Input placeholder='Director name' value={directorName} onChange={(e) => setDirectorName(e.target.value)} />
+              </Form.Item>
+              <Form.Item label="Actor name" required>
+                <Select
+                  mode="multiple"
+                  placeholder="Actor"
+                  options={optionsActor}
+                  style={{ width: '100%', maxHeight: '300px', overflow: 'auto' }}
+                  value={actor}
+                  onChange={(value) => setActor(value)}
+                />
+              </Form.Item>
+              <Form.Item label="Trailer" required>
+                <Input placeholder='Trailer' value={trailer} onChange={(e) => setTrailer(e.target.value)} />
+              </Form.Item>
+              <Form.Item label="Content" required>
+                <TextArea placeholder='Content' value={content} onChange={(e) => setContent(e.target.value)} />
+              </Form.Item>
+            </div>
+            <div style={{ marginRight: -120, marginLeft: 130, marginTop: -70 }}>
+              <Form.Item>
+                <Image
+                  style={{ width: 200, height: 300 }}
+                  src={bannerUrl || 'https://via.placeholder.com/130x200?text=No+Image'}
+                  alt="Movie Banner"
+                />
+              </Form.Item>
+            </div>
+          </div>
           <Form.Item>
             <Popconfirm
               title="Are you sure to submit this movie?"
