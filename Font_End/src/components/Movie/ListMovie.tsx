@@ -122,13 +122,12 @@ const ListMovie: React.FC = () => {
   };
 
   const editMovie = (id: number) => {
-    navigator(`/dotheanh/movies/movie-detail/${id}`);
+    navigator(`/dotheanh/movies/movie/${id}`);
   };
 
   useEffect(() => {
     fetchMovie(currentPage, pageSize).then((data) => {
-      const sortedMovie = data;
-      setMovies(sortedMovie);
+      setMovies(data);
     });
   }, [currentPage, pageSize]);
 
@@ -247,7 +246,7 @@ const ListMovie: React.FC = () => {
           </Col>
           <Col xs={24} md={12} lg={3} style={{ marginLeft: 500 }}>
             <Button type="primary" style={{ marginLeft: 10 }}>
-              <Link to="/dotheanh/movies/movie-detail">New movie</Link>
+              <Link to="/dotheanh/movies/movie">New movie</Link>
             </Button>
           </Col>
         </Row>

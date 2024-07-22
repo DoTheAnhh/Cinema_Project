@@ -2,9 +2,11 @@ package com.example.cinema_project.serivce.impl;
 
 import com.example.cinema_project.dto.MovieDetailDTO;
 import com.example.cinema_project.entity.Actor;
+import com.example.cinema_project.entity.Movie;
 import com.example.cinema_project.entity.MovieDetail;
 import com.example.cinema_project.repository.ActorRepository;
 import com.example.cinema_project.repository.MovieDetailRepository;
+import com.example.cinema_project.repository.MovieRepository;
 import com.example.cinema_project.serivce.MovieDetailService;
 import com.example.cinema_project.specification.MovieDetailSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,9 @@ public class IMovieDetailService implements MovieDetailService {
     @Autowired
     ActorRepository actorRepository;
 
+    @Autowired
+    MovieRepository movieRepository;
+
     @Override
     public Page<MovieDetail> findAll(Pageable pageable) {
         return movieDetailRepository.findAll(pageable);
@@ -44,7 +49,13 @@ public class IMovieDetailService implements MovieDetailService {
         movieDetail.setTrailer(movieDetailDTO.getTrailer());
         movieDetail.setContent(movieDetailDTO.getContent());
         movieDetail.setDirectorName(movieDetailDTO.getDirectorName());
-        movieDetail.setMovies(movieDetailDTO.getMovie());
+
+        Long movieId = movieDetailDTO.getMovie().getId();
+        Movie movie = movieRepository.findById(movieId).orElse(null);
+        if (movie != null) {
+            movieDetail.setMovies(movie);
+        }
+
         Set<Actor> actors = new HashSet<>();
         for (String actorId : movieDetailDTO.getActor()) {
             Actor existingActor = actorRepository.findById(Long.parseLong(actorId)).orElse(null);
@@ -83,22 +94,23 @@ public class IMovieDetailService implements MovieDetailService {
     }
 
     @Override
-    public Page<MovieDetail> searchMovieDetail(Long movie, String directorName, Long[] actors, int page, int size) {
+    public Page<MovieDetail> searchMovieDetail(String movieName, String directorName, Long[] actors, int page, int size) {
         Specification<MovieDetail> movieDetailSpecification = Specification.where(null);
 
         if (directorName != null && !directorName.trim().isEmpty()) {
             movieDetailSpecification = movieDetailSpecification.and(MovieDetailSpecification.hasDirectorName(directorName));
         }
 
-        if (movie != null) {
-            movieDetailSpecification = movieDetailSpecification.and(MovieDetailSpecification.hasMovie(movie));
+        if (movieName != null && !movieName.trim().isEmpty()) {
+            movieDetailSpecification = movieDetailSpecification.and(MovieDetailSpecification.hasMovie(movieName));
         }
 
         if (actors != null && actors.length > 0) {
             movieDetailSpecification = movieDetailSpecification.and(MovieDetailSpecification.hasActors(actors));
         }
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(Math.max(page - 1, 0), Math.max(size, 1));
         return movieDetailRepository.findAll(movieDetailSpecification, pageable);
     }
+
 }

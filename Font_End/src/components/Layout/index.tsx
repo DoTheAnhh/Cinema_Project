@@ -9,6 +9,7 @@ import './css/index.css'
 import ListMovieDetail from "../MovieDetail/ListMovieDetail";
 import ListMovie from "../Movie/ListMovie";
 import Movie from "../Movie/Movie";
+import MovieDetail from "../MovieDetail/MovieDetail";
 
 const Layouts: React.FC = () => {
 
@@ -46,9 +47,11 @@ const Layouts: React.FC = () => {
           <Routes>
             <Route path="/home" element={<Home />} />
             <Route path="/movies" element={<ListMovie />} />
-            <Route path="/movies/movie-detail" element={<Movie />} />
-            <Route path="/movies/movie-detail/:id" element={<Movie />} />
+            <Route path="/movies/movie" element={<Movie />} />
+            <Route path="/movies/movie/:id" element={<Movie />} />
             <Route path="/movie-details" element={<ListMovieDetail />} />
+            <Route path="/movie-details/movie-detail" element={<MovieDetail />} />
+            <Route path="/movie-details/movie-detail/:id" element={<MovieDetail />} />
           </Routes>
         </Content>
       </Layout>

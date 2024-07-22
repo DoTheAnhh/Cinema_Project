@@ -85,7 +85,6 @@ const Movie: React.FC = () => {
       const data = {
         ...movie,
       };
-      console.log(data);
       if (id) {
         await axios.put(LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.EDIT_MOVIE + `/${id}`, data);
       } else {

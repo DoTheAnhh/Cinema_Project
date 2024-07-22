@@ -15,10 +15,10 @@ public class MovieDetailSpecification {
                 criteriaBuilder.like(criteriaBuilder.lower(root.get("directorName")), "%" + directorName.toLowerCase() + "%");
     }
 
-    public static Specification<MovieDetail> hasMovie(Long movieId) {
+    public static Specification<MovieDetail> hasMovie(String movieName) {
         return (root, query, criteriaBuilder) -> {
-            if (movieId != null) {
-                return criteriaBuilder.equal(root.get("movies").get("id"), movieId);
+            if (movieName != null && !movieName.trim().isEmpty()) {
+                return criteriaBuilder.like(criteriaBuilder.lower(root.get("movies").get("movieName")), "%" + movieName.toLowerCase() + "%");
             } else {
                 return criteriaBuilder.conjunction();
             }

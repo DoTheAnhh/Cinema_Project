@@ -18,5 +18,5 @@ public interface MovieDetailService {
 
     MovieDetail edit(MovieDetailDTO movieDetailDTO, Long id);
 
-    Page<MovieDetail> searchMovieDetail(Long movieId, String directorName, Long[] actor , int page, int size);
+    Page<MovieDetail> searchMovieDetail(String movieName, String directorName, Long[] actor , int page, int size);
 }

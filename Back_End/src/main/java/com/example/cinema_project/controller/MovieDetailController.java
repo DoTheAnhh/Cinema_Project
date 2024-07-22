@@ -48,12 +48,11 @@ public class MovieDetailController {
 
     @GetMapping("/search-movie-details")
     public ResponseEntity<Page<MovieDetail>> searchMovie(
-            @RequestParam(required = false) Long movie,
+            @RequestParam(required = false) String movie,
             @RequestParam(required = false) String directorName,
             @RequestParam(required = false) Long[] actor,
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "5") int size) {
-
         Page<MovieDetail> movieDetailPage = movieDetailService.searchMovieDetail(movie, directorName, actor, page, size);
         return ResponseEntity.ok().body(movieDetailPage);
     }

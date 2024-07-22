@@ -6,6 +6,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import ListMovieDetail from './components/MovieDetail/ListMovieDetail';
 import ListMovie from './components/Movie/ListMovie';
 import Movie from './components/Movie/Movie';
+import MovieDetail from './components/MovieDetail/MovieDetail';
 
 interface RouteComponent {
   path: string;
@@ -17,34 +18,44 @@ function App() {
   
   const routes: RouteComponent[] = [
     {
-      path: '/',
+      path: '',
       element: Login
     },
     {
-      path: '/dotheanh',
+      path: 'dotheanh/*',
       element: Home,
       children: [
         {
-          path: '/home',
+          path: 'home',
           element: Home
         },
         {
-          path: '/movies',
+          path: 'movies',
           element: ListMovie,
           children: [
             {
-              path: '/movie-detail',
+              path: 'movie',
               element: Movie
             },
             {
-              path: '/movie-detail/:id',
+              path: 'movie/:id',
               element: Movie
             }
           ]
         },
         {
-          path: '/movie-details',
-          element: ListMovieDetail
+          path: 'movie-details',
+          element: ListMovieDetail,
+          children: [
+            {
+              path: 'movie-detail',
+              element: MovieDetail
+            },
+            {
+              path: 'movie-detail/:id',
+              element: MovieDetail
+            }
+          ]
         }
       ]
     }
