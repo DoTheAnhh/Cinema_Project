@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Form, Input, message, Popconfirm, Select } from 'antd';
+import { Button, Form, Image, Input, message, Popconfirm, Select } from 'antd';
 import { MovieTypee } from '../Types';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 
@@ -52,7 +52,7 @@ const Movie: React.FC = () => {
     }
   }
 
-  
+
 
   const validateForm = (): boolean => {
     if (!movieName.trim()) {
@@ -115,50 +115,59 @@ const Movie: React.FC = () => {
   }, [id])
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: '', minHeight: '100vh' }}>
-      <div className="container mt-5" style={{ width: 500 }}>
-        <Form layout="vertical">
-          <Form.Item label="Movie name" required>
-            <Input value={movieName} onChange={(e) => setMovieName(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Duration" required>
-            <Input type='number' value={duration} onChange={(e) => setDuration(Number(e.target.value))} />
-          </Form.Item>
-          <Form.Item label="Release date" required>
-            <Input type='date' value={releaseDate} onChange={(e) => setReleaseDate(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Banner" required>
-            <Input value={banner} onChange={(e) => setBanner(e.target.value)} />
-          </Form.Item>
-          <Form.Item label="Movie type" required>
-            <Select
-              mode="multiple"
-              placeholder="Movie type"
-              options={options}
-              style={{ width: '300px', maxHeight: '300px', overflow: 'auto' }}
-              value={movieType}
-              onChange={(value) => setMovieType(value)}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Popconfirm
-              title="Are you sure to submit this movie?"
-              onConfirm={() => handleInsertOrUpdateMovie()}
-              okText="Yes"
-              cancelText="No"
-            >
-              <Button type="primary">Submit</Button>
-            </Popconfirm>
-            <Popconfirm
-              title="Are you sure back to list?"
-              className="ms-2"
-              onConfirm={backToList}
-              okText="Yes"
-              cancelText="No">
-              <Button type="default" style={{ marginLeft: 20 }}>Back to list</Button>
-            </Popconfirm>
-          </Form.Item>
-        </Form>
+    <div style={{ display: 'flex', justifyContent: 'center', minHeight: '100vh' }}>
+      <div className="container mt-5" style={{ width: '1000px', display: 'flex', alignItems: 'flex-start' }}>
+        <div style={{ flex: 1 }}>
+          <Form layout="vertical">
+            <Form.Item label="Movie name" required>
+              <Input value={movieName} onChange={(e) => setMovieName(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Duration" required>
+              <Input type='number' value={duration} onChange={(e) => setDuration(Number(e.target.value))} />
+            </Form.Item>
+            <Form.Item label="Release date" required>
+              <Input type='date' value={releaseDate} onChange={(e) => setReleaseDate(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Banner" required>
+              <Input value={banner} onChange={(e) => setBanner(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="Movie type" required>
+              <Select
+                mode="multiple"
+                placeholder="Movie type"
+                options={options}
+                style={{ width: '100%', maxHeight: '300px', overflow: 'auto' }}
+                value={movieType}
+                onChange={(value) => setMovieType(value)}
+              />
+            </Form.Item>
+            <Form.Item>
+              <Popconfirm
+                title="Are you sure to submit this movie?"
+                onConfirm={() => handleInsertOrUpdateMovie()}
+                okText="Yes"
+                cancelText="No"
+              >
+                <Button type="primary">Submit</Button>
+              </Popconfirm>
+              <Popconfirm
+                title="Are you sure back to list?"
+                className="ms-2"
+                onConfirm={backToList}
+                okText="Yes"
+                cancelText="No">
+                <Button type="default" style={{ marginLeft: 20 }}>Back to list</Button>
+              </Popconfirm>
+            </Form.Item>
+          </Form>
+        </div>
+        <div style={{ marginRight: -60, marginLeft: 130, marginTop: 30 }}>
+          <Image
+            style={{ width: 200, height: 300, marginLeft: -30 }}
+            src={banner || 'https://via.placeholder.com/130x200?text=No+Image'}
+            alt="Movie Banner"
+          />
+        </div>
       </div>
     </div>
   )
