@@ -8,11 +8,11 @@ import TextArea from 'antd/es/input/TextArea'
 
 const MovieDetail: React.FC = () => {
 
-  const [movie, setMovie] = useState<Moviee>()
+  const [movie, setMovie] = useState<number | undefined>()
   const [trailer, setTrailer] = useState<string>("")
   const [directorName, setDirectorName] = useState<string>("")
   const [content, setContent] = useState<string>("")
-  const [actor, setActor] = useState<number[]>([])
+  const [actorIds, setActorIds] = useState<number[]>([])
 
   const [bannerUrl, setBannerUrl] = useState<string>('');
 
@@ -30,13 +30,14 @@ const MovieDetail: React.FC = () => {
       setContent(movieDetailData.content)
       setDirectorName(movieDetailData.directorName)
       setTrailer(movieDetailData.trailer)
-      setMovie(movieDetailData.movies?.movieName)
+      setMovie(movieDetailData.movies.id)
       if (movieDetailData.actors) {
-        const mappedActors = movieDetailData.actors.map((act: Actorr) => act.id.toString());
-        setActor(mappedActors);
+        const mappedActors = movieDetailData.actors.map((act: Actorr) => act.id);
+        setActorIds(mappedActors);
       } else {
-        setActor([]);
+        setActorIds([]);
       }
+      setBannerUrl(movieDetailData.movies.banner);
       console.log('res.data', res.data);
 
     } catch (err) {
@@ -89,7 +90,7 @@ const MovieDetail: React.FC = () => {
       message.error("Content is required")
       return false;
     }
-    if (!actor) {
+    if (actorIds.length === 0) {
       message.error("Actor name is required")
       return false;
     }
@@ -106,7 +107,7 @@ const MovieDetail: React.FC = () => {
         trailer: trailer,
         directorName: directorName,
         content: content,
-        actor: actor,
+        actor: actorIds,
       };
       if (id) {
         await axios.put(LOCALHOST + REQUEST_MAPPING.MOVIE_DETAIL + API.MOVIE_DETAIL.EDIT_MOVIE_DETAIL + `/${id}`, data);
@@ -119,12 +120,12 @@ const MovieDetail: React.FC = () => {
     }
   };
 
-  const handleMovieChange = (value: any) => {
+  const handleMovieChange = (value: string) => {
     const selectedMovie = movies.find(movie => movie.id.toString() === value);
     if (selectedMovie) {
       setBannerUrl(selectedMovie.banner);
+      setMovie(selectedMovie.id); // Set movieId
     }
-    setMovie(value);
   };
 
   const backToList = () => {
@@ -149,7 +150,7 @@ const MovieDetail: React.FC = () => {
                 <Select
                   placeholder="Movie name"
                   style={{ width: '100%', maxHeight: '300px', overflow: 'auto' }}
-                  value={movie}
+                  value={movie?.toString()}
                   options={optionsMovie}
                   onChange={handleMovieChange}
                 />
@@ -163,8 +164,8 @@ const MovieDetail: React.FC = () => {
                   placeholder="Actor"
                   options={optionsActor}
                   style={{ width: '100%', maxHeight: '300px', overflow: 'auto' }}
-                  value={actor}
-                  onChange={(value) => setActor(value)}
+                  value={actorIds.map(id => id.toString())} // Ensure actorIds are strings
+                  onChange={(value) => setActorIds(value.map(val => parseInt(val)))}
                 />
               </Form.Item>
               <Form.Item label="Trailer" required>
