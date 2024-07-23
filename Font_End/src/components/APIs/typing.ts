@@ -3,9 +3,11 @@ export const LOCALHOST = 'http://localhost:8080'
 export const REQUEST_MAPPING = {
     HOME: '/home',
     MOVIE: '/movies',
-    MOVIE_TYPE: '/movie-type',
+    MOVIE_TYPE: '/movie-types',
     MOVIE_DETAIL: '/movie-details',
-    ACTOR: '/actors'
+    ACTOR: '/actors',
+    THEATER: '/theaters',
+    CINEMA_ROOM: '/cinema-rooms'
 }
 
 export const API = {
@@ -34,5 +36,19 @@ export const API = {
         EDIT_ACTOR: '/edit-actor',
         DELETE_ACTOR: '/delete-actor',
         SEARCH_ACTOR: '/search-actors'
+    },
+    THEATER: {
+        GETALL_THEATER: '',
+        INSERT_THEATER: '/insert-theater',
+        EDIT_THEATER: '/edit-theater',
+        DELETE_THEATER: '/delete-theater',
+        SEARCH_THEATER: '/search-theaters'
+    },
+    CINEMA_ROOM: {
+        GETALL_CINEMA_ROOM: '',
+        INSERT_CINEMA_ROOM: '/insert-cinema-room',
+        EDIT_CINEMA_ROOM: '/edit-cinema-room',
+        DELETE_CINEMA_ROOM: '/delete-cinema-room',
+        SEARCH_CINEMA_ROOM: '/search-cinema-rooms'
     }
 }

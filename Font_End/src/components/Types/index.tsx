@@ -26,4 +26,17 @@ export interface Moviee {
 export interface MovieTypee {
     id: number
     movieTypeName: string
-  }
+}
+
+export interface Theaterr {
+    id: number
+    theaterName: string
+    location: string
+    province: string
+}
+
+export interface CinamaRoomm {
+    id: number
+    cinemaRoomName: string
+    theaters: Theaterr
+}

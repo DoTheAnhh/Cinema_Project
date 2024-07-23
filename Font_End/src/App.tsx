@@ -7,6 +7,7 @@ import ListMovieDetail from './components/MovieDetail/ListMovieDetail';
 import ListMovie from './components/Movie/ListMovie';
 import Movie from './components/Movie/Movie';
 import MovieDetail from './components/MovieDetail/MovieDetail';
+import ListTheater from './components/Theater/ListTheater';
 
 interface RouteComponent {
   path: string;
@@ -56,6 +57,10 @@ function App() {
               element: MovieDetail
             }
           ]
+        },
+        {
+          path: 'theaters',
+          element: ListTheater
         }
       ]
     }

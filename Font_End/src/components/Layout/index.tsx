@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Layout, Menu, Button, theme } from 'antd';
-import { HomeOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ProductOutlined } from "@ant-design/icons";
+import { HomeOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ShopOutlined, DesktopOutlined } from "@ant-design/icons";
 import { Link, Route, Routes } from "react-router-dom";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
@@ -10,6 +10,8 @@ import ListMovieDetail from "../MovieDetail/ListMovieDetail";
 import ListMovie from "../Movie/ListMovie";
 import Movie from "../Movie/Movie";
 import MovieDetail from "../MovieDetail/MovieDetail";
+import ListTheater from "../Theater/ListTheater";
+import Theater from "../Theater/Theater";
 
 const Layouts: React.FC = () => {
 
@@ -26,11 +28,14 @@ const Layouts: React.FC = () => {
           <Menu.Item key="1" icon={<HomeOutlined />} >
             <Link to="/dotheanh/home">Home</Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<ProductOutlined />}>
+          <Menu.Item key="2" icon={<DesktopOutlined />}>
             <Link to="/dotheanh/movies">Movies</Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<ProductOutlined />}>
-            <Link to="/dotheanh/movie-details">Movie detail</Link>
+          <Menu.Item key="3" icon={<DesktopOutlined />}>
+            <Link to="/dotheanh/movie-details">Movie details</Link>
+          </Menu.Item>
+          <Menu.Item key="4" icon={<ShopOutlined />}>
+            <Link to="/dotheanh/theaters">Theaters</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -52,6 +57,9 @@ const Layouts: React.FC = () => {
             <Route path="/movie-details" element={<ListMovieDetail />} />
             <Route path="/movie-details/movie-detail" element={<MovieDetail />} />
             <Route path="/movie-details/movie-detail/:id" element={<MovieDetail />} />
+            <Route path="/theaters" element={<ListTheater />} />
+            <Route path="/theaters/theater" element={<Theater />} />
+            <Route path="/theaters/theater/:id" element={<Theater />} />
           </Routes>
         </Content>
       </Layout>
