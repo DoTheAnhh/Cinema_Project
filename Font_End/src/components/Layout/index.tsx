@@ -12,6 +12,8 @@ import Movie from "../Movie/Movie";
 import MovieDetail from "../MovieDetail/MovieDetail";
 import ListTheater from "../Theater/ListTheater";
 import Theater from "../Theater/Theater";
+import CinemaRoom from "../MovieCinema/CinemaRoom";
+import ListCinemaRoom from "../MovieCinema/ListCinemaRoom";
 
 const Layouts: React.FC = () => {
 
@@ -37,6 +39,9 @@ const Layouts: React.FC = () => {
           <Menu.Item key="4" icon={<ShopOutlined />}>
             <Link to="/dotheanh/theaters">Theaters</Link>
           </Menu.Item>
+          <Menu.Item key="5" icon={<ShopOutlined />}>
+            <Link to="/dotheanh/cinema-rooms">Cinema room</Link>
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout className="site-layout">
@@ -51,15 +56,22 @@ const Layouts: React.FC = () => {
         <Content style={{ margin: "24px 16px", padding: 24, minHeight: 280 }}>
           <Routes>
             <Route path="/home" element={<Home />} />
+
             <Route path="/movies" element={<ListMovie />} />
             <Route path="/movies/movie" element={<Movie />} />
             <Route path="/movies/movie/:id" element={<Movie />} />
+
             <Route path="/movie-details" element={<ListMovieDetail />} />
             <Route path="/movie-details/movie-detail" element={<MovieDetail />} />
             <Route path="/movie-details/movie-detail/:id" element={<MovieDetail />} />
+
             <Route path="/theaters" element={<ListTheater />} />
             <Route path="/theaters/theater" element={<Theater />} />
             <Route path="/theaters/theater/:id" element={<Theater />} />
+
+            <Route path="/cinema-rooms" element={<ListCinemaRoom />} />
+            <Route path="/cinema-rooms/cinema-room" element={<CinemaRoom />} />
+            <Route path="/cinema-rooms/cinema-room/:id" element={<CinemaRoom />} />
           </Routes>
         </Content>
       </Layout>

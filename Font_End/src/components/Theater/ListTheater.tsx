@@ -32,10 +32,6 @@ const ListTheater: React.FC = () => {
         setIsModalVisible(true);
     };
 
-    const handleOk = () => {
-        setIsModalVisible(false);
-    };
-
     const handleCancel = () => {
         setIsModalVisible(false);
     };
@@ -73,24 +69,6 @@ const ListTheater: React.FC = () => {
                             icon={<EditFilled />}
                         />
                     </Tooltip>
-                    <Tooltip title="Cinema room">
-                        <Button
-                            type="primary"
-                            style={{ marginLeft: 10 }}
-                            onClick={() => showModal(record.id)}
-                        >
-                            Cinema room
-                        </Button>
-                    </Tooltip>
-                    <Modal
-                        title="Cinema room"
-                        visible={isModalVisible}
-                        onOk={handleOk}
-                        onCancel={handleCancel}
-                        okText="New room"
-                    >
-                        {selectedId && <ListCinemaRoom id={selectedId} />}
-                    </Modal>
                 </div>
             ),
         }

@@ -8,6 +8,9 @@ import ListMovie from './components/Movie/ListMovie';
 import Movie from './components/Movie/Movie';
 import MovieDetail from './components/MovieDetail/MovieDetail';
 import ListTheater from './components/Theater/ListTheater';
+import Theater from './components/Theater/Theater';
+import CinemaRoom from './components/MovieCinema/CinemaRoom';
+import ListCinemaRoom from './components/MovieCinema/ListCinemaRoom';
 
 interface RouteComponent {
   path: string;
@@ -60,7 +63,31 @@ function App() {
         },
         {
           path: 'theaters',
-          element: ListTheater
+          element: ListTheater,
+          children: [
+            {
+              path: 'theater',
+              element: Theater
+            },
+            {
+              path: 'theater/:id',
+              element: Theater
+            }
+          ]
+        },
+        {
+          path: 'cinema-rooms',
+          element: ListCinemaRoom,
+          children: [
+            {
+              path: 'cinema-room',
+              element: CinemaRoom
+            },
+            {
+              path: 'cinema-room/:id',
+              element: CinemaRoom
+            }
+          ]
         }
       ]
     }
