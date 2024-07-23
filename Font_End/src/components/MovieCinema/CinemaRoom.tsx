@@ -78,12 +78,12 @@ const CinemaRoom: React.FC = () => {
   }, [id])
 
   return (
-    <div className="container mt-5" style={{ width: '100%', display: 'flex', alignItems: 'flex-start' }}>
-      <div style={{ flex: 1 }}>
+    <div className="container" style={{ display: 'flex', justifyContent: 'center' }}>
+      <div style={{ width: '600px' }}>
         <Form layout="vertical">
-          <Form.Item label="Movie name" required>
+          <Form.Item label="Theater name" required>
             <Select
-              placeholder="Movie name"
+              placeholder="Theater name"
               style={{ width: '100%', maxHeight: '300px', overflow: 'auto' }}
               value={theater?.toString()}
               options={optionsTheater}
@@ -91,7 +91,7 @@ const CinemaRoom: React.FC = () => {
             />
           </Form.Item>
           <Form.Item label="Cinema room name" required>
-            <Input value={cinemaRoomName} onChange={(e) => setCinemaRoomName(e.target.value)} />
+            <Input placeholder="Cinema room name" value={cinemaRoomName} onChange={(e) => setCinemaRoomName(e.target.value)} />
           </Form.Item>
           <Form.Item>
             <Popconfirm
@@ -101,6 +101,15 @@ const CinemaRoom: React.FC = () => {
               cancelText="No"
             >
               <Button type="primary">Submit</Button>
+            </Popconfirm>
+            <Popconfirm
+              title="Are you sure back to list?"
+              className="ms-2"
+              onConfirm={backToList}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="default" style={{ marginLeft: 20 }}>Back to list</Button>
             </Popconfirm>
           </Form.Item>
         </Form>
