@@ -3,6 +3,8 @@ import Layouts from './components/Layout';
 import Login from './components/Login';
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import User from './components/UserPage/User';
+import { useEffect } from 'react';
 
 interface RouteComponent {
   path: string;
@@ -11,7 +13,11 @@ interface RouteComponent {
 }
 
 function App() {
-  
+
+  useEffect(() => {
+    document.title = "Do The Anh";
+  }, []);
+
   const routes: RouteComponent[] = [
     {
       path: '',
@@ -19,14 +25,18 @@ function App() {
     },
     {
       path: 'dotheanh/*',
-      element: Layouts, 
+      element: Layouts,
+    },
+    {
+      path: 'user/*',
+      element: User,
     }
   ];
 
   const renderRoutes = (children: RouteComponent[] = [], path = '') => {
     return children.map((route) => {
       const currentPath = path + route.path;
-       return (
+      return (
         <Route
           key={currentPath}
           path={currentPath}
@@ -41,10 +51,10 @@ function App() {
   return (
     <>
       <BrowserRouter>
-      <Routes>
-        {renderRoutes(routes)}
-      </Routes>
-    </BrowserRouter>
+        <Routes>
+          {renderRoutes(routes)}
+        </Routes>
+      </BrowserRouter>
     </>
   )
 }

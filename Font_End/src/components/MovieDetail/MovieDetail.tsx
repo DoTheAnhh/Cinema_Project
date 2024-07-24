@@ -14,6 +14,10 @@ const MovieDetail: React.FC = () => {
   const [content, setContent] = useState<string>("")
   const [actorIds, setActorIds] = useState<number[]>([])
 
+  const [totalMovie, setTotalMovie] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(999999999);
+
   const [bannerUrl, setBannerUrl] = useState<string>('');
 
   const [actors, setActors] = useState<Actorr[]>([])
@@ -54,11 +58,18 @@ const MovieDetail: React.FC = () => {
     }
   }
 
-  const fetchMovie = async () => {
+  const fetchMovie = async (page: number, size: number): Promise<Moviee[]> => {
     try {
-      const res = await axios.get<Moviee>(LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE);
-      setMovies(res.data.content);
+      const res = await axios.get(LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE, {
+        params: {
+          page: page - 1,
+          size: size,
+        },
+      });
+      setTotalMovie(res.data.totalElements);
+      return res.data.content;
     } catch (error) {
+      console.error("Error fetching data:", error);
       return [];
     }
   };
@@ -129,12 +140,14 @@ const MovieDetail: React.FC = () => {
   };
 
   const backToList = () => {
-    navigator("/dotheanh/movie-details");
+    navigator("/dotheanh/movie-details")
   };
 
   useEffect(() => {
     fetchActor()
-    fetchMovie()
+    fetchMovie(currentPage, pageSize).then((data) => {
+      setMovies(data);
+    });
     if (id) {
       fetchMovieDetail(Number(id))
     }

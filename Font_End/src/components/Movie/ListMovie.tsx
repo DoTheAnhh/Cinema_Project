@@ -17,9 +17,9 @@ const ListMovie: React.FC = () => {
 
   const [movieType, setMovieType] = useState<string>("")
 
-  const [currentPage, setCurrentPage] = useState<number>(0); // State để theo dõi trang hiện tại
-  const [pageSize, setPageSize] = useState<number>(5); // Số mục trên mỗi trang
-  const [totalMovie, setTotalMovie] = useState<number>(0); // Tổng số phần tử
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [pageSize, setPageSize] = useState<number>(5);
+  const [totalMovie, setTotalMovie] = useState<number>(0);
 
   const [movieTypes, setMovieTypes] = useState<MovieTypee[]>([])
 

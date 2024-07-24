@@ -22,7 +22,7 @@ const Login: React.FC = () => {
         onFinish={onLogin}
       >
         <div className="logo-container">
-          <img src='https://github.githubassets.com/favicons/favicon.png' alt="Logo" className="logo-image" />
+          <img src='/src/assets/Logo.jpg' alt="Logo" className="logo-image" />
         </div>
         <Form.Item
           name="email"
