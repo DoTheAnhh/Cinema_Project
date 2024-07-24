@@ -134,7 +134,7 @@ const User: React.FC = () => {
                 justifyContent: 'space-evenly'
               }}>
                 {movieDetails.slice(0, 8).map((m, index) => (
-                  <Link to={`/user/movie-detail/${m.movies.id}`} key={index}>
+                  <Link to={`/movie-detail/${m.movies.id}`} key={index}>
                     <Card
                       key={index}
                       style={{ width: 250, border: 'none' }}

@@ -5,6 +5,7 @@ import Login from './components/Login';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import User from './components/UserPage/User';
 import { useEffect } from 'react';
+import MVDetailForUser from './components/UserPage/MovieDetailForUser/MVDetailForUser';
 
 interface RouteComponent {
   path: string;
@@ -30,6 +31,10 @@ function App() {
     {
       path: 'user/*',
       element: User,
+    },
+    {
+      path: 'movie-detail/:id',
+      element: MVDetailForUser
     }
   ];
 
