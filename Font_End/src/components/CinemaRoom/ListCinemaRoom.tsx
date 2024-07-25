@@ -2,14 +2,14 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Col, Row, Table, Tooltip } from 'antd';
 import { EditFilled } from "@ant-design/icons";
-import { CinamaRoomm } from '../Types';
+import { CinemaRoomm } from '../Types';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 import axios from 'axios';
 import { Link, useNavigate } from 'react-router-dom';
 
 const ListCinemaRoom: React.FC = () => {
 
-  const [cinemaRooms, setCinemaRooms] = useState<CinamaRoomm[]>([]);
+  const [cinemaRooms, setCinemaRooms] = useState<CinemaRoomm[]>([]);
 
   const navigator = useNavigate()
 
@@ -32,6 +32,7 @@ const ListCinemaRoom: React.FC = () => {
       dataIndex: ['theaters', 'theaterName'],
       key: 'theaterName',
       align: "center" as const,
+      sorter: (a: CinemaRoomm, b: CinemaRoomm) => a.theaters.theaterName.localeCompare(b.theaters.theaterName),
     },
     {
       title: 'Cinema room name',
@@ -43,7 +44,7 @@ const ListCinemaRoom: React.FC = () => {
       title: "Action",
       key: "action",
       align: "center" as const,
-      render: (record: CinamaRoomm) => (
+      render: (record: CinemaRoomm) => (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <Tooltip title="Cinema room">
             <Button

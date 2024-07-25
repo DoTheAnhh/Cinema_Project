@@ -12,8 +12,8 @@ import Movie from "../Movie/Movie";
 import MovieDetail from "../MovieDetail/MovieDetail";
 import ListTheater from "../Theater/ListTheater";
 import Theater from "../Theater/Theater";
-import CinemaRoom from "../MovieCinema/CinemaRoom";
-import ListCinemaRoom from "../MovieCinema/ListCinemaRoom";
+import CinemaRoom from "../CinemaRoom/CinemaRoom";
+import ListCinemaRoom from "../CinemaRoom/ListCinemaRoom";
 
 const Layouts: React.FC = () => {
 

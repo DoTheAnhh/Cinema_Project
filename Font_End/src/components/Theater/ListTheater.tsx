@@ -5,7 +5,7 @@ import { EditFilled } from "@ant-design/icons";
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 import { Theaterr } from '../Types';
 import { Link, useNavigate } from 'react-router-dom';
-import ListCinemaRoom from '../MovieCinema/ListCinemaRoom';
+import ListCinemaRoom from '../CinemaRoom/ListCinemaRoom';
 
 const ListTheater: React.FC = () => {
     const [isModalVisible, setIsModalVisible] = useState(false);

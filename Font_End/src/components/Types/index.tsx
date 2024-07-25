@@ -35,7 +35,7 @@ export interface Theaterr {
     province: string
 }
 
-export interface CinamaRoomm {
+export interface CinemaRoomm {
     id: number
     cinemaRoomName: string
     theaters: Theaterr
