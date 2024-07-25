@@ -158,7 +158,7 @@ const MVDetailForUser: React.FC = () => {
                             src={movieDetails?.movies.banner}
                             alt={movieDetails?.movies.movieName}
                         />
-                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 30 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 30, marginTop: -500 }}>
                             <h1 style={{ marginBottom: 10 }}>{movieDetails?.movies.movieName}</h1>
                             <div style={{
                                 display: 'flex',
@@ -192,9 +192,55 @@ const MVDetailForUser: React.FC = () => {
                                 </div>
                             </div>
                         </div>
+                        <div style={{ marginLeft: 120, marginTop: -50 }}>
+                            <h2 style={{
+                                float: 'left',
+                                marginTop: 50,
+                                position: 'relative',
+                                paddingLeft: 30,
+                                fontFamily: 'Noto Sans JP", sans-serif',
+                                fontSize: '18px',
+                                marginLeft: 100,
+                            }}>
+                                <span style={{
+                                    width: 10,
+                                    height: 20,
+                                    backgroundColor: 'blue',
+                                    display: 'inline-block',
+                                    position: 'absolute',
+                                    left: 0,
+                                    top: '50%',
+                                    transform: 'translateY(-50%)',
+                                }}></span>
+                                Phim đang chiếu
+                            </h2>
+                            <div style={{ marginLeft: 100 }}>
+                                <div>
+                                    <img src='https://prod-ripcut-delivery.disney-plus.net/v1/variant/disney/353CC6E434CA544C677596ACDDE553B762C4D4E49E52F36B4C3205EA49CFA8DD/scale?width=1200&amp;aspectRatio=1.78&amp;format=webp' height={200} width={300} style={{ marginTop: 20 }} />
+                                    <div style={{ marginTop: 10 }}>
+                                        Deadpool & Wolverine
+                                    </div>
+                                </div>
+                                <div>
+                                    <img src='https://cdn.mobilecity.vn/mobilecity-vn/images/2024/07/review-phim-ke-trom-mat-trang-4-su-quay-pha-cua-minion.jpg.webp' height={200} width={300} style={{ marginTop: 20 }} />
+                                    <div style={{ marginTop: 10 }}>
+                                        Kẻ Trộm Mặt Trăng 4
+                                    </div>
+                                </div>
+                                <div>
+                                    <img src='https://cdn.mobilecity.vn/mobilecity-vn/images/2024/07/review-phim-du-an-mat-tham-hoa-tren-cau-su-doan-ket.jpg.webp' height={200} width={300} style={{ marginTop: 20 }} />
+                                    <div style={{ marginTop: 10 }}>
+                                        Thảm họa trên cầu
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{marginLeft: 280}}>
+                                <Button style={{borderColor: 'orange', width: 120, height: 40, color: 'orange'}}>Xem thêm</Button>
+                            </div>
+                        </div>
                     </div>
 
-                    <div style={{ marginLeft: 100, width: 700 }}>
+                    <div style={{ marginLeft: 100, width: 700, marginTop: -500 }}>
                         <h3 style={{
                             float: 'left',
                             marginTop: 50,
