@@ -49,7 +49,7 @@ const User: React.FC = () => {
   useEffect(() => {
     fetchMovieDetails()
   }, [])
-  
+
   return (
     <>
       <Layout>
@@ -252,9 +252,13 @@ const User: React.FC = () => {
               </div>
             </div>
           </div>
+          <div style={{ marginTop: 20 }}></div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
-          ©{new Date().getFullYear()}
+
+        <Footer style={{ textAlign: 'center', width: '100%', backgroundColor: '#333', padding: '20px 0' }}>
+          <div style={{ color: '#FFF5D1' }}>
+            ©{new Date().getFullYear()}
+          </div>
         </Footer>
       </Layout >
     </>
