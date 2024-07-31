@@ -20,13 +20,21 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String banner;
-
     private String movieName;
+
+    private String banner;
 
     private String duration;
 
     private Date releaseDate;
+
+    private String directorName;
+
+    private String trailer;
+
+    @Lob
+    @Column(columnDefinition = "LONGTEXT")
+    private String content;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -34,5 +42,13 @@ public class Movie {
             joinColumns = @JoinColumn(name = "movie_id"),
             inverseJoinColumns = @JoinColumn(name = "movie_type_id")
     )
-    private Set<MovieType> movieTypes = new HashSet<>();
+    private Set<MovieType> movieTypes;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "movie_actor",
+            joinColumns = @JoinColumn(name = "movie_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
+    private Set<Actor> actors;
 }

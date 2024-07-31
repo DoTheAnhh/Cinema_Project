@@ -49,7 +49,7 @@ public class ITheaterService implements TheaterService {
             theaterToEdit.setProvince(theaterDTO.getProvince());
             return theaterRepository.save(theaterToEdit);
         } else {
-            throw new RuntimeException("Movie not found with id: " + id);
+            throw new RuntimeException("Theater not found with id: " + id);
         }
     }
 }

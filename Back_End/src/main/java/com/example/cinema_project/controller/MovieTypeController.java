@@ -1,14 +1,19 @@
 package com.example.cinema_project.controller;
 
+import com.example.cinema_project.dto.CinemaRoomDTO;
+import com.example.cinema_project.dto.MovieTypeDTO;
+import com.example.cinema_project.dto.TheaterDTO;
+import com.example.cinema_project.entity.CinemaRoom;
 import com.example.cinema_project.entity.MovieType;
+import com.example.cinema_project.entity.Theater;
 import com.example.cinema_project.serivce.MovieTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin("*")
 @RestController
@@ -19,7 +24,26 @@ public class MovieTypeController {
     MovieTypeService movieTypeService;
 
     @GetMapping("")
-    public List<MovieType> getAll(){
+    public List<MovieType> getAllMovieType(){
         return movieTypeService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Optional<MovieType> getById(@PathVariable Long id) {
+        return movieTypeService.findById(id);
+    }
+
+    @PostMapping("/insert-movie-type")
+    public ResponseEntity<MovieType> addMovie(@RequestBody MovieTypeDTO movieTypeDTO) {
+        return new ResponseEntity<>(movieTypeService.insert(movieTypeDTO), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/edit-movie-type/{id}")
+    public ResponseEntity<MovieType> editMovie(@PathVariable Long id, @RequestBody MovieTypeDTO movieTypeDTO) {
+        try {
+            return new ResponseEntity<>(movieTypeService.update(id, movieTypeDTO), HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

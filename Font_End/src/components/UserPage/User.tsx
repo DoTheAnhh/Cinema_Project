@@ -2,7 +2,7 @@ import { Button, Card, Carousel, Layout, theme } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import React, { useEffect, useState } from 'react';
 import './css/index.css'
-import { MovieDetaill } from '../Types';
+import { MovieDetaill, Moviee } from '../Types';
 import axios from 'axios';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 import { LikeFilled, EyeOutlined } from "@ant-design/icons";
@@ -35,19 +35,19 @@ const User: React.FC = () => {
     color: 'black'
   };
 
-  const [movieDetails, setMovieDetails] = useState<MovieDetaill[]>([]);
+  const [movies, setMovies] = useState<Moviee[]>([]);
 
-  const fetchMovieDetails = async () => {
+  const fetchMovies = async () => {
     try {
-      const res = await axios.get(LOCALHOST + REQUEST_MAPPING.MOVIE_DETAIL + API.MOVIE_DETAIL.GETALL_MOVIE_DETAIL);
-      setMovieDetails(res.data.content);
+      const res = await axios.get(LOCALHOST + REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE);
+      setMovies(res.data.content);
     } catch (error) {
       console.error('Error fetching movie details:', error);
     }
   };
 
   useEffect(() => {
-    fetchMovieDetails()
+    fetchMovies()
   }, [])
 
   return (
@@ -133,14 +133,14 @@ const User: React.FC = () => {
                 gap: '16px',
                 justifyContent: 'space-evenly'
               }}>
-                {movieDetails.slice(0, 8).map((m, index) => (
-                  <Link to={`/movie-detail/${m.movies.id}`} key={index}>
+                {movies.slice(0, 8).map((m, index) => (
+                  <Link to={`/movie/${m.id}`} key={index}>
                     <Card
                       key={index}
                       style={{ width: 250, border: 'none' }}
-                      cover={<img alt="Movie" src={m.movies.banner} />}
+                      cover={<img alt="Movie" src={m.banner} />}
                     >
-                      <span style={{ fontSize: 20, fontWeight: 'bold' }}>{m.movies.movieName}</span>
+                      <span style={{ fontSize: 20, fontWeight: 'bold' }}>{m.movieName}</span>
                     </Card>
                   </Link>
                 ))}

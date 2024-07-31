@@ -33,7 +33,7 @@ function App() {
       element: User,
     },
     {
-      path: 'movie-detail/:id',
+      path: 'movie/:id',
       element: MVDetailForUser
     }
   ];

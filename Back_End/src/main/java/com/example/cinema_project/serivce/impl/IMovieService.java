@@ -1,8 +1,10 @@
 package com.example.cinema_project.serivce.impl;
 
 import com.example.cinema_project.dto.MovieDTO;
+import com.example.cinema_project.entity.Actor;
 import com.example.cinema_project.entity.Movie;
 import com.example.cinema_project.entity.MovieType;
+import com.example.cinema_project.repository.ActorRepository;
 import com.example.cinema_project.repository.MovieRepository;
 import com.example.cinema_project.repository.MovieTypeRepository;
 import com.example.cinema_project.serivce.MovieService;
@@ -26,6 +28,9 @@ public class IMovieService implements MovieService {
     MovieRepository movieRepo;
 
     @Autowired
+    ActorRepository actorRepository;
+
+    @Autowired
     MovieTypeRepository movieTypeRepository;
 
     @Override
@@ -47,12 +52,25 @@ public class IMovieService implements MovieService {
         movie.setReleaseDate(movieDTO.getReleaseDate());
 
         Set<MovieType> movieTypes = new HashSet<>();
-        for (String typeId : movieDTO.getMovieType()) {
+        for (String typeId : movieDTO.getMovieTypes()) {
             MovieType existingType = movieTypeRepository.findById(Long.parseLong(typeId)).orElse(null);
             if (existingType != null) {
                 movieTypes.add(existingType);
             }
         }
+
+        movie.setTrailer(movieDTO.getTrailer());
+        movie.setContent(movieDTO.getContent());
+        movie.setDirectorName(movieDTO.getDirectorName());
+
+        Set<Actor> actors = new HashSet<>();
+        for (String actorId : movieDTO.getActors()) {
+            Actor existingActor = actorRepository.findById(Long.parseLong(actorId)).orElse(null);
+            if (existingActor != null) {
+                actors.add(existingActor);
+            }
+        }
+        movie.setActors(actors);
         movie.setMovieTypes(movieTypes);
 
         return movieRepo.save(movie);
@@ -68,13 +86,26 @@ public class IMovieService implements MovieService {
             movieToEdit.setReleaseDate(movieDTO.getReleaseDate());
 
             Set<MovieType> movieTypes = new HashSet<>();
-            for (String typeId : movieDTO.getMovieType()) {
+            for (String typeId : movieDTO.getMovieTypes()) {
                 MovieType existingType = movieTypeRepository.findById(Long.parseLong(typeId)).orElse(null);
                 if (existingType != null) {
                     movieTypes.add(existingType);
                 }
             }
             movieToEdit.setMovieTypes(movieTypes);
+
+            movieToEdit.setTrailer(movieDTO.getTrailer());
+            movieToEdit.setContent(movieDTO.getContent());
+            movieToEdit.setDirectorName(movieDTO.getDirectorName());
+
+            Set<Actor> actors = new HashSet<>();
+            for (String actorId : movieDTO.getActors()) {
+                Actor existingActor = actorRepository.findById(Long.parseLong(actorId)).orElse(null);
+                if (existingActor != null) {
+                    actors.add(existingActor);
+                }
+            }
+            movieToEdit.setActors(actors);
 
             return movieRepo.save(movieToEdit);
         } else {

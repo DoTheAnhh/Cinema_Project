@@ -5,6 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,4 +27,13 @@ public class Theater {
     private String province;
 
     private String location;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "theater_movie",
+            joinColumns = @JoinColumn(name = "theater_id"),
+            inverseJoinColumns = @JoinColumn(name = "movie_id")
+    )
+    private Set<Movie> movies;
+
 }

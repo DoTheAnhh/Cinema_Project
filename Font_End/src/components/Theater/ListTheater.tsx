@@ -1,15 +1,14 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Modal, Row, Table, Tooltip } from 'antd';
+import { Button, Col, Row, Table, Tooltip } from 'antd';
 import { EditFilled } from "@ant-design/icons";
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 import { Theaterr } from '../Types';
 import { Link, useNavigate } from 'react-router-dom';
-import ListCinemaRoom from '../CinemaRoom/ListCinemaRoom';
+
 
 const ListTheater: React.FC = () => {
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [selectedId, setSelectedId] = useState<number | null>(null);
+
     const [theaters, setTheaters] = useState<Theaterr[]>([]);
 
     const navigator = useNavigate();
@@ -27,27 +26,20 @@ const ListTheater: React.FC = () => {
         navigator(`/dotheanh/theaters/theater/${id}`);
     };
 
-    const showModal = (id: number) => {
-        setSelectedId(id);
-        setIsModalVisible(true);
-    };
-
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
     const columns = [
         {
             title: 'Theater name',
             dataIndex: 'theaterName',
             key: 'theaterName',
             align: "center" as const,
+            sorter: (a: { theaterName: string }, b: { theaterName: string }) => a.theaterName.localeCompare(b.theaterName)
         },
         {
             title: 'Province',
             dataIndex: 'province',
             key: 'province',
             align: "center" as const,
+            sorter: (a: { province: string }, b: { province: string }) => a.province.localeCompare(b.province)
         },
         {
             title: 'Location',

@@ -17,10 +17,6 @@ public class ShowTime {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id")
-    private Movie movie;
-
-    @ManyToOne
     @JoinColumn(name = "theater_id")
     private Theater theater;
 

@@ -1,5 +1,6 @@
 package com.example.cinema_project.dto;
 
+import com.example.cinema_project.entity.Movie;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,5 +25,15 @@ public class MovieDTO {
 
     private Date releaseDate;
 
-    private Set<String> movieType;
+    public String directorName;
+
+    public String trailer;
+
+    public Date movieDate;
+
+    public String content;
+
+    private Set<String> movieTypes;
+
+    public Set<String> actors;
 }

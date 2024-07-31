@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { LOCALHOST, REQUEST_MAPPING, API } from '../../APIs/typing';
-import { MovieDetaill } from '../../Types';
+import { MovieDetaill, Moviee } from '../../Types';
 import { Button, Layout, Select, Tag, theme } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import { FieldTimeOutlined, CalendarOutlined, FacebookOutlined, YoutubeOutlined } from "@ant-design/icons";
@@ -18,7 +18,7 @@ interface DateObject {
 
 const MVDetailForUser: React.FC = () => {
     const { id } = useParams<{ id: string }>();
-    const [movieDetails, setMovieDetails] = useState<MovieDetaill>();
+    const [movies, setMovies] = useState<Moviee>();
 
     const [selectedDate, setSelectedDate] = useState<DateObject | null>(null);
 
@@ -47,16 +47,16 @@ const MVDetailForUser: React.FC = () => {
     };
 
     useEffect(() => {
-        const fetchMovieDetail = async () => {
+        const fetchMovie = async () => {
             try {
-                const res = await axios.get(`${LOCALHOST}${REQUEST_MAPPING.MOVIE_DETAIL + API.MOVIE_DETAIL.GETALL_MOVIE_DETAIL}/${id}`);
-                setMovieDetails(res.data);
+                const res = await axios.get(`${LOCALHOST}${REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE}/${id}`);
+                setMovies(res.data);
             } catch (error) {
                 console.error('Error fetching movie detail:', error);
             }
         };
 
-        fetchMovieDetail();
+        fetchMovie();
     }, [id]);
 
 
@@ -146,46 +146,45 @@ const MVDetailForUser: React.FC = () => {
                         }}
                     >
                         <iframe
-                            src={movieDetails?.trailer}
+                            src={movies?.trailer}
                             style={{ height: 503, width: 750, flexShrink: 0 }}
                             title="Movie Trailer"
                         ></iframe>
                     </div>
-
                     <div style={{ display: 'flex', marginTop: 25 }}>
                         <img
                             style={{ height: 350, width: 240, borderRadius: 5, marginTop: -90, marginLeft: 200 }}
-                            src={movieDetails?.movies.banner}
-                            alt={movieDetails?.movies.movieName}
+                            src={movies?.banner}
+                            alt={movies?.movieName}
                         />
                         <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 30, marginTop: -500 }}>
-                            <h1 style={{ marginBottom: 10 }}>{movieDetails?.movies.movieName}</h1>
+                            <h1 style={{ marginBottom: 10 }}>{movies?.movieName}</h1>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 gap: '20px',
                                 marginBottom: 20
                             }}>
-                                <p><FieldTimeOutlined style={{ color: 'orange' }} /> {movieDetails?.movies.duration + " Phút"}</p>
-                                <p><CalendarOutlined style={{ color: 'orange' }} /> {movieDetails?.movies.releaseDate
-                                    ? dayjs(movieDetails.movies.releaseDate).format('DD/MM/YYYY')
+                                <p><FieldTimeOutlined style={{ color: 'orange' }} /> {movies?.duration + " Phút"}</p>
+                                <p><CalendarOutlined style={{ color: 'orange' }} /> {movies?.releaseDate
+                                    ? dayjs(movies.releaseDate).format('DD/MM/YYYY')
                                     : 'No release date available'}</p>
                             </div>
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <strong style={{ marginRight: '5px' }}>Thể loại</strong>:
-                                    {movieDetails?.movies.movieTypes.map((type, index) => (
+                                    {movies?.movieTypes.map((type, index) => (
                                         <Tag key={index} style={tagStyle}>{type.movieTypeName}</Tag>
                                     ))}
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
                                     <strong style={{ marginRight: '5px' }}>Đạo diễn</strong>:
-                                    <Tag style={tagStyle}>{movieDetails?.directorName}</Tag>
+                                    <Tag style={tagStyle}>{movies?.directorName}</Tag>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', marginTop: '5px' }}>
                                     <strong style={{ marginRight: '5px' }}>Diễn viên</strong>:
                                     <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', maxWidth: '100%' }}>
-                                        {movieDetails?.actors.map((actor, index) => (
+                                        {movies?.actors.map((actor: any, index: any) => (
                                             <Tag key={index} style={tagStyle}>{actor.actorName}</Tag>
                                         ))}
                                     </div>
@@ -263,8 +262,8 @@ const MVDetailForUser: React.FC = () => {
                             Nội dung phim
                         </h3>
                     </div>
-                    <div style={{ width: 800, marginTop: 90, marginLeft: 200 }}>
-                        {movieDetails?.content}
+                    <div style={{ width: 720, marginTop: 90, marginLeft: 200, gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '20px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
+                        {movies?.content}
                     </div>
 
                     <div style={{ marginLeft: 100 }}>
@@ -290,8 +289,8 @@ const MVDetailForUser: React.FC = () => {
                             Lịch chiếu
                         </h3>
                     </div>
-                    <div style={{ marginTop: 80, marginLeft: 220, width: 600, display: 'flex', alignItems: 'center' }}>
-                        <div style={{ width: 460 }}>
+                    <div style={{ marginTop: 80, marginLeft: 220, width: 500, display: 'flex', alignItems: 'center' }}>
+                        <div style={{ width: 350 }}>
                             <Slider {...settings}>
                                 {allDays.map((dateObj, index) => (
                                     <div key={index} style={{ display: 'flex', justifyContent: 'center' }}>
@@ -347,7 +346,7 @@ const MVDetailForUser: React.FC = () => {
                             'Chưa chọn ngày.'
                         )}
                     </div>
-                    <hr style={{ marginTop: 80, width: 850, justifyContent: 'center', marginLeft: 195, height: 2, backgroundColor: 'blue' }} />
+                    <hr style={{ marginTop: 80, width: 725, justifyContent: 'center', marginLeft: 195, height: 2, backgroundColor: 'blue' }} />
                     <div className="container table" style={{ marginLeft: 180 }}>
                         <div className="row">
                             <div className="col-12 mb-3" style={{
@@ -390,7 +389,6 @@ const MVDetailForUser: React.FC = () => {
                             </div>
                         </div>
                     </div>
-
                 </Content>
                 <Footer style={{ width: '100%', backgroundColor: '#333333', display: 'flex', justifyContent: 'space-between', padding: '0 140px' }}>
                     <div style={{ color: '#FFF5D1', flex: 1, marginTop: 40, marginLeft: 40, marginRight: 200 }}>
@@ -439,7 +437,6 @@ const MVDetailForUser: React.FC = () => {
                         </div>
                     </div>
                 </Footer>
-
             </Layout >
         </>
     );

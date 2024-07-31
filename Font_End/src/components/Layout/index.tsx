@@ -6,10 +6,8 @@ import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import Home from "../Home";
 import './css/index.css'
-import ListMovieDetail from "../MovieDetail/ListMovieDetail";
 import ListMovie from "../Movie/ListMovie";
 import Movie from "../Movie/Movie";
-import MovieDetail from "../MovieDetail/MovieDetail";
 import ListTheater from "../Theater/ListTheater";
 import Theater from "../Theater/Theater";
 import CinemaRoom from "../CinemaRoom/CinemaRoom";
@@ -33,13 +31,10 @@ const Layouts: React.FC = () => {
           <Menu.Item key="2" icon={<DesktopOutlined />}>
             <Link to="/dotheanh/movies">Movies</Link>
           </Menu.Item>
-          <Menu.Item key="3" icon={<DesktopOutlined />}>
-            <Link to="/dotheanh/movie-details">Movie details</Link>
-          </Menu.Item>
-          <Menu.Item key="4" icon={<ShopOutlined />}>
+          <Menu.Item key="3" icon={<ShopOutlined />}>
             <Link to="/dotheanh/theaters">Theaters</Link>
           </Menu.Item>
-          <Menu.Item key="5" icon={<ShopOutlined />}>
+          <Menu.Item key="4" icon={<ShopOutlined />}>
             <Link to="/dotheanh/cinema-rooms">Cinema room</Link>
           </Menu.Item>
         </Menu>
@@ -60,10 +55,6 @@ const Layouts: React.FC = () => {
             <Route path="/movies" element={<ListMovie />} />
             <Route path="/movies/movie" element={<Movie />} />
             <Route path="/movies/movie/:id" element={<Movie />} />
-
-            <Route path="/movie-details" element={<ListMovieDetail />} />
-            <Route path="/movie-details/movie-detail" element={<MovieDetail />} />
-            <Route path="/movie-details/movie-detail/:id" element={<MovieDetail />} />
 
             <Route path="/theaters" element={<ListTheater />} />
             <Route path="/theaters/theater" element={<Theater />} />

@@ -3,11 +3,10 @@ import axios from "axios"
 import { Col, Input, Pagination, Row, Select, Space, Table, Tag, DatePicker, Button, Tooltip } from "antd"
 import { Dayjs } from "dayjs"
 import { Link, useNavigate } from "react-router-dom"
-import { EditFilled } from "@ant-design/icons";
+import { EditFilled, PlayCircleOutlined } from "@ant-design/icons";
 import { Moviee, MovieTypee } from "../Types"
 import { API, LOCALHOST, REQUEST_MAPPING } from "../APIs/typing"
 const { RangePicker } = DatePicker;
-
 
 const ListMovie: React.FC = () => {
 
@@ -22,6 +21,8 @@ const ListMovie: React.FC = () => {
   const [totalMovie, setTotalMovie] = useState<number>(0);
 
   const [movieTypes, setMovieTypes] = useState<MovieTypee[]>([])
+
+  const [expandedRowKeys, setExpandedRowKeys] = useState<React.Key[]>([]);
 
   const [dateRange, setDateRange] = useState<[Dayjs | null, Dayjs | null]>([null, null])
 
@@ -92,18 +93,18 @@ const ListMovie: React.FC = () => {
           size: size,
         },
       });
-      setTotalMovie(res.data.totalElements); // Cập nhật tổng số phần tử
-      return res.data.content; // Trả về mảng Employee[]
+      setTotalMovie(res.data.totalElements);
+      return res.data.content;
     } catch (error) {
       console.error("Error fetching data:", error);
-      return []; // Trả về một mảng trống trong trường hợp lỗi
+      return [];
     }
   };
 
   const fetchMovieType = async () => {
     try {
       const res = await axios.get<MovieTypee[]>(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.GETALL_MOVIE_TYPE);
-      setMovieTypes(res.data); // Cập nhật danh sách MovieType vào state
+      setMovieTypes(res.data);
     } catch (error) {
       console.error("Error fetching data:", error);
       return [];
@@ -134,13 +135,26 @@ const ListMovie: React.FC = () => {
   useEffect(() => {
     fetchMovieType();
   }, []);
-
+  
   const options = movieTypes.map((type) => ({
     value: type.id.toString(),
     label: type.movieTypeName,
   }));
 
   const columns = [
+    {
+      title: "Banner",
+      dataIndex: 'banner',
+      key: "banner",
+      align: "center" as const,
+      render: (banner: any) => (
+        <img
+          src={banner}
+          alt="Banner"
+          style={{ width: '100px', height: '150px' }}
+        />
+      ),
+    },
     {
       title: 'Movie name',
       dataIndex: 'movieName',
@@ -181,16 +195,56 @@ const ListMovie: React.FC = () => {
         )),
     },
     {
-      title: "Banner",
-      dataIndex: 'banner',
-      key: "banner",
+      title: 'Director name',
+      dataIndex: 'directorName',
+      key: 'directorName',
       align: "center" as const,
-      render: (banner: any) => (
-        <img
-          src={banner}
-          alt="Banner"
-          style={{ width: '100px', height: '150px' }}
-        />
+      render: (directorNames: any[]) =>
+        <Tag style={{ fontSize: '12px', padding: '6px 12px', margin: '4px' }}>
+          {directorNames}
+        </Tag>
+    },
+    {
+      title: 'Actor',
+      dataIndex: 'actors',
+      key: 'actors',
+      align: "center" as const,
+      render: (actors: any[]) =>
+        actors.map((actor: any) => (
+          <Tag key={actor.actorName} style={{ fontSize: '12px', padding: '6px 12px', margin: '4px' }}>
+            {actor.actorName}
+          </Tag>
+        )),
+    },
+    {
+      title: 'Trailer',
+      dataIndex: 'trailer',
+      key: 'trailer',
+      align: "center" as const,
+      render: (trailerUrl: string, record: Moviee) => (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {expandedRowKeys.includes(record.id) && (
+            <iframe
+              width="220"
+              height="150"
+              src={trailerUrl}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              referrerPolicy="strict-origin-when-cross-origin"
+              allowFullScreen
+              style={{ border: 'none' }}
+            ></iframe>
+          )}
+          <Button
+            icon={<PlayCircleOutlined />}
+            onClick={() => {
+              setExpandedRowKeys(expandedRowKeys.includes(record.id) ? [] : [record.id]);
+            }}
+            style={{ marginTop: '5px', height: 30, width: 70 }}
+          >
+            {expandedRowKeys.includes(record.id) ? 'Hide' : 'Show'}
+          </Button>
+        </div>
       ),
     },
     {
