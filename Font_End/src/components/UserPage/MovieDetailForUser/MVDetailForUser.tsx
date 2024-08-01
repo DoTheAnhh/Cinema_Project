@@ -198,9 +198,10 @@ const MVDetailForUser: React.FC = () => {
                         {embedUrl ? (
                             <iframe
                                 src={embedUrl}
-                                style={{ height: 503, width: 750, flexShrink: 0 }}
+                                style={{ height: 500, width: 800, flexShrink: 0, border: 'none', pointerEvents: 'auto', position: 'relative' }}
                                 title="Movie Trailer"
                                 allowFullScreen
+                                frameBorder="0"
                             ></iframe>
                         ) : (
                             <p>No trailer available</p>
@@ -208,7 +209,7 @@ const MVDetailForUser: React.FC = () => {
                     </div>
                     <div style={{ display: 'flex', marginTop: 25 }}>
                         <img
-                            style={{ height: 350, width: 240, borderRadius: 5, marginTop: -90, marginLeft: 200 }}
+                            style={{ height: 350, width: 240, borderRadius: 5, marginTop: -90, marginLeft: 200,position: 'relative'}}
                             src={movies?.banner}
                             alt={movies?.movieName}
                         />
