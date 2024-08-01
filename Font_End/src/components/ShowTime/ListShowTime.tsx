@@ -13,7 +13,7 @@ const ListShowTime: React.FC = () => {
     const [showTimes, setShowTimes] = useState<ShowTimee[]>([])
 
     const [currentPage, setCurrentPage] = useState<number>(0);
-    const [pageSize, setPageSize] = useState<number>(8);
+    const [pageSize, setPageSize] = useState<number>(7);
     const [totalShowTime, setTotalShowTime] = useState<number>(0);
 
     const navigator = useNavigate()

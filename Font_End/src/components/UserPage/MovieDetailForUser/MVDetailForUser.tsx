@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { LOCALHOST, REQUEST_MAPPING, API } from '../../APIs/typing';
 import { Moviee, ShowTimee, Theaterr } from '../../Types';
@@ -23,6 +23,8 @@ const MVDetailForUser: React.FC = () => {
     const [showTimes, setShowTimes] = useState<ShowTimee[]>([]);
 
     const [selectedDate, setSelectedDate] = useState<DateObject | null>(null);
+
+    const navigate = useNavigate();
 
     const totalDays = 6; // Tổng số ngày muốn hiển thị
     const daysToShow = 4; // Số ngày muốn hiển thị trên mỗi trang
@@ -67,6 +69,10 @@ const MVDetailForUser: React.FC = () => {
         } catch (error) {
             console.error('Error fetching movie detail:', error);
         }
+    };
+
+    const handleLogoClick = () => {
+        navigate('/user');
     };
 
     useEffect(() => {
@@ -136,6 +142,18 @@ const MVDetailForUser: React.FC = () => {
         return acc;
     }, {} as { [key: string]: string[] });
 
+    const getEmbedUrl = (url: string) => {
+        if (url.includes('watch?v=')) {
+            return url.replace('watch?v=', 'embed/');
+        } else if (url.includes('youtu.be/')) {
+            return url.replace('youtu.be/', 'www.youtube.com/embed/');
+        } else {
+            return null;
+        }
+    };
+
+    const embedUrl = movies?.trailer ? getEmbedUrl(movies.trailer) : null;
+
     return (
         <>
             <Layout>
@@ -152,7 +170,7 @@ const MVDetailForUser: React.FC = () => {
                     right: 0,
                     zIndex: 1000,
                 }}>
-                    <img src="/src/assets/Logo.jpg" alt="Logo" style={{ position: 'absolute', left: 80, height: 80 }} />
+                    <img src="/src/assets/Logo.jpg" alt="Logo" style={{ position: 'absolute', left: 80, height: 80 }} onClick={handleLogoClick}/>
                     <ul style={{ width: 300, display: 'flex', justifyContent: 'space-between', listStyleType: 'none' }}>
                         <li><a style={fontStyle} href="#new-movie">Phim mới</a></li>
                         <li><a style={fontStyle} href="#cinema-corner" >Góc điện ảnh</a></li>
@@ -177,11 +195,16 @@ const MVDetailForUser: React.FC = () => {
                             background: 'black',
                         }}
                     >
-                        <iframe
-                            src={movies?.trailer}
-                            style={{ height: 503, width: 750, flexShrink: 0 }}
-                            title="Movie Trailer"
-                        ></iframe>
+                        {embedUrl ? (
+                            <iframe
+                                src={embedUrl}
+                                style={{ height: 503, width: 750, flexShrink: 0 }}
+                                title="Movie Trailer"
+                                allowFullScreen
+                            ></iframe>
+                        ) : (
+                            <p>No trailer available</p>
+                        )}
                     </div>
                     <div style={{ display: 'flex', marginTop: 25 }}>
                         <img
