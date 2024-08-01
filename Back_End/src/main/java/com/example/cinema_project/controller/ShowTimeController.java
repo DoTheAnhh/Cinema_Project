@@ -27,6 +27,6 @@ public class ShowTimeController {
         java.util.Date parsedDate = dateFormat.parse(showDate);
         Date sqlDate = new Date(parsedDate.getTime());
 
-        return showTimeService.getShowTimesByMovieIdAndShowDateAndShowTime(movieId, sqlDate);
+        return showTimeService.getShowTimesByMovieIdAndShowDate(movieId, sqlDate);
     }
 }

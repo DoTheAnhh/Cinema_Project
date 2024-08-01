@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ShowTimeService {
 
-    List<ShowTime> getShowTimesByMovieIdAndShowDateAndShowTime(Long movieId, Date showDate);
+    List<ShowTime> getShowTimesByMovieIdAndShowDate(Long movieId, Date showDate);
 }

@@ -16,7 +16,7 @@ public class IShowTimeService implements ShowTimeService {
     ShowTimeRepository showTimeRepository;
 
     @Override
-    public List<ShowTime> getShowTimesByMovieIdAndShowDateAndShowTime(Long movieId, Date showDate) {
+    public List<ShowTime> getShowTimesByMovieIdAndShowDate(Long movieId, Date showDate) {
         return showTimeRepository.findByMovieIdAndShowDate(movieId, showDate);
     }
 }
