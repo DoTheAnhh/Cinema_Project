@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,7 +22,11 @@ public class ShowTime {
     @JoinColumn(name = "theater_id")
     private Theater theater;
 
-    private String showDate;
+    @ManyToOne
+    @JoinColumn(name = "movie_id")
+    private Movie movie;
+
+    private Date showDate;
 
     private String showTime;
 }

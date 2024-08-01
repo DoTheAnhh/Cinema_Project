@@ -40,3 +40,11 @@ export interface CinemaRoomm {
     cinemaRoomName: string
     theaters: Theaterr
 }
+
+export interface ShowTimee {
+    id: number
+    movie: Moviee
+    theater: Theaterr
+    showDate: string
+    showTime: string
+}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { LOCALHOST, REQUEST_MAPPING, API } from '../../APIs/typing';
-import { MovieDetaill, Moviee } from '../../Types';
+import { Moviee, ShowTimee, Theaterr } from '../../Types';
 import { Button, Layout, Select, Tag, theme } from 'antd';
 import { Content, Footer, Header } from 'antd/es/layout/layout';
 import { FieldTimeOutlined, CalendarOutlined, FacebookOutlined, YoutubeOutlined } from "@ant-design/icons";
@@ -18,15 +18,18 @@ interface DateObject {
 
 const MVDetailForUser: React.FC = () => {
     const { id } = useParams<{ id: string }>();
+
     const [movies, setMovies] = useState<Moviee>();
+    const [showTimes, setShowTimes] = useState<ShowTimee[]>([]);
 
     const [selectedDate, setSelectedDate] = useState<DateObject | null>(null);
 
     const totalDays = 6; // Tổng số ngày muốn hiển thị
     const daysToShow = 4; // Số ngày muốn hiển thị trên mỗi trang
 
-    const handleTagClick = (dateObj: DateObject) => {
+    const handleTagClick = async (dateObj: DateObject) => {
         setSelectedDate(dateObj);
+        await fetchShowTime(dateObj.date); // Gọi fetchShowTime với ngày được chọn
     };
 
     const {
@@ -46,19 +49,38 @@ const MVDetailForUser: React.FC = () => {
         borderRadius: '10px',
     };
 
+    const fetchMovie = async () => {
+        try {
+            const res = await axios.get(`${LOCALHOST}${REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE}/${id}`);
+            setMovies(res.data);
+        } catch (error) {
+            console.error('Error fetching movie detail:', error);
+        }
+    };
+
+    const fetchShowTime = async (date: string) => {
+        try {
+            const formattedDate = dayjs(date, 'DD/MM').format('YYYY-MM-DD');
+            const res = await axios.get(`${LOCALHOST}${REQUEST_MAPPING.SHOW_TIME}${API.SHOW_TIME.GETALL_SHOW_TIME}/movie/${id}/date/${formattedDate}`);
+            setShowTimes(res.data);
+            console.log(res.data);
+        } catch (error) {
+            console.error('Error fetching movie detail:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchMovie = async () => {
-            try {
-                const res = await axios.get(`${LOCALHOST}${REQUEST_MAPPING.MOVIE + API.MOVIE.GETALL_MOVIE}/${id}`);
-                setMovies(res.data);
-            } catch (error) {
-                console.error('Error fetching movie detail:', error);
+        if (id) {
+            fetchMovie();
+            // Gọi fetchShowTime với ngày mặc định hoặc ngày được chọn
+            if (selectedDate) {
+                fetchShowTime(selectedDate.date);
+            } else {
+                // Nếu chưa có ngày được chọn, có thể sử dụng ngày hôm nay hoặc một giá trị mặc định khác
+                fetchShowTime(dayjs().format('DD/MM'));
             }
-        };
-
-        fetchMovie();
-    }, [id]);
-
+        }
+    }, [id, selectedDate]);
 
     const generateNextDays = (days: number) => {
         const today = dayjs();
@@ -66,12 +88,13 @@ const MVDetailForUser: React.FC = () => {
             const date = today.add(index, 'day');
             return {
                 day: date.format('dddd'), // Lấy thứ trong tuần
-                date: date.format('DD/MM')
+                date: date.format('DD/MM') // Ngày định dạng DD/MM
             };
         });
     };
 
     const allDays = generateNextDays(totalDays);
+
 
     const NextArrow = (props: any) => {
         const { className, style, onClick } = props;
@@ -103,6 +126,15 @@ const MVDetailForUser: React.FC = () => {
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
     };
+
+    const groupedShowTimes: { [key: string]: string[] } = showTimes.reduce((acc, showTime) => {
+        const theaterName = showTime.theater.theaterName;
+        if (!acc[theaterName]) {
+            acc[theaterName] = [];
+        }
+        acc[theaterName].push(showTime.showTime);
+        return acc;
+    }, {} as { [key: string]: string[] });
 
     return (
         <>
@@ -262,7 +294,7 @@ const MVDetailForUser: React.FC = () => {
                             Nội dung phim
                         </h3>
                     </div>
-                    <div style={{ width: 720, marginTop: 90, marginLeft: 200, gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '20px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
+                    <div style={{ width: 800, marginTop: 90, marginLeft: 200, gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '20px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
                         {movies?.content}
                     </div>
 
@@ -289,8 +321,8 @@ const MVDetailForUser: React.FC = () => {
                             Lịch chiếu
                         </h3>
                     </div>
-                    <div style={{ marginTop: 80, marginLeft: 220, width: 500, display: 'flex', alignItems: 'center' }}>
-                        <div style={{ width: 350 }}>
+                    <div style={{ marginTop: 80, marginLeft: 220, width: 600, display: 'flex', alignItems: 'center' }}>
+                        <div style={{ width: 430 }}>
                             <Slider {...settings}>
                                 {allDays.map((dateObj, index) => (
                                     <div key={index} style={{ display: 'flex', justifyContent: 'center' }}>
@@ -312,6 +344,7 @@ const MVDetailForUser: React.FC = () => {
                                         </Tag>
                                     </div>
                                 ))}
+
                             </Slider>
                         </div>
                         <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
@@ -339,55 +372,33 @@ const MVDetailForUser: React.FC = () => {
                             />
                         </div>
                     </div>
-                    <div style={{ marginTop: -87 }}>
-                        {selectedDate ? (
-                            `${selectedDate.day}, ${selectedDate.date}`
-                        ) : (
-                            'Chưa chọn ngày.'
-                        )}
-                    </div>
-                    <hr style={{ marginTop: 80, width: 725, justifyContent: 'center', marginLeft: 195, height: 2, backgroundColor: 'blue' }} />
-                    <div className="container table" style={{ marginLeft: 180 }}>
-                        <div className="row">
-                            <div className="col-12 mb-3" style={{
-                                marginTop: 20, fontWeight: 'bold', fontFamily: 'Noto Sans JP, sans-serif',
-                                fontSize: '18px',
-                            }}>
-                                Quang Trung
+                    <hr style={{ marginTop: 30, width: 800, justifyContent: 'center', marginLeft: 195, height: 2, backgroundColor: 'blue' }} />
+                    <div className="container table" style={{ marginLeft: 200 }}>
+                        {Object.entries(groupedShowTimes).map(([theaterName, times]: [string, string[]], i: number) => (
+                            <div key={i} className="col-12 mb-3" style={{ marginTop: 20 }}>
+                                <div style={{
+                                    fontWeight: 'bold',
+                                    fontFamily: 'Noto Sans JP, sans-serif',
+                                    fontSize: '18px',
+                                }}>
+                                    {theaterName}
+                                </div>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
+                                    {times.map((time, j) => (
+                                        <Tag key={j} style={{
+                                            width: 90,
+                                            height: 35,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            fontSize: '14px'
+                                        }}>
+                                            {time}
+                                        </Tag>
+                                    ))}
+                                </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
-                                <Tag style={{
-                                    width: 90,
-                                    height: 35,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '14px'
-                                }}>
-                                    20:30
-                                </Tag>
-                                <Tag style={{
-                                    width: 90,
-                                    height: 35,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '14px'
-                                }}>
-                                    21:30
-                                </Tag>
-                                <Tag style={{
-                                    width: 90,
-                                    height: 35,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    fontSize: '14px'
-                                }}>
-                                    22:30
-                                </Tag>
-                            </div>
-                        </div>
+                        ))}
                     </div>
                 </Content>
                 <Footer style={{ width: '100%', backgroundColor: '#333333', display: 'flex', justifyContent: 'space-between', padding: '0 140px' }}>

@@ -7,7 +7,8 @@ export const REQUEST_MAPPING = {
     MOVIE_DETAIL: '/movie-details',
     ACTOR: '/actors',
     THEATER: '/theaters',
-    CINEMA_ROOM: '/cinema-rooms'
+    CINEMA_ROOM: '/cinema-rooms',
+    SHOW_TIME: '/show-times',
 }
 
 export const API = {
@@ -50,5 +51,12 @@ export const API = {
         EDIT_CINEMA_ROOM: '/edit-cinema-room',
         DELETE_CINEMA_ROOM: '/delete-cinema-room',
         SEARCH_CINEMA_ROOM: '/search-cinema-rooms'
-    }
+    },
+    SHOW_TIME: {
+        GETALL_SHOW_TIME: '',
+        INSERT_SHOW_TIME: '/insert-show-time',
+        EDIT_SHOW_TIME: '/edit-show-time',
+        DELETE_SHOW_TIME: '/delete-show-time',
+        SEARCH_SHOW_TIME: '/search-show-times'
+    },
 }

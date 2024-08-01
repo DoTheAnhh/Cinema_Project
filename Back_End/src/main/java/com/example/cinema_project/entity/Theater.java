@@ -27,13 +27,4 @@ public class Theater {
     private String province;
 
     private String location;
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "theater_movie",
-            joinColumns = @JoinColumn(name = "theater_id"),
-            inverseJoinColumns = @JoinColumn(name = "movie_id")
-    )
-    private Set<Movie> movies;
-
 }
