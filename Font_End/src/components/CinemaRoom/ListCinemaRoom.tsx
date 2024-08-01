@@ -18,7 +18,7 @@ const ListCinemaRoom: React.FC = () => {
     setCinemaRooms(res.data);
   }
 
-  const editMovie = (id: number) => {
+  const editCinemaRoom = (id: number) => {
     navigator(`/dotheanh/cinema-rooms/cinema-room/${id}`);
   };
 
@@ -50,7 +50,7 @@ const ListCinemaRoom: React.FC = () => {
             <Button
               type="primary"
               style={{ marginLeft: 10 }}
-              onClick={() => editMovie(record.id)}
+              onClick={() => editCinemaRoom(record.id)}
               icon={<EditFilled />}
             >
             </Button>
@@ -63,7 +63,7 @@ const ListCinemaRoom: React.FC = () => {
   return (
     <div>
       <Row style={{ float: 'right' }}>
-        <Col xs={24} md={12} lg={3} style={{ marginLeft: 500 }}>
+        <Col xs={24} md={12} lg={3} style={{ marginLeft: 500, marginBottom: 20 }}>
           <Button type="primary" style={{ marginLeft: 10 }}>
             <Link to="/dotheanh/cinema-rooms/cinema-room">New movie</Link>
           </Button>

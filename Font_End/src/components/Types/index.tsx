@@ -45,6 +45,6 @@ export interface ShowTimee {
     id: number
     movie: Moviee
     theater: Theaterr
-    showDate: string
+    showDate: Date
     showTime: string
 }

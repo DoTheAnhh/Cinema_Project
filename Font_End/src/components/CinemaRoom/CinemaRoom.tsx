@@ -22,7 +22,7 @@ const CinemaRoom: React.FC = () => {
       setCinemaRoomName(cinemaRoomData.cinemaRoomName)
       setTheater(cinemaRoomData.theaters.theaterName)
     } catch (err) {
-      console.error('Error fetching movie: ', err);
+      console.error('Error fetching cinema room: ', err);
     }
   }
 
@@ -95,7 +95,7 @@ const CinemaRoom: React.FC = () => {
           </Form.Item>
           <Form.Item>
             <Popconfirm
-              title="Are you sure to submit this movie?"
+              title="Are you sure to submit this cinema room?"
               onConfirm={() => handleInsertOrUpdateCinemaRoom()}
               okText="Yes"
               cancelText="No"

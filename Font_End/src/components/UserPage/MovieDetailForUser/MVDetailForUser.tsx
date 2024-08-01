@@ -384,18 +384,21 @@ const MVDetailForUser: React.FC = () => {
                                     {theaterName}
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
-                                    {times.map((time, j) => (
-                                        <Tag key={j} style={{
-                                            width: 90,
-                                            height: 35,
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            fontSize: '14px'
-                                        }}>
-                                            {time}
-                                        </Tag>
-                                    ))}
+                                    {times
+                                        .map(time => dayjs(time, 'HH:mm')) // Convert time strings to Dayjs objects
+                                        .sort((a, b) => a.isBefore(b) ? -1 : 1) // Sort times
+                                        .map((time, j) => (
+                                            <Tag key={j} style={{
+                                                width: 90,
+                                                height: 35,
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                fontSize: '14px'
+                                            }}>
+                                                {time.format('HH:mm')}
+                                            </Tag>
+                                        ))}
                                 </div>
                             </div>
                         ))}
