@@ -24,7 +24,7 @@ public class MovieController {
     @Autowired
     MovieService movieService;
 
-    @GetMapping("")
+    @GetMapping()
     public Page<Movie> getAllMovie(@PageableDefault(size = 5) Pageable pageable) {
         return movieService.findAll(pageable);
     }

@@ -19,7 +19,7 @@ public class CustomerDTO {
 
     private String location;
 
-    private String username;
+    private String email;
 
     private String password;
 

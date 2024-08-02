@@ -14,13 +14,13 @@ const Customer: React.FC = () => {
     const [birthday, setBirthday] = useState("");
     const [gender, setGender] = useState<boolean>(true);
     const [location, setLocation] = useState("");
-    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
 
     const [customers, setCustomers] = useState<Customerr[]>([])
 
-    const customer = { name, age, birthday, gender, location, username, password }
+    const customer = { name, age, birthday, gender, location, email, password }
 
     const { id } = useParams()
     const navigator = useNavigate();
@@ -34,7 +34,7 @@ const Customer: React.FC = () => {
             setBirthday(customerData.birthday)
             setGender(customerData.gender)
             setLocation(customerData.location)
-            setUsername(customerData.username)
+            setEmail(customerData.email)
             setPassword(customerData.password)
             setRole(customerData.role)
         } catch (err) {
@@ -62,8 +62,8 @@ const Customer: React.FC = () => {
             message.error("Location is required")
             return false;
         }
-        if (!username.trim()) {
-            message.error("Username is required")
+        if (!email.trim()) {
+            message.error("Email is required")
             return false;
         }
         if (!password.trim()) {
@@ -150,11 +150,11 @@ const Customer: React.FC = () => {
                             onChange={(e) => setLocation(e.target.value)}
                         />
                     </Form.Item>
-                    <Form.Item label="Username" required>
+                    <Form.Item label="Email" required>
                         <Input
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            placeholder="Email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                         />
                     </Form.Item>
                     <Form.Item label="Password" required>

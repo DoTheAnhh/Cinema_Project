@@ -97,12 +97,6 @@ const ListCustomer: React.FC = () => {
             align: 'center' as const,
         },
         {
-            title: 'Password',
-            dataIndex: 'password',
-            key: 'password',
-            align: 'center' as const,
-        },
-        {
             title: 'Role',
             dataIndex: 'role',
             key: 'role',

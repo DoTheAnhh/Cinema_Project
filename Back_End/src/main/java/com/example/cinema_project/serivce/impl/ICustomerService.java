@@ -30,35 +30,52 @@ public class ICustomerService implements CustomerService {
 
     @Override
     public Customer insert(CustomerDTO customerDTO) {
+        // Kiểm tra nếu email đã tồn tại
+        if (customerRepository.findByEmail(customerDTO.getEmail()).isPresent()) {
+            throw new RuntimeException("Email already exists: " + customerDTO.getEmail());
+        }
+
         Customer customer = new Customer();
         customer.setName(customerDTO.getName());
         customer.setAge(customerDTO.getAge());
         customer.setGender(customerDTO.isGender());
         customer.setBirthday(customerDTO.getBirthday());
         customer.setLocation(customerDTO.getLocation());
-        customer.setUsername(customerDTO.getUsername());
+        customer.setEmail(customerDTO.getEmail());
         customer.setPassword(customerDTO.getPassword());
         customer.setRole(customerDTO.getRole());
+
         return customerRepository.save(customer);
     }
+
 
     @Override
     public Customer edit(CustomerDTO customerDTO, Long id) {
         Optional<Customer> customerOptional = customerRepository.findById(id);
-        if(customerOptional.isPresent()) {
-            Customer customer = customerOptional.get();
-            customer.setName(customerDTO.getName());
-            customer.setAge(customerDTO.getAge());
-            customer.setGender(customerDTO.isGender());
-            customer.setBirthday(customerDTO.getBirthday());
-            customer.setLocation(customerDTO.getLocation());
-            customer.setUsername(customerDTO.getUsername());
-            customer.setPassword(customerDTO.getPassword());
-            customer.setRole(customerDTO.getRole());
-            return customerRepository.save(customer);
-        }
-        else {
+
+        if (customerOptional.isPresent()) {
+            Customer existingCustomer = customerOptional.get();
+
+            // Kiểm tra xem email đã tồn tại và không phải của chính khách hàng đang chỉnh sửa
+            Optional<Customer> existingEmailCustomer = customerRepository.findByEmail(customerDTO.getEmail());
+            if (existingEmailCustomer.isPresent() && !existingEmailCustomer.get().getId().equals(id)) {
+                throw new RuntimeException("Email already exists: " + customerDTO.getEmail());
+            }
+
+            // Cập nhật thông tin khách hàng
+            existingCustomer.setName(customerDTO.getName());
+            existingCustomer.setAge(customerDTO.getAge());
+            existingCustomer.setGender(customerDTO.isGender());
+            existingCustomer.setBirthday(customerDTO.getBirthday());
+            existingCustomer.setLocation(customerDTO.getLocation());
+            existingCustomer.setEmail(customerDTO.getEmail());
+            existingCustomer.setPassword(customerDTO.getPassword());
+            existingCustomer.setRole(customerDTO.getRole());
+
+            return customerRepository.save(existingCustomer);
+        } else {
             throw new RuntimeException("Customer not found with id: " + id);
         }
     }
+
 }
