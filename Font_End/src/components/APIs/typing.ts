@@ -9,6 +9,7 @@ export const REQUEST_MAPPING = {
     THEATER: '/theaters',
     CINEMA_ROOM: '/cinema-rooms',
     SHOW_TIME: '/show-times',
+    CUSTOMER: '/customers',
 }
 
 export const API = {
@@ -58,5 +59,12 @@ export const API = {
         EDIT_SHOW_TIME: '/edit-show-time',
         DELETE_SHOW_TIME: '/delete-show-time',
         SEARCH_SHOW_TIME: '/search-show-times'
+    },
+    CUSTOMER: {
+        GETALL_CUSTOMER: '',
+        INSERT_CUSTOMER: '/insert-customer',
+        EDIT_CUSTOMER: '/edit-customer',
+        DELETE_CUSTOMER: '/delete-customer',
+        SEARCH_CUSTOMER: '/search-customers'
     },
 }

@@ -252,11 +252,10 @@ const ListMovie: React.FC = () => {
       key: "action",
       align: "center" as const,
       render: (record: Moviee) => (
-        <div style={{ display: "flex", alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <Tooltip title="Edit">
             <Button
               type="primary"
-              style={{ marginLeft: 10 }}
               onClick={() => editMovie(record.id)}
               icon={<EditFilled />}
             />

@@ -48,3 +48,14 @@ export interface ShowTimee {
     showDate: Date
     showTime: string
 }
+
+export interface Customerr {
+    id: number
+    name: string
+    age: number
+    birthday: string
+    gender: boolean
+    location: string
+    username: string
+    password: string
+}

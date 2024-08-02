@@ -14,6 +14,8 @@ import CinemaRoom from "../CinemaRoom/CinemaRoom";
 import ListCinemaRoom from "../CinemaRoom/ListCinemaRoom";
 import ListShowTime from "../ShowTime/ListShowTime";
 import ShowTime from "../ShowTime/ShowTime";
+import ListCustomer from "../Customer/ListCustomer";
+import Customer from "../Customer/Customer";
 
 const Layouts: React.FC = () => {
 
@@ -41,6 +43,9 @@ const Layouts: React.FC = () => {
           </Menu.Item>
           <Menu.Item key="5" icon={<ShopOutlined />}>
             <Link to="/dotheanh/show-times">Show time</Link>
+          </Menu.Item>
+          <Menu.Item key="6" icon={<ShopOutlined />}>
+            <Link to="/dotheanh/customers">Customer</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -72,6 +77,10 @@ const Layouts: React.FC = () => {
             <Route path="/show-times" element={<ListShowTime />} />
             <Route path="/show-times/show-time" element={<ShowTime />} />
             <Route path="/show-times/show-time/:id" element={<ShowTime />} />
+
+            <Route path="/customers" element={<ListCustomer />} />
+            <Route path="/customers/customer" element={<Customer />} />
+            <Route path="/customers/customer/:id" element={<Customer />} />
           </Routes>
         </Content>
       </Layout>
