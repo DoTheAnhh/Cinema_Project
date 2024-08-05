@@ -6,8 +6,9 @@ import Login from './components/Login';
 import User from './components/UserPage/User';
 import MVDetailForUser from './components/UserPage/MovieDetailForUser/MVDetailForUser';
 import ProtectedRoute from './ProtectedRoute';
-import './App.css'
 import NotFound from './NotFound';
+import { UserProvider } from './components/Context/UserContext';
+import './App.css'
 
 interface RouteComponent {
   path: string;
@@ -29,7 +30,7 @@ function App() {
       path: 'dotheanh/*',
       element: <ProtectedRoute element={<Layouts />} requiredRole="ADMIN" />,
       children: [
-        
+        // Define your protected routes here
       ]
     },
     {
@@ -62,11 +63,13 @@ function App() {
   };
 
   return (
-    <BrowserRouter>
-      <Routes>
-        {renderRoutes(routes)}
-      </Routes>
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          {renderRoutes(routes)}
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   );
 }
 

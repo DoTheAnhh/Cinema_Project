@@ -7,6 +7,8 @@ import axios from 'axios';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 import { LikeFilled, EyeOutlined } from "@ant-design/icons";
 import { Link } from 'react-router-dom';
+import UserHeader from './Header/UserHeader';
+import UserFooter from './Footer/UserFooter';
 
 
 const User: React.FC = () => {
@@ -53,30 +55,7 @@ const User: React.FC = () => {
   return (
     <>
       <Layout>
-        <Header style={{
-          height: 80,
-          padding: 0,
-          background: colorBgContainer,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 1000,
-        }}>
-          <img src="/src/assets/Logo.jpg" alt="Logo" style={{ position: 'absolute', left: 80, height: 80 }} />
-          <ul style={{ width: 300, display: 'flex', justifyContent: 'space-between', listStyleType: 'none' }}>
-            <li><a style={fontStyle} href="#new-movie">Phim mới</a></li>
-            <li><a style={fontStyle} href="#cinema-corner" >Góc điện ảnh</a></li>
-          </ul>
-          <ul style={{ position: 'absolute', right: 80, display: 'flex', alignItems: 'center', listStyleType: 'none' }}>
-            <li><a style={fontStyle} href="/">Đăng nhập</a></li>
-            <li style={{ margin: '0 10px' }}>|</li>
-            <li><a style={fontStyle} href="#">Đăng ký</a></li>
-          </ul>
-        </Header>
+        <UserHeader />
         <Content style={{ margin: '24px 16px 0', overflow: 'initial', marginTop: 100 }}>
           <div
             style={{
@@ -255,11 +234,7 @@ const User: React.FC = () => {
           <div style={{ marginTop: 20 }}></div>
         </Content>
 
-        <Footer style={{ textAlign: 'center', width: '100%', backgroundColor: '#333', padding: '20px 0' }}>
-          <div style={{ color: '#FFF5D1' }}>
-            ©{new Date().getFullYear()}
-          </div>
-        </Footer>
+        <UserFooter />
       </Layout >
     </>
   );

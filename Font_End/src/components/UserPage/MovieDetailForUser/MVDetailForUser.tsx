@@ -2,14 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { LOCALHOST, REQUEST_MAPPING, API } from '../../APIs/typing';
-import { Moviee, ShowTimee, Theaterr } from '../../Types';
+import { Moviee, ShowTimee} from '../../Types';
 import { Button, Layout, Select, Tag, theme } from 'antd';
-import { Content, Footer, Header } from 'antd/es/layout/layout';
-import { FieldTimeOutlined, CalendarOutlined, FacebookOutlined, YoutubeOutlined } from "@ant-design/icons";
+import { Content } from 'antd/es/layout/layout';
+import { FieldTimeOutlined, CalendarOutlined } from "@ant-design/icons";
 import dayjs from 'dayjs';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import UserHeader from '../Header/UserHeader';
+import UserFooter from '../Footer/UserFooter';
 
 interface DateObject {
     day: string;
@@ -35,14 +37,8 @@ const MVDetailForUser: React.FC = () => {
     };
 
     const {
-        token: { colorBgContainer, borderRadiusLG },
+        token: { borderRadiusLG },
     } = theme.useToken();
-
-    const fontStyle: React.CSSProperties = {
-        fontFamily: '"Noto Sans JP", sans-serif',
-        fontSize: '13px',
-        color: 'black'
-    };
 
     const tagStyle = {
         fontSize: '14px',
@@ -69,10 +65,6 @@ const MVDetailForUser: React.FC = () => {
         } catch (error) {
             console.error('Error fetching movie detail:', error);
         }
-    };
-
-    const handleLogoClick = () => {
-        navigate('/user');
     };
 
     useEffect(() => {
@@ -157,30 +149,7 @@ const MVDetailForUser: React.FC = () => {
     return (
         <>
             <Layout>
-                <Header style={{
-                    height: 80,
-                    padding: 0,
-                    background: colorBgContainer,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    zIndex: 1000,
-                }}>
-                    <img src="/src/assets/Logo.jpg" alt="Logo" style={{ position: 'absolute', left: 80, height: 80 }} onClick={handleLogoClick}/>
-                    <ul style={{ width: 300, display: 'flex', justifyContent: 'space-between', listStyleType: 'none' }}>
-                        <li><a style={fontStyle} href="#new-movie">Phim mới</a></li>
-                        <li><a style={fontStyle} href="#cinema-corner" >Góc điện ảnh</a></li>
-                    </ul>
-                    <ul style={{ position: 'absolute', right: 80, display: 'flex', alignItems: 'center', listStyleType: 'none' }}>
-                        <li><a style={fontStyle} href="/">Đăng nhập</a></li>
-                        <li style={{ margin: '0 10px' }}>|</li>
-                        <li><a style={fontStyle} href="#">Đăng ký</a></li>
-                    </ul>
-                </Header>
+                <UserHeader />
                 <Content style={{ margin: '24px 0', overflow: 'initial', marginTop: 100 }}>
                     <div
                         style={{
@@ -209,7 +178,7 @@ const MVDetailForUser: React.FC = () => {
                     </div>
                     <div style={{ display: 'flex', marginTop: 25 }}>
                         <img
-                            style={{ height: 350, width: 240, borderRadius: 5, marginTop: -90, marginLeft: 200,position: 'relative'}}
+                            style={{ height: 350, width: 240, borderRadius: 5, marginTop: -90, marginLeft: 200, position: 'relative' }}
                             src={movies?.banner}
                             alt={movies?.movieName}
                         />
@@ -428,53 +397,7 @@ const MVDetailForUser: React.FC = () => {
                         ))}
                     </div>
                 </Content>
-                <Footer style={{ width: '100%', backgroundColor: '#333333', display: 'flex', justifyContent: 'space-between', padding: '0 140px' }}>
-                    <div style={{ color: '#FFF5D1', flex: 1, marginTop: 40, marginLeft: 40, marginRight: 200 }}>
-                        <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40, }}>Giới thiệu</div>
-                        <div>
-                            <ul style={{ listStyleType: 'none', padding: 0 }}>
-                                <li style={{ marginBottom: 20 }}>Về chúng tôi</li>
-                                <li style={{ marginBottom: 20 }}>Thỏa thuận sử dụng</li>
-                                <li style={{ marginBottom: 20 }}>Cơ chế hoạt động</li>
-                                <li style={{ marginBottom: 20 }}>Chính sách bảo mật</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div style={{ color: '#FFF5D1', flex: 1, marginTop: 40, marginRight: 200 }}>
-                        <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40 }}>Góc điện ảnh</div>
-                        <div>
-                            <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-                                <li style={{ marginBottom: 20 }}>Thể loại phim</li>
-                                <li style={{ marginBottom: 20 }}>Bình luận phim</li>
-                                <li style={{ marginBottom: 20 }}>Blog điện ảnh</li>
-                                <li style={{ marginBottom: 20 }}>Phim hay tháng</li>
-                                <li style={{ marginBottom: 20 }}>Phim IMAX</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div style={{ color: '#FFF5D1', flex: 1, marginTop: 40, marginRight: 200 }}>
-                        <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40 }}>Hỗ trợ</div>
-                        <div>
-                            <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
-                                <li style={{ marginBottom: 20 }}>Góp ý</li>
-                                <li style={{ marginBottom: 20 }}>Sale & Services</li>
-                                <li style={{ marginBottom: 20 }}>Rạp/Giá vé</li>
-                                <li style={{ marginBottom: 20 }}>Tuyển dụng</li>
-                                <li style={{ marginBottom: 20 }}>FQA</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div style={{ color: '#FFF5D1', flex: 1, marginTop: 240, marginLeft: 50 }}>
-                        <div style={{ display: 'flex', gap: '16px' }}>
-                            <div style={{ fontSize: '32px', marginLeft: -100 }}>
-                                <FacebookOutlined />
-                            </div>
-                            <div style={{ fontSize: '32px', marginLeft: 50 }}>
-                                <YoutubeOutlined />
-                            </div>
-                        </div>
-                    </div>
-                </Footer>
+                <UserFooter />
             </Layout >
         </>
     );

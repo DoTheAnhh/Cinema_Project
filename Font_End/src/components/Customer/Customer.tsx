@@ -100,34 +100,34 @@ const Customer: React.FC = () => {
                 console.error('No token found');
                 return;
             }
-
+    
             const decodedToken = decodeJwt(token);
             if (!decodedToken) {
                 console.error('Invalid token');
                 return;
             }
-
+    
             const userRole = decodedToken.role;
-
+    
             if (userRole === 'ADMIN' && role === 'USER') {
                 localStorage.removeItem('token');
                 navigator("/");
                 return;
             }
-
+            
             if (userRole !== 'ADMIN') {
                 console.error('User does not have the required ADMIN role');
                 return;
             }
-
+    
             const config = {
                 headers: { Authorization: `Bearer ${token}` }
             };
-
+    
             const data = {
                 ...customer,
             };
-
+    
             if (id) {
                 await axios.put(`${LOCALHOST}${REQUEST_MAPPING.CUSTOMER}${API.CUSTOMER.EDIT_CUSTOMER}/${id}`, data, config);
             } else {
@@ -138,8 +138,7 @@ const Customer: React.FC = () => {
             console.error('Error adding item: ', e);
         }
     };
-
-
+    
     const backToList = () => {
         navigator("/dotheanh/customers");
     };

@@ -3,16 +3,19 @@ import { Button, Checkbox, Form, Input, message, Spin } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './css/index.css'
+import './css/index.css';
+import { useUserContext } from '../Context/UserContext';
 
 interface LoginResponse {
   token: string;
   refreshToken: string;
+  name: string;
 }
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
+  const { setUser } = useUserContext();
 
   const decodeJwt = (token: string) => {
     const base64Url = token.split('.')[1];
@@ -28,14 +31,15 @@ const Login: React.FC = () => {
         password: values.password,
       });
 
-      console.log('Server Response:', response.data);
-
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('refreshToken', response.data.refreshToken);
 
         const decodedToken = decodeJwt(response.data.token);
-        console.log('Decoded Token:', decodedToken);
+        const user = { name: decodedToken.name, role: decodedToken.role };
+        localStorage.setItem('user', JSON.stringify(user));
+
+        setUser(user);
 
         if (decodedToken.role === 'ADMIN') {
           navigate('/dotheanh/home');
