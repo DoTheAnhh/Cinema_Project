@@ -27,6 +27,7 @@ public class JWTUtils {
 
     public String generateToken(Customer customer) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", customer.getRole());
         return Jwts.builder()
                 .claims(claims)
                 .subject(customer.getUsername())
@@ -36,7 +37,8 @@ public class JWTUtils {
                 .compact();
     }
 
-    public String generateRefreshToken(HashMap<String, Objects> claims, Customer customer) {
+    public String generateRefreshToken(Map<String, Object> claims, Customer customer) {
+        claims.put("role", customer.getRole());
         return Jwts.builder()
                 .claims(claims)
                 .subject(customer.getUsername())

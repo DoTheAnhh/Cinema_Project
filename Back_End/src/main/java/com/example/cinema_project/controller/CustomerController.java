@@ -21,7 +21,7 @@ public class CustomerController {
     @Autowired
     CustomerService customerService;
 
-    @GetMapping("")
+    @GetMapping()
     public Page<Customer> findAll(@PageableDefault(size = 5) Pageable pageable) {
         return customerService.findAll(pageable);
     }

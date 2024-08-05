@@ -1,40 +1,39 @@
-import './App.css'
+// src/App.tsx
+import React, { useEffect } from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layouts from './components/Layout';
 import Login from './components/Login';
-
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import User from './components/UserPage/User';
-import { useEffect } from 'react';
 import MVDetailForUser from './components/UserPage/MovieDetailForUser/MVDetailForUser';
-
+import ProtectedRoute from './ProtectedRoute';
+import './App.css'
 interface RouteComponent {
   path: string;
-  element: React.ComponentType<any>;
+  element: React.ReactElement;
   children?: RouteComponent[];
 }
 
 function App() {
-
   useEffect(() => {
     document.title = "Do The Anh";
   }, []);
 
   const routes: RouteComponent[] = [
     {
-      path: '',
-      element: Login
+      path: '/',
+      element: <Login />
     },
     {
       path: 'dotheanh/*',
-      element: Layouts,
+      element: <ProtectedRoute element={<Layouts />} requiredRole="ADMIN" />,
     },
     {
       path: 'user/*',
-      element: User,
+      element: <User />
     },
     {
       path: 'movie/:id',
-      element: MVDetailForUser
+      element: <MVDetailForUser />
     }
   ];
 
@@ -45,23 +44,21 @@ function App() {
         <Route
           key={currentPath}
           path={currentPath}
-          element={<route.element />}
+          element={route.element}
         >
           {route?.children && renderRoutes(route.children, currentPath)}
         </Route>
-      )
-    })
-  }
+      );
+    });
+  };
 
   return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          {renderRoutes(routes)}
-        </Routes>
-      </BrowserRouter>
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        {renderRoutes(routes)}
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;

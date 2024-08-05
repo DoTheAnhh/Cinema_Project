@@ -1,9 +1,9 @@
-import './css/index.css';
 import React from 'react';
-import { Button, Checkbox, Form, Input, message } from 'antd';
+import { Button, Checkbox, Form, Input, message, Spin } from 'antd';
 import { LockOutlined, MailOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './css/index.css'
 
 interface LoginResponse {
   token: string;
@@ -12,8 +12,16 @@ interface LoginResponse {
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = React.useState(false);
+
+  const decodeJwt = (token: string) => {
+    const base64Url = token.split('.')[1];
+    const base64 = decodeURIComponent(atob(base64Url).replace(/\+/g, ' '));
+    return JSON.parse(base64);
+  };
 
   const onLogin = async (values: any) => {
+    setLoading(true);
     try {
       const response = await axios.post<LoginResponse>('http://localhost:8080/auth/signin', {
         email: values.email,
@@ -25,18 +33,27 @@ const Login: React.FC = () => {
       if (response.data.token) {
         localStorage.setItem('token', response.data.token);
         localStorage.setItem('refreshToken', response.data.refreshToken);
+
+        const decodedToken = decodeJwt(response.data.token);
+        console.log('Decoded Token:', decodedToken);
+
+        if (decodedToken.role === 'ADMIN') {
+          navigate('/dotheanh/home');
+        } else {
+          navigate('/user');
+        }
+
         message.success('Login successful!');
-        navigate('/dotheanh');
       } else {
         message.error('Login failed!');
       }
-    } catch (error) {
-      console.error('Login Error:', error); // Xem lỗi chi tiết
-      message.error('An error occurred during login!');
+    } catch (error: any) {
+      const errorMessage = error.response?.data?.message || 'An error occurred during login!';
+      message.error(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
-
-
 
   return (
     <Form
@@ -73,15 +90,19 @@ const Login: React.FC = () => {
         </a>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
+        <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>
           Log in
         </Button>
         <div style={{ marginTop: 10 }}>
           Or <a href="">register now!</a>
         </div>
       </Form.Item>
+      {loading && (
+        <div style={{ textAlign: 'center', marginTop: 20 }}>
+          <Spin />
+        </div>
+      )}
     </Form>
-
   );
 };
 

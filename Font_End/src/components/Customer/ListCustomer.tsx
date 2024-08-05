@@ -17,18 +17,19 @@ const ListCustomer: React.FC = () => {
 
     const navigator = useNavigate()
 
-    const fetchCustomer = async (page: number, size: number) => {
+    const fetchCustomer = async (page: number, size: number): Promise<Customerr[]> => {
         try {
-            const res = await axios.get(LOCALHOST + REQUEST_MAPPING.CUSTOMER + API.CUSTOMER.GETALL_CUSTOMER, {
+            const res = await axios.get(LOCALHOST + REQUEST_MAPPING.CUSTOMER + API.MOVIE.GETALL_MOVIE, {
                 params: {
                     page: page - 1,
                     size: size,
                 },
             })
-            setCustomers(res.data.totalElements)
+            setTotalCustomer(res.data.totalElements)            
             return res.data.content;
         } catch (err) {
             console.error(err);
+            return []
         }
     }
 
@@ -52,6 +53,7 @@ const ListCustomer: React.FC = () => {
             setCustomers(data);
         });
     }, [currentPage, pageSize]);
+
 
     const columns = [
         {

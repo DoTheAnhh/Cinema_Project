@@ -21,17 +21,55 @@ const MovieType: React.FC<MovieTypeProps> = ({ movieType, onClose, onSuccess }) 
     }
   }, [movieType]);
 
+  const decodeJwt = (token: string) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error("Invalid token");
+      return null;
+    }
+  };
+
   const handleInsertOrUpdateMovieType = async () => {
     if (!movieTypeName.trim()) {
       message.error('Movie type name is required');
       return false;
     }
     try {
+
+      const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            const decodedToken = decodeJwt(token);
+            if (!decodedToken) {
+                console.error('Invalid token');
+                return;
+            }
+
+            const userRole = decodedToken.role;
+
+            if (userRole !== 'ADMIN') {
+                console.error('User does not have the required ADMIN role');
+                return;
+            }
+
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+
       const data = { movieTypeName };
       if (movieType && movieType.id) {
-        await axios.put(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.EDIT_MOVIE_TYPE + `/${movieType.id}`, data);
+        await axios.put(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.EDIT_MOVIE_TYPE + `/${movieType.id}`, data, config);
       } else {
-        await axios.post(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.INSERT_MOVIE_TYPE, data);
+        await axios.post(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.INSERT_MOVIE_TYPE, data, config);
       }
       onSuccess()
       onClose()

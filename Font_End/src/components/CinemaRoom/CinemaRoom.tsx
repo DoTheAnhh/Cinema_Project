@@ -31,12 +31,49 @@ const CinemaRoom: React.FC = () => {
     setTheaters(res.data)
   }
 
+  const decodeJwt = (token: string) => {
+    try {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      return JSON.parse(jsonPayload);
+    } catch (error) {
+      console.error("Invalid token");
+      return null;
+    }
+  };
+
   const handleInsertOrUpdateCinemaRoom = async () => {
     if (!cinemaRoomName.trim()) {
       message.error("Cinema room name is required")
       return
     }
     try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+
+      const decodedToken = decodeJwt(token);
+      if (!decodedToken) {
+        console.error('Invalid token');
+        return;
+      }
+
+      const userRole = decodedToken.role;
+
+      if (userRole !== 'ADMIN') {
+        console.error('User does not have the required ADMIN role');
+        return;
+      }
+
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
+
       const data = {
         theater: {
           id: theater
@@ -44,9 +81,9 @@ const CinemaRoom: React.FC = () => {
         cinemaRoomName: cinemaRoomName
       };
       if (id) {
-        await axios.put(LOCALHOST + REQUEST_MAPPING.CINEMA_ROOM + API.CINEMA_ROOM.EDIT_CINEMA_ROOM + `/${id}`, data);
+        await axios.put(LOCALHOST + REQUEST_MAPPING.CINEMA_ROOM + API.CINEMA_ROOM.EDIT_CINEMA_ROOM + `/${id}`, data, config);
       } else {
-        await axios.post(LOCALHOST + REQUEST_MAPPING.CINEMA_ROOM + API.CINEMA_ROOM.INSERT_CINEMA_ROOM, data);
+        await axios.post(LOCALHOST + REQUEST_MAPPING.CINEMA_ROOM + API.CINEMA_ROOM.INSERT_CINEMA_ROOM, data, config);
       }
       backToList();
     } catch (e) {
@@ -61,7 +98,7 @@ const CinemaRoom: React.FC = () => {
   const handleTheaterChange = (value: string) => {
     const selectTheater = theaters.find(theater => theater.id.toString() === value);
     if (selectTheater) {
-      setTheater(selectTheater.id); 
+      setTheater(selectTheater.id);
     }
   };
 

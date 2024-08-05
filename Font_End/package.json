@@ -14,6 +14,7 @@
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
     "jquery": "^3.7.1",
+    "jwt-decode": "^4.0.0",
     "moment": "^2.30.1",
     "owl.carousel": "^2.3.4",
     "react": "^18.3.1",
@@ -24,6 +25,7 @@
   },
   "devDependencies": {
     "@types/jquery": "^3.5.30",
+    "@types/jwt-decode": "^3.1.0",
     "@types/owl.carousel": "^2.3.6",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",

@@ -37,54 +37,55 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**").permitAll()
 
                                 .requestMatchers("/movies").permitAll()
-                                .requestMatchers("/movies/**").permitAll()
+                                .requestMatchers("/movies/*").permitAll()
                                 .requestMatchers("/movies/search-movies").permitAll()
 
                                 .requestMatchers("/cinema-rooms").permitAll()
-                                .requestMatchers("/cinema-rooms/**").permitAll()
+                                .requestMatchers("/cinema-rooms/*").permitAll()
                                 .requestMatchers("/cinema-rooms/search-cinema-rooms").permitAll()
 
                                 .requestMatchers("/actors").permitAll()
-                                .requestMatchers("/actors//**").permitAll()
+                                .requestMatchers("/actors/*").permitAll()
                                 .requestMatchers("/actors/search-actors").permitAll()
 
                                 .requestMatchers("/customers").permitAll()
-                                .requestMatchers("/customers/**").permitAll()
+                                .requestMatchers("/customers/*").permitAll()
                                 .requestMatchers("/customers/search-customers").permitAll()
 
                                 .requestMatchers("/movie-types").permitAll()
-                                .requestMatchers("/movie-types/**").permitAll()
+                                .requestMatchers("/movie-types/*").permitAll()
                                 .requestMatchers("/movie-types/search-movie-types").permitAll()
 
                                 .requestMatchers("/show-times").permitAll()
-                                .requestMatchers("/show-times/**").permitAll()
+                                .requestMatchers("/show-times/*").permitAll()
+                                .requestMatchers("/show-times/movie/*/date/*").permitAll()
                                 .requestMatchers("/show-times/search-show-times").permitAll()
 
                                 .requestMatchers("/theaters").permitAll()
-                                .requestMatchers("/theaters/**").permitAll()
+                                .requestMatchers("/theaters/*").permitAll()
                                 .requestMatchers("/theaters/search-theaters").permitAll()
 
                                 //ADMIN
                                 .requestMatchers("/movies/insert-movie").hasAnyAuthority( "ADMIN")
-                                .requestMatchers("/movies/edit-movie/**").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/movies/edit-movie/*").hasAnyAuthority( "ADMIN")
 
                                 .requestMatchers("/actors/insert-actor").hasAnyAuthority( "ADMIN")
-                                .requestMatchers("/actors/edit-actor/**").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/actors/edit-actor/*").hasAnyAuthority( "ADMIN")
 
                                 .requestMatchers("/cinema-rooms/insert-cinema-room").hasAnyAuthority( "ADMIN")
-                                .requestMatchers("/cinema-rooms/edit-cinema-room/**").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/cinema-rooms/edit-cinema-room/*").hasAnyAuthority( "ADMIN")
 
                                 .requestMatchers("/customers/insert-customer").hasAnyAuthority( "ADMIN")
-                                .requestMatchers("/customers/edit-customer/**").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/customers/edit-customer/*").hasAnyAuthority( "ADMIN")
 
                                 .requestMatchers("/movie-types/insert-movie-type").hasAnyAuthority( "ADMIN")
-                                .requestMatchers("/movie-types/edit-movie-type/**").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/movie-types/edit-movie-type/*").hasAnyAuthority( "ADMIN")
 
                                 .requestMatchers("/show-times/insert-show-time").hasAnyAuthority( "ADMIN")
-                                .requestMatchers("/show-times/edit-show-time/**").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/show-times/edit-show-time/*").hasAnyAuthority( "ADMIN")
 
                                 .requestMatchers("/theaters/insert-theater").hasAnyAuthority( "ADMIN")
-                                .requestMatchers("/theaters/edit-theater/**").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/theaters/edit-theater/*").hasAnyAuthority( "ADMIN")
 
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

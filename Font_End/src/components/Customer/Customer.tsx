@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 import { Customerr } from '../Types';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Button, Form, Input, message, Popconfirm, Radio, Select, TimePicker } from 'antd';
-import dayjs, { Dayjs } from 'dayjs';
+import { Button, Form, Input, message, Popconfirm, Radio, Select } from 'antd';
+import dayjs from 'dayjs';
 import { Option } from 'antd/es/mentions';
 
 const Customer: React.FC = () => {
@@ -18,9 +18,7 @@ const Customer: React.FC = () => {
     const [password, setPassword] = useState("");
     const [role, setRole] = useState("");
 
-    const [customers, setCustomers] = useState<Customerr[]>([])
-
-    const customer = { name, age, birthday, gender, location, email, password }
+    const customer = { name, age, birthday, gender, location, email, password, role }
 
     const { id } = useParams()
     const navigator = useNavigate();
@@ -49,6 +47,7 @@ const Customer: React.FC = () => {
         }
         if (age < 0) {
             message.error("Age is required")
+            return false;
         }
         if (!birthday.trim()) {
             message.error("Birthday is required")
@@ -77,18 +76,57 @@ const Customer: React.FC = () => {
         return true;
     }
 
+    const decodeJwt = (token: string) => {
+        try {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        } catch (error) {
+            console.error("Invalid token");
+            return null;
+        }
+    };
+
     const handleInsertOrUpdateCustomer = async () => {
         if (!validateForm()) {
             return;
         }
         try {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.error('No token found');
+                return;
+            }
+
+            const decodedToken = decodeJwt(token);
+            if (!decodedToken) {
+                console.error('Invalid token');
+                return;
+            }
+
+            const userRole = decodedToken.role;
+
+            if (userRole !== 'ADMIN') {
+                console.error('User does not have the required ADMIN role');
+                return;
+            }
+
+            const config = {
+                headers: { Authorization: `Bearer ${token}` }
+            };
+
             const data = {
                 ...customer,
             };
+
+
             if (id) {
-                await axios.put(LOCALHOST + REQUEST_MAPPING.CUSTOMER + API.CUSTOMER.EDIT_CUSTOMER + `/${id}`, data);
+                await axios.put(`${LOCALHOST}${REQUEST_MAPPING.CUSTOMER}${API.CUSTOMER.EDIT_CUSTOMER}/${id}`, data, config);
             } else {
-                await axios.post(LOCALHOST + REQUEST_MAPPING.CUSTOMER + API.CUSTOMER.INSERT_CUSTOMER, data);
+                await axios.post(`${LOCALHOST}${REQUEST_MAPPING.CUSTOMER}${API.CUSTOMER.INSERT_CUSTOMER}`, data, config);
             }
             backToList();
         } catch (e) {
@@ -155,6 +193,7 @@ const Customer: React.FC = () => {
                             placeholder="Email"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
+                            disabled
                         />
                     </Form.Item>
                     <Form.Item label="Password" required>
@@ -199,4 +238,4 @@ const Customer: React.FC = () => {
     )
 }
 
-export default Customer
+export default Customer;
