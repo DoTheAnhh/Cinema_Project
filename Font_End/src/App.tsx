@@ -7,6 +7,8 @@ import User from './components/UserPage/User';
 import MVDetailForUser from './components/UserPage/MovieDetailForUser/MVDetailForUser';
 import ProtectedRoute from './ProtectedRoute';
 import './App.css'
+import NotFound from './NotFound';
+
 interface RouteComponent {
   path: string;
   element: React.ReactElement;
@@ -26,6 +28,9 @@ function App() {
     {
       path: 'dotheanh/*',
       element: <ProtectedRoute element={<Layouts />} requiredRole="ADMIN" />,
+      children: [
+        
+      ]
     },
     {
       path: 'user/*',
@@ -34,6 +39,10 @@ function App() {
     {
       path: 'movie/:id',
       element: <MVDetailForUser />
+    },
+    {
+      path: '*',
+      element: <NotFound />
     }
   ];
 
