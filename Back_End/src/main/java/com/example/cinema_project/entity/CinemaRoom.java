@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -21,4 +23,7 @@ public class CinemaRoom {
     @ManyToOne
     @JoinColumn(name = "theater_id")
     private Theater theaters;
+
+    @OneToMany(mappedBy = "cinemaRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Seat> seats;
 }

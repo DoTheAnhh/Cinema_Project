@@ -14,4 +14,6 @@ public interface CinemaRoomService {
     CinemaRoom insertCinemaRoom(CinemaRoomDTO cinemaRoomDTO);
 
     CinemaRoom editCinemaRoom(Long id, CinemaRoomDTO cinemaRoomDTO);
+
+    List<CinemaRoom> getCinemaRoomsByTheaterId(Long theaterId);
 }

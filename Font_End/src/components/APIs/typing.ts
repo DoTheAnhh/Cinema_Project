@@ -10,6 +10,7 @@ export const REQUEST_MAPPING = {
     CINEMA_ROOM: '/cinema-rooms',
     SHOW_TIME: '/show-times',
     CUSTOMER: '/customers',
+    SEAT: '/seats',
 }
 
 export const API = {
@@ -66,5 +67,13 @@ export const API = {
         EDIT_CUSTOMER: '/edit-customer',
         DELETE_CUSTOMER: '/delete-customer',
         SEARCH_CUSTOMER: '/search-customers'
+    },
+    SEAT: {
+        GET_SEAT_BY_CINEMA_ROOM: '/cinema-room',
+        BOOK_SEAT: '/book',
+        // INSERT_SEAT: '/insert-seat',
+        // EDIT_SEAT: '/edit-seat',
+        // DELETE_SEAT: '/delete-seat',
+        // SEARCH_SEAT: '/search-seats'
     },
 }

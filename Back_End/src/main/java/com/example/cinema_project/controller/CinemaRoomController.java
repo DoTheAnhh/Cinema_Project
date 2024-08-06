@@ -44,4 +44,9 @@ public class CinemaRoomController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/theater/{theaterId}")
+    public List<CinemaRoom> getCinemaRoomsByTheaterId(@PathVariable Long theaterId) {
+        return cinemaRoomService.getCinemaRoomsByTheaterId(theaterId);
+    }
 }

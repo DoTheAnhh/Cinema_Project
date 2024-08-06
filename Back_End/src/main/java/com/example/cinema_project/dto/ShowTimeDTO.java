@@ -1,5 +1,6 @@
 package com.example.cinema_project.dto;
 
+import com.example.cinema_project.entity.CinemaRoom;
 import com.example.cinema_project.entity.Movie;
 import com.example.cinema_project.entity.Theater;
 import jakarta.persistence.JoinColumn;
@@ -13,11 +14,14 @@ import java.sql.Date;
 @Setter
 public class ShowTimeDTO {
 
-    private Theater theater;
+    private CinemaRoom cinemaRoom;
 
     private Movie movie;
 
     private Date showDate;
 
     private String showTime;
+
+    private String showTimeEnd;
+
 }

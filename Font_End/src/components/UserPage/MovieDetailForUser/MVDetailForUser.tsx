@@ -126,7 +126,7 @@ const MVDetailForUser: React.FC = () => {
     };
 
     const groupedShowTimes: { [key: string]: string[] } = showTimes.reduce((acc, showTime) => {
-        const theaterName = showTime.theater.theaterName;
+        const theaterName = showTime.cinemaRoom.theaters.theaterName;
         if (!acc[theaterName]) {
             acc[theaterName] = [];
         }

@@ -59,4 +59,9 @@ public class ICinemaRoomService implements CinemaRoomService {
             throw new RuntimeException("Movie detail not found with id: " + id);
         }
     }
+
+    @Override
+    public List<CinemaRoom> getCinemaRoomsByTheaterId(Long theaterId) {
+        return cinemaRoomRepository.findByTheatersId(theaterId);
+    }
 }

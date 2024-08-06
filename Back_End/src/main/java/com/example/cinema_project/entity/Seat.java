@@ -16,10 +16,6 @@ public class Seat {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "cinemaRoom_id")
-    private CinemaRoom cinemaRoom;
-
     private int rowNumber; //Số hàng của ghế
 
     private int seatNumber; //Số ghế trong hàng
@@ -27,4 +23,8 @@ public class Seat {
     private String seatType;
 
     private boolean status;
+
+    @ManyToOne
+    @JoinColumn(name = "cinemaRoom_id")
+    private CinemaRoom cinemaRoom;
 }

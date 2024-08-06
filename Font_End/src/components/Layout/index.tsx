@@ -47,6 +47,9 @@ const Layouts: React.FC = () => {
           <Menu.Item key="6" icon={<ShopOutlined />}>
             <Link to="/dotheanh/customers">Customer</Link>
           </Menu.Item>
+          <Menu.Item key="7" icon={<ShopOutlined />}>
+            <Link to="/dotheanh/booking-seats">Seat</Link>
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout className="site-layout">

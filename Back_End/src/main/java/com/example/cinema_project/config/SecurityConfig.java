@@ -42,6 +42,7 @@ public class SecurityConfig {
 
                                 .requestMatchers("/cinema-rooms").permitAll()
                                 .requestMatchers("/cinema-rooms/*").permitAll()
+                                .requestMatchers("/cinema-rooms/theater/*").permitAll()
                                 .requestMatchers("/cinema-rooms/search-cinema-rooms").permitAll()
 
                                 .requestMatchers("/actors").permitAll()

@@ -19,8 +19,8 @@ public class ShowTime {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "theater_id")
-    private Theater theater;
+    @JoinColumn(name = "cinema_room_id")
+    private CinemaRoom cinemaRoom;
 
     @ManyToOne
     @JoinColumn(name = "movie_id")
@@ -29,4 +29,6 @@ public class ShowTime {
     private Date showDate;
 
     private String showTime;
+
+    private String showTimeEnd;
 }

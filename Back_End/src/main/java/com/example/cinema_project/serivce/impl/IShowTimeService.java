@@ -38,23 +38,31 @@ public class IShowTimeService implements ShowTimeService {
 
     @Override
     public ShowTime insertShowTime(ShowTimeDTO showTimeDTO) {
-        // Check for existing ShowTime with the same movie, date, and time
-        boolean exists = showTimeRepository.existsByMovieAndShowDateAndShowTime(
-                showTimeDTO.getMovie(),
-                showTimeDTO.getShowDate(),
-                showTimeDTO.getShowTime()
+        String showTime = showTimeDTO.getShowTime();
+        String showTimeEnd = showTimeDTO.getShowTimeEnd();
+
+        // Convert showDate to java.sql.Date
+        Date showDate = showTimeDTO.getShowDate(); // Assumes showDate is a String in format yyyy-MM-dd
+
+        // Check for conflicting show times
+        boolean exists = showTimeRepository.existsConflict(
+                showTimeDTO.getCinemaRoom().getId(),
+                showDate,
+                showTime,
+                showTimeEnd
         );
 
         if (exists) {
-            throw new RuntimeException("ShowTime already exists for this movie, date, and time.");
+            throw new RuntimeException("ShowTime overlaps with an existing show.");
         }
 
-        ShowTime showTime = new ShowTime();
-        showTime.setMovie(showTimeDTO.getMovie());
-        showTime.setShowDate(showTimeDTO.getShowDate());
-        showTime.setShowTime(showTimeDTO.getShowTime());
-        showTime.setTheater(showTimeDTO.getTheater());
-        return showTimeRepository.save(showTime);
+        ShowTime showTimeEntity = new ShowTime();
+        showTimeEntity.setMovie(showTimeDTO.getMovie());
+        showTimeEntity.setShowDate(showDate);
+        showTimeEntity.setShowTime(showTime);
+        showTimeEntity.setShowTimeEnd(showTimeEnd);
+        showTimeEntity.setCinemaRoom(showTimeDTO.getCinemaRoom());
+        return showTimeRepository.save(showTimeEntity);
     }
 
     @Override
@@ -63,26 +71,35 @@ public class IShowTimeService implements ShowTimeService {
         if (showTimeOptional.isPresent()) {
             ShowTime showTimeToEdit = showTimeOptional.get();
 
-            // Check for existing ShowTime with the same movie, date, and time, excluding the current showTime
-            boolean exists = showTimeRepository.existsByMovieAndShowDateAndShowTimeAndIdNot(
-                    showTimeDTO.getMovie(),
-                    showTimeDTO.getShowDate(),
-                    showTimeDTO.getShowTime(),
-                    id
+            String showTime = showTimeDTO.getShowTime();
+            String showTimeEnd = showTimeDTO.getShowTimeEnd();
+
+            // Convert showDate to java.sql.Date
+            Date showDate = showTimeDTO.getShowDate(); // Assumes showDate is a String in format yyyy-MM-dd
+
+            // Check for conflicting show times excluding the current show time
+            boolean exists = showTimeRepository.existsConflictExcludingCurrent(
+                    showTimeDTO.getCinemaRoom().getId(),
+                    showDate,
+                    id,
+                    showTime,
+                    showTimeEnd
             );
 
             if (exists) {
-                throw new RuntimeException("ShowTime already exists for this movie, date, and time.");
+                throw new RuntimeException("ShowTime overlaps with an existing show.");
             }
 
             showTimeToEdit.setMovie(showTimeDTO.getMovie());
-            showTimeToEdit.setShowDate(showTimeDTO.getShowDate());
-            showTimeToEdit.setShowTime(showTimeDTO.getShowTime());
-            showTimeToEdit.setTheater(showTimeDTO.getTheater());
+            showTimeToEdit.setShowDate(showDate);
+            showTimeToEdit.setShowTime(showTime);
+            showTimeToEdit.setShowTimeEnd(showTimeEnd);
+            showTimeToEdit.setCinemaRoom(showTimeDTO.getCinemaRoom());
             return showTimeRepository.save(showTimeToEdit);
         } else {
             throw new RuntimeException("ShowTime not found with id: " + id);
         }
     }
+
 }
 

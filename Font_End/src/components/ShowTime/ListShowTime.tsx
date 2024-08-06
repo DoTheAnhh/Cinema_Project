@@ -1,7 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing'
-import { ShowTimee } from '../Types'
+import { CinemaRoomm, ShowTimee } from '../Types'
 import { Button, Col, Pagination, Row, Table, Tooltip } from 'antd'
 import { EditFilled } from "@ant-design/icons";
 import dayjs from 'dayjs'
@@ -57,10 +57,17 @@ const ListShowTime: React.FC = () => {
     const columns: ColumnsType<ShowTimee> = [
         {
             title: 'Theater',
-            dataIndex: ['theater', 'theaterName'],
+            dataIndex: ['cinemaRoom', 'theaters', 'theaterName'],
             key: 'theaterName',
             align: "center" as const,
             sorter: (a: ShowTimee, b: ShowTimee) => a.theater.theaterName.localeCompare(b.theater.theaterName),
+        },
+        {
+            title: 'Cinema room',
+            dataIndex: ['cinemaRoom', 'cinemaRoomName'],
+            key: 'theaterName',
+            align: "center" as const,
+            sorter: (a: ShowTimee, b: ShowTimee) => a.cinemaRoom.cinemaRoomName.localeCompare(b.cinemaRoom.cinemaRoomName),
         },
         {
             title: 'Movie',
@@ -80,9 +87,15 @@ const ListShowTime: React.FC = () => {
             render: (text: Date) => dayjs(text).format('DD/MM/YYYY'),
         },
         {
-            title: 'Show time',
+            title: 'Show start',
             dataIndex: 'showTime',
             key: 'showTime',
+            align: "center" as const,
+        },
+        {
+            title: 'Show end',
+            dataIndex: 'showTimeEnd',
+            key: 'showTimeEnd',
             align: "center" as const,
         },
         {

@@ -45,6 +45,7 @@ export interface ShowTimee {
     id: number
     movie: Moviee
     theater: Theaterr
+    cinemaRoom: CinemaRoomm
     showDate: Date
     showTime: string
 }
@@ -58,4 +59,13 @@ export interface Customerr {
     location: string
     username: string
     password: string
+}
+
+export interface Seatt {
+    id: number;
+    rowNumber: number;
+    seatNumber: number;
+    seatType: string;
+    status: boolean;
+
 }
