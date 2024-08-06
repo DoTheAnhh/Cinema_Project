@@ -1,2 +1,22 @@
-package com.example.cinema_project.dto;public class SeatDTO {
+package com.example.cinema_project.dto;
+
+import com.example.cinema_project.entity.CinemaRoom;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public class SeatDTO {
+
+    private Long id;
+
+    private int rowNumber;
+
+    private int seatNumber;
+
+    private String seatType;
+
+    private boolean status;
+
+    private CinemaRoom cinemaRoom;
 }

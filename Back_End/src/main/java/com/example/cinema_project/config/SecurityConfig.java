@@ -58,7 +58,6 @@ public class SecurityConfig {
                                 .requestMatchers("/movie-types/search-movie-types").permitAll()
 
                                 .requestMatchers("/show-times").permitAll()
-                                .requestMatchers("/show-times/*").permitAll()
                                 .requestMatchers("/show-times/movie/*/date/*").permitAll()
                                 .requestMatchers("/show-times/search-show-times").permitAll()
 

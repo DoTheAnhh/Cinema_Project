@@ -16,6 +16,7 @@ import ListShowTime from "../ShowTime/ListShowTime";
 import ShowTime from "../ShowTime/ShowTime";
 import ListCustomer from "../Customer/ListCustomer";
 import Customer from "../Customer/Customer";
+import RoomSelection from "../UserPage/MovieDetailForUser/RoomSelection";
 
 const Layouts: React.FC = () => {
 
@@ -46,9 +47,6 @@ const Layouts: React.FC = () => {
           </Menu.Item>
           <Menu.Item key="6" icon={<ShopOutlined />}>
             <Link to="/dotheanh/customers">Customer</Link>
-          </Menu.Item>
-          <Menu.Item key="7" icon={<ShopOutlined />}>
-            <Link to="/dotheanh/booking-seats">Seat</Link>
           </Menu.Item>
         </Menu>
       </Sider>

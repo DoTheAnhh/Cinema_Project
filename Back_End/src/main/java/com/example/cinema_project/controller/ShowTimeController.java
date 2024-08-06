@@ -1,9 +1,12 @@
 package com.example.cinema_project.controller;
 
 import com.example.cinema_project.dto.CinemaRoomDTO;
+import com.example.cinema_project.dto.SeatDTO;
 import com.example.cinema_project.dto.ShowTimeDTO;
 import com.example.cinema_project.entity.CinemaRoom;
+import com.example.cinema_project.entity.Seat;
 import com.example.cinema_project.entity.ShowTime;
+import com.example.cinema_project.serivce.SeatService;
 import com.example.cinema_project.serivce.ShowTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -18,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @CrossOrigin("*")
 @RestController
@@ -25,7 +29,10 @@ import java.util.Optional;
 public class ShowTimeController {
 
     @Autowired
-    private ShowTimeService showTimeService;
+    ShowTimeService showTimeService;
+
+    @Autowired
+    SeatService seatService;
 
     @GetMapping("/movie/{movieId}/date/{showDate}")
     public List<ShowTime> getShowTimeByMovieIdAndShowDate(

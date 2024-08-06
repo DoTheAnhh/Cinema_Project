@@ -109,15 +109,18 @@ const Customer: React.FC = () => {
     
             const userRole = decodedToken.role;
     
-            if (userRole === 'ADMIN' && role === 'USER') {
-                localStorage.removeItem('token');
-                navigator("/");
-                return;
-            }
-            
-            if (userRole !== 'ADMIN') {
-                console.error('User does not have the required ADMIN role');
-                return;
+            if (id) {
+                // Check if the current user is ADMIN and is trying to change the role to USER during an update
+                if (userRole === 'ADMIN' && customer.role === 'USER') {
+                    message.error("ADMIN users cannot change their role to USER during an update.");
+                    return;
+                }
+            } else {
+                // Check if the current user has the ADMIN role for insert operation
+                if (userRole !== 'ADMIN') {
+                    console.error('User does not have the required ADMIN role');
+                    return;
+                }
             }
     
             const config = {
@@ -138,6 +141,7 @@ const Customer: React.FC = () => {
             console.error('Error adding item: ', e);
         }
     };
+    
     
     const backToList = () => {
         navigator("/dotheanh/customers");

@@ -1,6 +1,7 @@
 package com.example.cinema_project.serivce;
 
 import com.example.cinema_project.dto.ShowTimeDTO;
+import com.example.cinema_project.entity.CinemaRoom;
 import com.example.cinema_project.entity.ShowTime;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

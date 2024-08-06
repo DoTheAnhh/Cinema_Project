@@ -26,4 +26,7 @@ public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
     boolean existsConflictExcludingCurrent(@Param("cinemaRoomId") Long cinemaRoomId, @Param("showDate") Date showDate, @Param("showTimeId") Long showTimeId, @Param("showTime") String showTime, @Param("showTimeEnd") String showTimeEnd);
 
     List<ShowTime> findByShowDateBefore(LocalDate date);
+
+    List<ShowTime> findByShowDateAndShowTime(Date showDate, String showTime);
+
 }
