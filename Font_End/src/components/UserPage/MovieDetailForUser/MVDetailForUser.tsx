@@ -23,8 +23,11 @@ const MVDetailForUser: React.FC = () => {
 
     const [movies, setMovies] = useState<Moviee>();
     const [showTimes, setShowTimes] = useState<ShowTimee[]>([]);
+    const [selectedTheater, setSelectedTheater] = useState<string | null>(null);
 
     const [selectedDate, setSelectedDate] = useState<DateObject | null>(null);
+
+    const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
     const navigate = useNavigate();
 
@@ -144,6 +147,16 @@ const MVDetailForUser: React.FC = () => {
         }
     };
 
+    const handleTimeClick = (theaterName: string, time: string) => {
+        navigate('/cinema-room-booking', {
+            state: {
+                selectedTheater: theaterName,
+                showTimes: showTimes.filter(st => st.cinemaRoom.theaters.theaterName === theaterName),
+                selectedTime: time // Pass the selected time
+            }
+        });
+    };
+    
     const embedUrl = movies?.trailer ? getEmbedUrl(movies.trailer) : null;
 
     return (
@@ -378,19 +391,24 @@ const MVDetailForUser: React.FC = () => {
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
                                     {times
-                                        .map(time => dayjs(time, 'HH:mm')) // Convert time strings to Dayjs objects
-                                        .sort((a, b) => a.isBefore(b) ? -1 : 1) // Sort times
+                                        .map(time => dayjs(time, 'HH:mm'))
+                                        .sort((a, b) => a.isBefore(b) ? -1 : 1)
                                         .map((time, j) => (
-                                            <Tag key={j} style={{
-                                                width: 90,
-                                                height: 35,
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                fontSize: '14px'
-                                            }}>
+                                            <Button
+                                                key={j}
+                                                style={{
+                                                    width: 90,
+                                                    height: 35,
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: '14px',
+                                                    margin: '4px'
+                                                }}
+                                                onClick={() => handleTimeClick(theaterName, time.format('HH:mm'))}
+                                            >
                                                 {time.format('HH:mm')}
-                                            </Tag>
+                                            </Button>
                                         ))}
                                 </div>
                             </div>

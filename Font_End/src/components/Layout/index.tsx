@@ -16,8 +16,6 @@ import ListShowTime from "../ShowTime/ListShowTime";
 import ShowTime from "../ShowTime/ShowTime";
 import ListCustomer from "../Customer/ListCustomer";
 import Customer from "../Customer/Customer";
-import RoomSelection from "../UserPage/MovieDetailForUser/RoomSelection";
-
 const Layouts: React.FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);

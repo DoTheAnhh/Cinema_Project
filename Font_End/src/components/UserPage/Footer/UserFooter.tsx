@@ -1,8 +1,6 @@
 import { Footer } from 'antd/es/layout/layout'
 import React from 'react'
 import { FacebookOutlined, YoutubeOutlined } from "@ant-design/icons";
-
-
 const UserFooter: React.FC = () => {
     return (
         <Footer style={{ width: '100%', backgroundColor: '#333333', display: 'flex', justifyContent: 'space-between', padding: '0 140px' }}>

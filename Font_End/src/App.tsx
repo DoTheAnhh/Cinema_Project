@@ -9,8 +9,7 @@ import ProtectedRoute from './ProtectedRoute';
 import NotFound from './NotFound';
 import { UserProvider } from './components/Context/UserContext';
 import './App.css'
-import SeatBooking from './components/UserPage/Seat/SeatBooking';
-
+import CinemaRoomBooking from './components/UserPage/MovieDetailForUser/CinemaRoom/CinemaRoomBooking';
 interface RouteComponent {
   path: string;
   element: React.ReactElement;
@@ -43,8 +42,8 @@ function App() {
       element: <MVDetailForUser />
     },
     {
-      path: 'test',
-      element: <SeatBooking />
+      path: 'cinema-room-booking',
+      element: <CinemaRoomBooking />
     },
     {
       path: '*',
