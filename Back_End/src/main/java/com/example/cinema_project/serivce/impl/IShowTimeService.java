@@ -49,17 +49,25 @@ public class IShowTimeService implements ShowTimeService {
         String showTimeEnd = showTimeDTO.getShowTimeEnd();
 
         // Convert showDate to java.sql.Date
-        Date showDate = showTimeDTO.getShowDate(); // Assumes showDate is a String in format yyyy-MM-dd
+        Date showDate = showTimeDTO.getShowDate(); // Assumes showDate is a java.sql.Date
 
         // Check for conflicting show times
-        boolean exists = showTimeRepository.existsConflict(
+        boolean existsConflict = showTimeRepository.existsConflict(
                 showTimeDTO.getCinemaRoom().getId(),
                 showDate,
                 showTime,
                 showTimeEnd
         );
 
-        if (exists) {
+        // Check for conflicting show times for the same movie
+        boolean existsConflictForMovie = showTimeRepository.existsConflictForMovie(
+                showTimeDTO.getMovie().getId(),
+                showDate,
+                showTime,
+                showTimeEnd
+        );
+
+        if (existsConflict || existsConflictForMovie) {
             throw new RuntimeException("ShowTime overlaps with an existing show.");
         }
 
@@ -72,6 +80,7 @@ public class IShowTimeService implements ShowTimeService {
         return showTimeRepository.save(showTimeEntity);
     }
 
+
     @Override
     public ShowTime editShowTime(Long id, ShowTimeDTO showTimeDTO) {
         Optional<ShowTime> showTimeOptional = showTimeRepository.findById(id);
@@ -80,12 +89,9 @@ public class IShowTimeService implements ShowTimeService {
 
             String showTime = showTimeDTO.getShowTime();
             String showTimeEnd = showTimeDTO.getShowTimeEnd();
+            Date showDate = showTimeDTO.getShowDate(); // Assumes showDate is a java.sql.Date
 
-            // Convert showDate to java.sql.Date
-            Date showDate = showTimeDTO.getShowDate(); // Assumes showDate is a String in format yyyy-MM-dd
-
-            // Check for conflicting show times excluding the current show time
-            boolean exists = showTimeRepository.existsConflictExcludingCurrent(
+            boolean existsConflict = showTimeRepository.existsConflictExcludingCurrent(
                     showTimeDTO.getCinemaRoom().getId(),
                     showDate,
                     id,
@@ -93,7 +99,15 @@ public class IShowTimeService implements ShowTimeService {
                     showTimeEnd
             );
 
-            if (exists) {
+            boolean existsConflictForMovie = showTimeRepository.existsConflictForMovieExcludingCurrent(
+                    showTimeDTO.getMovie().getId(),
+                    showDate,
+                    id,
+                    showTime,
+                    showTimeEnd
+            );
+
+            if (existsConflict || existsConflictForMovie) {
                 throw new RuntimeException("ShowTime overlaps with an existing show.");
             }
 
@@ -107,5 +121,7 @@ public class IShowTimeService implements ShowTimeService {
             throw new RuntimeException("ShowTime not found with id: " + id);
         }
     }
+
+
 }
 

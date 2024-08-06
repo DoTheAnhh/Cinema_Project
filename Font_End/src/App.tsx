@@ -9,6 +9,7 @@ import ProtectedRoute from './ProtectedRoute';
 import NotFound from './NotFound';
 import { UserProvider } from './components/Context/UserContext';
 import './App.css'
+import SeatBooking from './components/UserPage/Seat/SeatBooking';
 
 interface RouteComponent {
   path: string;
@@ -40,6 +41,10 @@ function App() {
     {
       path: 'movie/:id',
       element: <MVDetailForUser />
+    },
+    {
+      path: 'test',
+      element: <SeatBooking />
     },
     {
       path: '*',
