@@ -138,10 +138,11 @@ const CinemaRoomBooking: React.FC = () => {
               <ul>
                 {Object.entries(groupedSeats).reverse().map(([rowNumber, rowSeats]) => (
                   <li key={rowNumber} className="seat-row">
-                    <span className="row-label left-label">{rowNumber}</span>
+                    <span className="row-label left-label" style={{ fontFamily: 'Noto Sans JP, sans-serif' }}>{rowNumber}</span>
                     <div className="seat-grid" style={{ marginLeft: 200 }}>
                       {rowSeats.map(seat => (
                         <div
+                          style={{ fontFamily: 'Noto Sans JP, sans-serif' }}
                           key={seat.id}
                           className={`seat ${selectedSeats.has(seat.id) ? 'selected' : ''} ${seat.status === 'booked' ? 'booked' : ''}`}
                           onClick={() => seat.status !== 'booked' && handleSeatClick(seat)}
@@ -150,21 +151,21 @@ const CinemaRoomBooking: React.FC = () => {
                         </div>
                       ))}
                     </div>
-                    <span className="row-label right-label">{rowNumber}</span>
+                    <span className="row-label right-label" style={{ fontFamily: 'Noto Sans JP, sans-serif' }}>{rowNumber}</span>
                   </li>
                 ))}
               </ul>
             </div>
           </div>
           <div>
-            <div style={{ margin: '10px 360px' }}>Màn hình</div>
+            <div style={{ margin: '10px 360px', fontFamily: 'Noto Sans JP, sans-serif' }}>Màn hình</div>
             <div style={{ backgroundColor: 'orange', width: 765, height: 10, marginBottom: 20 }}></div>
           </div>
         </div>
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, marginLeft: -200 }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', top: '0', marginTop: 100 }}>
             <div style={{ display: 'flex', marginTop: 10 }}>
-              <img style={{ height: 200, width: 140, padding: 10, marginLeft: -120 }} src={banner} alt="Movie Banner" />
+              <img style={{ height: 200, width: 140, padding: 10, marginLeft: -200 }} src={banner} alt="Movie Banner" />
               <div style={{ marginLeft: 10, fontFamily: 'Noto Sans JP, sans-serif', fontWeight: 'bold', marginTop: 20 }}>
                 {movieName}
               </div>
