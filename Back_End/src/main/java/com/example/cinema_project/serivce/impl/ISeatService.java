@@ -13,4 +13,9 @@ public class ISeatService implements SeatService {
 
     @Autowired
     SeatRepository seatRepository;
+
+    @Override
+    public List<Seat> getSeatsByCinemaRoomId(Long cinemaRoomId) {
+        return seatRepository.findByCinemaRoomId(cinemaRoomId);
+    }
 }

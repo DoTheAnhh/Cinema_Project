@@ -23,7 +23,4 @@ public class CinemaRoom {
     @ManyToOne
     @JoinColumn(name = "theater_id")
     private Theater theaters;
-
-    @OneToMany(mappedBy = "cinemaRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Seat> seats;
 }

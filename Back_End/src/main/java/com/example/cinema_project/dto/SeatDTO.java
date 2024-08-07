@@ -10,13 +10,13 @@ public class SeatDTO {
 
     private Long id;
 
-    private int rowNumber;
+    private String rowNumber;
 
     private int seatNumber;
 
     private String seatType;
 
-    private boolean status;
+    private String status;
 
     private CinemaRoom cinemaRoom;
 }

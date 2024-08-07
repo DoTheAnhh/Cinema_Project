@@ -69,11 +69,8 @@ export const API = {
         SEARCH_CUSTOMER: '/search-customers'
     },
     SEAT: {
+        GET_ALL_SEAT: '',
         GET_SEAT_BY_CINEMA_ROOM: '/cinema-room',
         BOOK_SEAT: '/book',
-        // INSERT_SEAT: '/insert-seat',
-        // EDIT_SEAT: '/edit-seat',
-        // DELETE_SEAT: '/delete-seat',
-        // SEARCH_SEAT: '/search-seats'
     },
 }

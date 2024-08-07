@@ -61,7 +61,4 @@ public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
     );
 
     List<ShowTime> findByShowDateBefore(LocalDate date);
-
-    List<ShowTime> findByShowDateAndShowTime(Date showDate, String showTime);
-
 }

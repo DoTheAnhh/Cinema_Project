@@ -21,4 +21,5 @@ public interface ShowTimeService {
     ShowTime insertShowTime(ShowTimeDTO showTimeDTO);
 
     ShowTime editShowTime(Long id, ShowTimeDTO showTimeDTO);
+
 }

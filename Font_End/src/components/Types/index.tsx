@@ -15,7 +15,7 @@ export interface Actorr {
 
 export interface Moviee {
     id: number
-    banner: string
+    banner: string | undefined
     movieName: string
     duration: number
     releaseDate: string | Date
@@ -66,6 +66,6 @@ export interface Seatt {
     rowNumber: number;
     seatNumber: number;
     seatType: string;
-    status: boolean;
+    status: 'available' | 'booked' | 'selected';
 
 }

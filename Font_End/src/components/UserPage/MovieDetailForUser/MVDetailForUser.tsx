@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { LOCALHOST, REQUEST_MAPPING, API } from '../../APIs/typing';
-import { Moviee, ShowTimee} from '../../Types';
+import { Moviee, ShowTimee } from '../../Types';
 import { Button, Layout, Select, Tag, theme } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { FieldTimeOutlined, CalendarOutlined } from "@ant-design/icons";
@@ -19,7 +19,7 @@ interface DateObject {
 }
 
 const MVDetailForUser: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<string>();
 
     const [movies, setMovies] = useState<Moviee>();
     const [showTimes, setShowTimes] = useState<ShowTimee[]>([]);
@@ -128,14 +128,14 @@ const MVDetailForUser: React.FC = () => {
         prevArrow: <PrevArrow />,
     };
 
-    const groupedShowTimes: { [key: string]: string[] } = showTimes.reduce((acc, showTime) => {
+    const groupedShowTimes: { [key: string]: { showTime: string, cinemaRoomId: number }[] } = showTimes.reduce((acc, showTime) => {
         const theaterName = showTime.cinemaRoom.theaters.theaterName;
         if (!acc[theaterName]) {
             acc[theaterName] = [];
         }
-        acc[theaterName].push(showTime.showTime);
+        acc[theaterName].push({ showTime: showTime.showTime, cinemaRoomId: showTime.cinemaRoom.id });
         return acc;
-    }, {} as { [key: string]: string[] });
+    }, {} as { [key: string]: { showTime: string, cinemaRoomId: number }[] });
 
     const getEmbedUrl = (url: string) => {
         if (url.includes('watch?v=')) {
@@ -147,16 +147,20 @@ const MVDetailForUser: React.FC = () => {
         }
     };
 
-    const handleTimeClick = (theaterName: string, time: string) => {
+    const handleTimeClick = (theaterName: string, time: string, cinemaRoomId: number, movieName: string, banner: string) => {
         navigate('/cinema-room-booking', {
             state: {
                 selectedTheater: theaterName,
                 showTimes: showTimes.filter(st => st.cinemaRoom.theaters.theaterName === theaterName),
-                selectedTime: time // Pass the selected time
+                selectedTime: time,
+                cinemaRoomId: cinemaRoomId,
+                movieName: movieName,
+                banner: banner
             }
         });
     };
-    
+
+
     const embedUrl = movies?.trailer ? getEmbedUrl(movies.trailer) : null;
 
     return (
@@ -380,7 +384,7 @@ const MVDetailForUser: React.FC = () => {
                     </div>
                     <hr style={{ marginTop: 30, width: 800, justifyContent: 'center', marginLeft: 195, height: 2, backgroundColor: 'blue' }} />
                     <div className="container table" style={{ marginLeft: 200 }}>
-                        {Object.entries(groupedShowTimes).map(([theaterName, times]: [string, string[]], i: number) => (
+                        {Object.entries(groupedShowTimes).map(([theaterName, times], i) => (
                             <div key={i} className="col-12 mb-3" style={{ marginTop: 20 }}>
                                 <div style={{
                                     fontWeight: 'bold',
@@ -391,7 +395,7 @@ const MVDetailForUser: React.FC = () => {
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
                                     {times
-                                        .map(time => dayjs(time, 'HH:mm'))
+                                        .map(({ showTime, cinemaRoomId }) => dayjs(showTime, 'HH:mm'))
                                         .sort((a, b) => a.isBefore(b) ? -1 : 1)
                                         .map((time, j) => (
                                             <Button
@@ -405,18 +409,19 @@ const MVDetailForUser: React.FC = () => {
                                                     fontSize: '14px',
                                                     margin: '4px'
                                                 }}
-                                                onClick={() => handleTimeClick(theaterName, time.format('HH:mm'))}
+                                                onClick={() => handleTimeClick(theaterName, time.format('HH:mm'), times[j].cinemaRoomId, movies?.movieName || '', movies?.banner || '')}
                                             >
-                                                {time.format('HH:mm')}
-                                            </Button>
+                                    {time.format('HH:mm')}
+                                </Button>
                                         ))}
-                                </div>
+                            </div>
                             </div>
                         ))}
-                    </div>
-                </Content>
-                <UserFooter />
-            </Layout >
+                </div>
+
+            </Content>
+            <UserFooter />
+        </Layout >
         </>
     );
 };

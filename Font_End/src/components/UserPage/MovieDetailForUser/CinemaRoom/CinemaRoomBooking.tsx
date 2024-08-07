@@ -1,78 +1,194 @@
-import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Button } from 'antd';
+import React from 'react';
 import dayjs from 'dayjs';
-import { ShowTimee } from '../../../Types';
-import UserHeader from '../../Header/UserHeader';
 import UserFooter from '../../Footer/UserFooter';
+import { Button } from 'antd';
+import UserHeader from '../../Header/UserHeader';
+import { useEffect, useState } from 'react';
+import { Seatt, ShowTimee } from '../../../Types';
+import { useLocation } from 'react-router-dom';
+import { API, LOCALHOST, REQUEST_MAPPING } from '../../../APIs/typing';
+import './CinemaRoom.css';
 
 interface LocationState {
   showTimes: ShowTimee[];
   selectedTheater: string;
-  selectedTime: string; // Add selectedTime to the LocationState
+  selectedTime: string;
+  cinemaRoomId: number;
+  movieName: string;
+  banner: string;
 }
 
 const CinemaRoomBooking: React.FC = () => {
   const location = useLocation();
-  const { showTimes, selectedTheater, selectedTime } = location.state as LocationState;
+  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, banner } = location.state as LocationState;
 
-  // Initialize the selectedTime state with the received selectedTime
+  const [cinemaRoom, setCinemaRoom] = useState<any>(null);
   const [currentSelectedTime, setCurrentSelectedTime] = useState<string>(selectedTime);
+  const [currentCinemaRoomId, setCurrentCinemaRoomId] = useState<number>(cinemaRoomId);
+  const [selectedSeats, setSelectedSeats] = useState<Set<number>>(new Set());
+  const [seats, setSeats] = useState<Seatt[]>([]);
 
   const groupedShowTimes = showTimes.reduce((acc, showTime) => {
     const theaterName = showTime.cinemaRoom.theaters.theaterName;
     if (!acc[theaterName]) {
       acc[theaterName] = [];
     }
-    acc[theaterName].push(showTime.showTime);
+    acc[theaterName].push({ showTime: showTime.showTime, cinemaRoomId: showTime.cinemaRoom.id });
     return acc;
-  }, {} as { [key: string]: string[] });
+  }, {} as { [key: string]: { showTime: string, cinemaRoomId: number }[] });
 
   const timesForSelectedTheater = groupedShowTimes[selectedTheater] || [];
 
-  const handleTimeClick = (time: string) => {
+  const handleTimeClick = (time: string, cinemaRoomId: number) => {
     setCurrentSelectedTime(time);
-    // Optionally, navigate to another route or perform other actions
+    setCurrentCinemaRoomId(cinemaRoomId);
   };
+
+  const fetchCinemaRoom = async () => {
+    try {
+      const response = await fetch(`${LOCALHOST}${REQUEST_MAPPING.CINEMA_ROOM}${API.CINEMA_ROOM.GETALL_CINEMA_ROOM}/${currentCinemaRoomId}`);
+      const data = await response.json();
+      setCinemaRoom(data);
+    } catch (error) {
+      console.error('Failed to fetch cinema room:', error);
+    }
+  };
+
+  const fetchSeats = async () => {
+    try {
+      const response = await fetch(`${LOCALHOST}${REQUEST_MAPPING.SEAT}${API.SEAT.GET_ALL_SEAT}/cinemaRoom/${currentCinemaRoomId}`);
+      const data = await response.json();
+      setSeats(data);
+    } catch (error) {
+      console.error('Failed to fetch seats:', error);
+    }
+  };
+
+  const handleSeatClick = (seat: Seatt) => {
+    setSelectedSeats(prev => {
+      const newSelectedSeats = new Set(prev);
+      if (newSelectedSeats.has(seat.id)) {
+        newSelectedSeats.delete(seat.id);
+      } else {
+        newSelectedSeats.add(seat.id);
+      }
+      return newSelectedSeats;
+    });
+  };
+
+  useEffect(() => {
+    if (currentCinemaRoomId) {
+      fetchSeats();
+      fetchCinemaRoom();
+    }
+  }, [currentCinemaRoomId]);
+
+  useEffect(() => {
+    setSelectedSeats(new Set());
+  }, [currentSelectedTime]);
+
+  const groupedSeats = seats.reduce((acc, seat) => {
+    if (!acc[seat.rowNumber]) {
+      acc[seat.rowNumber] = [];
+    }
+    acc[seat.rowNumber].push(seat);
+    return acc;
+  }, {} as { [key: string]: Seatt[] });
 
   return (
     <>
       <UserHeader />
-      <div className="container table" style={{ marginLeft: 200, marginTop: 120 }}>
-        <div className="col-12 mb-3" style={{ marginTop: 20 }}>
-          <div style={{
-            fontWeight: 'bold',
-            fontFamily: 'Noto Sans JP, sans-serif',
-            fontSize: '18px',
-          }}>
-            {selectedTheater}
+      <div className="container" style={{ display: 'flex', marginLeft: 150, marginTop: 120 }}>
+        <div className="table" style={{ flex: 2, marginRight: 20 }}>
+          <div className="col-12 mb-3" style={{ marginTop: 20 }}>
+            <div style={{
+              fontWeight: 'bold',
+              fontFamily: 'Noto Sans JP, sans-serif',
+              fontSize: '18px',
+            }}>
+              {selectedTheater}
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
+              {timesForSelectedTheater
+                .map(({ showTime, cinemaRoomId }) => dayjs(showTime, 'HH:mm'))
+                .sort((a, b) => a.isBefore(b) ? -1 : 1)
+                .map((time, j) => (
+                  <Button
+                    key={j}
+                    style={{
+                      width: 90,
+                      height: 35,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '14px',
+                      margin: '4px',
+                      backgroundColor: time.format('HH:mm') === currentSelectedTime ? '#034EA2' : '#f0f0f0',
+                      color: time.format('HH:mm') === currentSelectedTime ? 'white' : 'black',
+                    }}
+                    onClick={() => handleTimeClick(time.format('HH:mm'), timesForSelectedTheater[j].cinemaRoomId)}
+                  >
+                    {time.format('HH:mm')}
+                  </Button>
+                ))}
+            </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
-            {timesForSelectedTheater
-              .map(time => dayjs(time, 'HH:mm'))
-              .sort((a, b) => a.isBefore(b) ? -1 : 1)
-              .map((time, j) => (
-                <Button
-                  key={j}
-                  style={{
-                    width: 90,
-                    height: 35,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '14px',
-                    margin: '4px',
-                    backgroundColor: time.format('HH:mm') === currentSelectedTime ? '#034EA2' : '#f0f0f0', // Default color
-                    color: time.format('HH:mm') === currentSelectedTime ? 'white' : 'black', // Default text color
-                  }}
-                  onClick={() => handleTimeClick(time.format('HH:mm'))}
-                >
-                  {time.format('HH:mm')}
-                </Button>
-              ))}
+          <div className="center-container" style={{ marginLeft: 0, width: 760 }}>
+            <div className="seat-layout">
+              <ul>
+                {Object.entries(groupedSeats).reverse().map(([rowNumber, rowSeats]) => (
+                  <li key={rowNumber} className="seat-row">
+                    <span className="row-label left-label">{rowNumber}</span>
+                    <div className="seat-grid" style={{ marginLeft: 200 }}>
+                      {rowSeats.map(seat => (
+                        <div
+                          key={seat.id}
+                          className={`seat ${selectedSeats.has(seat.id) ? 'selected' : ''} ${seat.status === 'booked' ? 'booked' : ''}`}
+                          onClick={() => seat.status !== 'booked' && handleSeatClick(seat)}
+                        >
+                          {seat.seatNumber}
+                        </div>
+                      ))}
+                    </div>
+                    <span className="row-label right-label">{rowNumber}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
-          <div style={{ marginTop: 20, fontSize: '16px' }}>
-            <strong>Selected Time: </strong>{currentSelectedTime}
+          <div>
+            <div style={{ margin: '10px 360px' }}>Màn hình</div>
+            <div style={{ backgroundColor: 'orange', width: 765, height: 10, marginBottom: 20 }}></div>
+          </div>
+        </div>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', top: '0', marginTop: 100 }}>
+            <div style={{ display: 'flex', marginTop: 10 }}>
+              <img style={{ height: 200, width: 140, padding: 10, marginLeft: -120 }} src={banner} alt="Movie Banner" />
+              <div style={{ marginLeft: 10, fontFamily: 'Noto Sans JP, sans-serif', fontWeight: 'bold', marginTop: 20 }}>
+                {movieName}
+              </div>
+            </div>
+            <div style={{ marginTop: 20, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
+              <strong>{selectedTheater}</strong> - {cinemaRoom ? cinemaRoom.cinemaRoomName : 'Loading...'}
+            </div>
+            <div style={{ marginTop: 15, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
+              Suất: <strong>{currentSelectedTime}</strong> - {dayjs(currentSelectedTime, 'HH:mm').format('dddd')}, {dayjs(currentSelectedTime, 'HH:mm').format('DD/MM/YYYY')}
+            </div>
+            <div className="seat-info" style={{ marginTop: 25, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
+              <strong>Ghế đã chọn: </strong>
+              {Array.from(selectedSeats).map(seatId => {
+                const seat = seats.find(s => s.id === seatId);
+                return seat ? (
+                  <div key={seatId} className="seat-details">
+                    {seat.rowNumber}{seat.seatNumber}
+                  </div>
+                ) : null;
+              })}
+            </div>
+            <div style={{ marginTop: 30, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
+              <strong>Tổng cộng: </strong>
+            </div>
           </div>
         </div>
       </div>
