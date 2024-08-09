@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Layout, Menu, Button, theme } from 'antd';
 import { HomeOutlined, MenuFoldOutlined, MenuUnfoldOutlined, ShopOutlined, DesktopOutlined } from "@ant-design/icons";
-import { Link, Route, Routes } from "react-router-dom";
+import { Link, Route, Routes, useNavigate } from "react-router-dom";
 import Sider from "antd/es/layout/Sider";
 import { Content, Header } from "antd/es/layout/layout";
 import Home from "../Home";
@@ -16,12 +16,39 @@ import ListShowTime from "../ShowTime/ListShowTime";
 import ShowTime from "../ShowTime/ShowTime";
 import ListCustomer from "../Customer/ListCustomer";
 import Customer from "../Customer/Customer";
+import { useUserContext } from "../Context/UserContext";
 const Layouts: React.FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);
+
+  const { user, setUser } = useUserContext();
+  const navigate = useNavigate();
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('user');
+    setUser(null);
+    navigate('/');
+  };
+
+  const logoutStyle: React.CSSProperties = {
+    fontFamily: '"Noto Sans JP", sans-serif',
+    fontSize: '13px',
+    color: 'black',
+    marginLeft: 10
+  };
+
+  const userNameStyle: React.CSSProperties = {
+    fontFamily: '"Noto Sans JP", sans-serif',
+    fontSize: '13px',
+    color: 'black',
+    marginRight: 10
+  };
 
   return (
     <Layout style={{ minHeight: '100vh' }}>
@@ -56,6 +83,15 @@ const Layouts: React.FC = () => {
             onClick={() => setCollapsed(!collapsed)}
             style={{ fontSize: "16px", width: 64, height: 64 }}
           />
+          <div style={{ marginTop: -65, marginLeft: 1120 }}>
+            <a style={userNameStyle}>
+              {user?.name}
+            </a>
+            <a>|</a>
+            <a style={logoutStyle} onClick={handleLogout}>
+               Logout
+            </a>
+          </div>
         </Header>
         <Content style={{ margin: "24px 16px", padding: 24, minHeight: 280 }}>
           <Routes>

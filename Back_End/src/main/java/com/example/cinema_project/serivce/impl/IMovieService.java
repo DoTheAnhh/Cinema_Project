@@ -61,6 +61,7 @@ public class IMovieService implements MovieService {
 
         movie.setTrailer(movieDTO.getTrailer());
         movie.setContent(movieDTO.getContent());
+        movie.setTicketPrice(movieDTO.getTicketPrice());
         movie.setDirectorName(movieDTO.getDirectorName());
 
         Set<Actor> actors = new HashSet<>();
@@ -84,6 +85,7 @@ public class IMovieService implements MovieService {
             movieToEdit.setMovieName(movieDTO.getMovieName());
             movieToEdit.setDuration(movieDTO.getDuration());
             movieToEdit.setReleaseDate(movieDTO.getReleaseDate());
+            movieToEdit.setTicketPrice(movieDTO.getTicketPrice());
 
             Set<MovieType> movieTypes = new HashSet<>();
             for (String typeId : movieDTO.getMovieTypes()) {

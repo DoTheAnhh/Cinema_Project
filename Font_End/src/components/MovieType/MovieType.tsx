@@ -43,30 +43,30 @@ const MovieType: React.FC<MovieTypeProps> = ({ movieType, onClose, onSuccess }) 
     try {
 
       const token = localStorage.getItem('token');
-            if (!token) {
-                console.error('No token found');
-                return;
-            }
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
 
-            const decodedToken = decodeJwt(token);
-            if (!decodedToken) {
-                console.error('Invalid token');
-                return;
-            }
+      const decodedToken = decodeJwt(token);
+      if (!decodedToken) {
+        console.error('Invalid token');
+        return;
+      }
 
-            const userRole = decodedToken.role;
+      const userRole = decodedToken.role;
 
-            if (userRole !== 'ADMIN') {
-                console.error('User does not have the required ADMIN role');
-                return;
-            }
+      if (userRole !== 'ADMIN') {
+        console.error('User does not have the required ADMIN role');
+        return;
+      }
 
-            const config = {
-                headers: { Authorization: `Bearer ${token}` }
-            };
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
 
       const data = { movieTypeName };
-      if (movieType && movieType.id) {
+      if (movieType?.id) {
         await axios.put(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.EDIT_MOVIE_TYPE + `/${movieType.id}`, data, config);
       } else {
         await axios.post(LOCALHOST + REQUEST_MAPPING.MOVIE_TYPE + API.MOVIE_TYPE.INSERT_MOVIE_TYPE, data, config);

@@ -33,6 +33,8 @@ public class MovieDTO {
 
     public String content;
 
+    public String ticketPrice;
+
     private Set<String> movieTypes;
 
     public Set<String> actors;

@@ -1,11 +1,14 @@
-import { Footer } from 'antd/es/layout/layout'
-import React from 'react'
+import { Footer } from 'antd/es/layout/layout';
+import React from 'react';
 import { FacebookOutlined, YoutubeOutlined } from "@ant-design/icons";
+
 const UserFooter: React.FC = () => {
     return (
-        <Footer style={{ width: '100%', backgroundColor: '#333333', display: 'flex', justifyContent: 'space-between', padding: '0 140px' }}>
+        <Footer style={{ width: '100%', backgroundColor: '#333333', display: 'flex', justifyContent: 'space-between', padding: '0 140px', fontFamily: '"Noto Sans JP", sans-serif' }}>
             <div style={{ color: '#FFF5D1', flex: 1, marginTop: 40, marginLeft: 40, marginRight: 200 }}>
-                <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40, }}>Giới thiệu</div>
+                <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40 }}>
+                    Giới thiệu
+                </div>
                 <div>
                     <ul style={{ listStyleType: 'none', padding: 0 }}>
                         <li style={{ marginBottom: 20 }}>Về chúng tôi</li>
@@ -16,7 +19,9 @@ const UserFooter: React.FC = () => {
                 </div>
             </div>
             <div style={{ color: '#FFF5D1', flex: 1, marginTop: 40, marginRight: 200 }}>
-                <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40 }}>Góc điện ảnh</div>
+                <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40 }}>
+                    Góc điện ảnh
+                </div>
                 <div>
                     <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
                         <li style={{ marginBottom: 20 }}>Thể loại phim</li>
@@ -28,7 +33,9 @@ const UserFooter: React.FC = () => {
                 </div>
             </div>
             <div style={{ color: '#FFF5D1', flex: 1, marginTop: 40, marginRight: 200 }}>
-                <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40 }}>Hỗ trợ</div>
+                <div style={{ fontWeight: 'normal', fontSize: 20, marginBottom: 40 }}>
+                    Hỗ trợ
+                </div>
                 <div>
                     <ul style={{ listStyleType: 'none', padding: 0, margin: 0 }}>
                         <li style={{ marginBottom: 20 }}>Góp ý</li>
@@ -50,7 +57,7 @@ const UserFooter: React.FC = () => {
                 </div>
             </div>
         </Footer>
-    )
+    );
 }
 
-export default UserFooter
+export default UserFooter;

@@ -39,6 +39,9 @@ public class Movie {
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
+    @Column(name = "ticket_price")
+    public String ticketPrice;
+
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "movie_movie_type",

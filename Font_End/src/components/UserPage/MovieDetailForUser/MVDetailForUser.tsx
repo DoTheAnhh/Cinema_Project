@@ -144,23 +144,28 @@ const MVDetailForUser: React.FC = () => {
     };
 
     const handleTimeClick = (theaterName: string, time: string, cinemaRoomId: number, movieName: string, banner: string, selectedDate: string) => {
-        navigate('/cinema-room-booking', {
-            state: {
-                selectedTheater: theaterName,
-                showTimes: showTimes.filter(st => st.cinemaRoom.theaters.theaterName === theaterName),
-                selectedTime: time,
-                cinemaRoomId: cinemaRoomId,
-                movieName: movieName,
-                banner: banner,
-                selectedDate: selectedDate
-            }
-        });
-    };
+        const isLoggedIn = Boolean(localStorage.getItem('token'));
+        if (!isLoggedIn) {
+            navigate('/');
+        } else {
+            navigate('/cinema-room-booking', {
+                state: {
+                    selectedTheater: theaterName,
+                    showTimes: showTimes.filter(st => st.cinemaRoom.theaters.theaterName === theaterName),
+                    selectedTime: time,
+                    cinemaRoomId: cinemaRoomId,
+                    movieName: movieName,
+                    banner: banner,
+                    selectedDate: selectedDate
+                }
+            });
+        };
+    }
 
     const embedUrl = movies?.trailer ? getEmbedUrl(movies.trailer) : null;
 
-    console.log("selectedDate" ,selectedDate);
-    
+    console.log("selectedDate", selectedDate);
+
 
     return (
         <>
@@ -394,7 +399,7 @@ const MVDetailForUser: React.FC = () => {
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
                                     {times
-                                        .map(({ showTime, cinemaRoomId }) => dayjs(showTime, 'HH:mm'))
+                                        .map(({ showTime }) => dayjs(showTime, 'HH:mm'))
                                         .sort((a, b) => a.isBefore(b) ? -1 : 1)
                                         .map((time, j) => (
                                             <Button

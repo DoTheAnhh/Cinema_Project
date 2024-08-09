@@ -18,6 +18,7 @@ const Movie: React.FC = () => {
   const [trailer, setTrailer] = useState<string>("")
   const [directorName, setDirectorName] = useState<string>("")
   const [content, setContent] = useState<string>("")
+  const [ticketPrice, setTicketPrice] = useState<string>("")
 
   const [movieType, setMovieType] = useState<string[]>([]);
   const [actor, setActor] = useState<string[]>([])
@@ -32,7 +33,7 @@ const Movie: React.FC = () => {
 
   const { id } = useParams()
 
-  const movie = { movieName, banner, duration, releaseDate, trailer, directorName, content }
+  const movie = { movieName, banner, duration, releaseDate, trailer, directorName, content, ticketPrice }
 
   const fetchMovieType = async () => {
     try {
@@ -52,6 +53,7 @@ const Movie: React.FC = () => {
       setBanner(movieData.banner)
       setDuration(movieData.duration)
       setReleaseDate(movieData.releaseDate)
+      setTicketPrice(movieData.ticketPrice)
 
       if (movieData.movieTypes) {
         const mappedMovieTypes = movieData.movieTypes.map((type: MovieTypee) => type.id.toString());
@@ -122,6 +124,10 @@ const Movie: React.FC = () => {
     }
     if (actor.length === 0) {
       message.error("Actor name is required")
+      return false;
+    }
+    if (!ticketPrice.trim()) {
+      message.error("Movie name is required")
       return false;
     }
     return true;
@@ -293,6 +299,9 @@ const Movie: React.FC = () => {
                   <ListActor />
                 </Modal>
               </div>
+            </Form.Item>
+            <Form.Item label="Ticket price" required>
+              <Input value={ticketPrice} onChange={(e) => setTicketPrice(e.target.value)} />
             </Form.Item>
             <Form.Item label="Trailer" required>
               <Input placeholder='Trailer' value={trailer} onChange={(e) => setTrailer(e.target.value)} />

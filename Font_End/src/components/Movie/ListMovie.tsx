@@ -161,7 +161,6 @@ const ListMovie: React.FC = () => {
       key: 'movieName',
       align: "center" as const,
       render: (movieName: string) => <span style={{ fontWeight: 'bold', fontSize: '25px' }}>{movieName}</span>,
-
     },
     {
       title: 'Duration',
@@ -215,6 +214,16 @@ const ListMovie: React.FC = () => {
             {actor.actorName}
           </Tag>
         )),
+    },
+    {
+      title: 'Ticket price',
+      dataIndex: 'ticketPrice',
+      key: 'ticketPrice',
+      align: "center" as const,
+      render: (price: number | string) => {
+        const numericPrice = typeof price === 'string' ? parseInt(price, 10) : price;
+        return `${numericPrice.toLocaleString('de-DE', { minimumFractionDigits: 0 })} VND`;
+      }
     },
     {
       title: 'Trailer',

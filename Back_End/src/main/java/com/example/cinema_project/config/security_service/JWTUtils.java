@@ -27,9 +27,9 @@ public class JWTUtils {
 
     public String generateToken(Customer customer) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("name", customer.getName());
         claims.put("role", customer.getRole());
         claims.put("id", customer.getId());
-        claims.put("name", customer.getName());
         return Jwts.builder()
                 .claims(claims)
                 .subject(customer.getUsername())
