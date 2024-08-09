@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import UserFooter from '../../Footer/UserFooter';
 import { Button } from 'antd';
 import UserHeader from '../../Header/UserHeader';
-import { useEffect, useState } from 'react';
 import { Seatt, ShowTimee } from '../../../Types';
 import { useLocation } from 'react-router-dom';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../../../APIs/typing';
@@ -16,14 +15,16 @@ interface LocationState {
   cinemaRoomId: number;
   movieName: string;
   banner: string;
+  selectedDate: string;
 }
 
 const CinemaRoomBooking: React.FC = () => {
   const location = useLocation();
-  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, banner } = location.state as LocationState;
+  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, banner, selectedDate } = location.state as LocationState;
 
   const [cinemaRoom, setCinemaRoom] = useState<any>(null);
   const [currentSelectedTime, setCurrentSelectedTime] = useState<string>(selectedTime);
+  const [currentSelectedDate, setCurrentSelectedDate] = useState<string>(selectedDate);
   const [currentCinemaRoomId, setCurrentCinemaRoomId] = useState<number>(cinemaRoomId);
   const [selectedSeats, setSelectedSeats] = useState<Set<number>>(new Set());
   const [seats, setSeats] = useState<Seatt[]>([]);
@@ -39,8 +40,9 @@ const CinemaRoomBooking: React.FC = () => {
 
   const timesForSelectedTheater = groupedShowTimes[selectedTheater] || [];
 
-  const handleTimeClick = (time: string, cinemaRoomId: number) => {
+  const handleTimeClick = (time: string, date: string, cinemaRoomId: number) => {
     setCurrentSelectedTime(time);
+    setCurrentSelectedDate(date);
     setCurrentCinemaRoomId(cinemaRoomId);
   };
 
@@ -56,34 +58,44 @@ const CinemaRoomBooking: React.FC = () => {
 
   const fetchSeats = async () => {
     try {
-      const response = await fetch(`${LOCALHOST}${REQUEST_MAPPING.SEAT}${API.SEAT.GET_ALL_SEAT}/cinemaRoom/${currentCinemaRoomId}`);
+      const response = await fetch(`${LOCALHOST}${REQUEST_MAPPING.SEAT}${API.SEAT.GET_ALL_SEAT}/cinema-room/${currentCinemaRoomId}/show-time/${currentSelectedTime}`);
       const data = await response.json();
-      setSeats(data);
+      console.log('Fetched seats data:', data);
+
+      setSeats(data.map((item: any) => ({
+        ...item,
+        status: item.seat_showTime ? item.seat_showTime.status : 'available',
+      })));
     } catch (error) {
       console.error('Failed to fetch seats:', error);
     }
   };
 
+
+
   const handleSeatClick = (seat: Seatt) => {
-    setSelectedSeats(prev => {
-      const newSelectedSeats = new Set(prev);
-      if (newSelectedSeats.has(seat.id)) {
-        newSelectedSeats.delete(seat.id);
-      } else {
-        newSelectedSeats.add(seat.id);
-      }
-      return newSelectedSeats;
-    });
+    if (seat.seat_showTime?.status !== 'booked') {
+      setSelectedSeats(prev => {
+        const newSelectedSeats = new Set(prev);
+        if (newSelectedSeats.has(seat.seatId)) {
+          newSelectedSeats.delete(seat.seatId);
+        } else {
+          newSelectedSeats.add(seat.seatId);
+        }
+        return newSelectedSeats;
+      });
+    }
   };
 
   useEffect(() => {
     if (currentCinemaRoomId) {
-      fetchSeats();
       fetchCinemaRoom();
+      fetchSeats();
     }
-  }, [currentCinemaRoomId]);
+  }, [currentCinemaRoomId, currentSelectedTime]);
 
   useEffect(() => {
+    fetchSeats();
     setSelectedSeats(new Set());
   }, [currentSelectedTime]);
 
@@ -123,10 +135,8 @@ const CinemaRoomBooking: React.FC = () => {
                       justifyContent: 'center',
                       fontSize: '14px',
                       margin: '4px',
-                      backgroundColor: time.format('HH:mm') === currentSelectedTime ? '#034EA2' : '#f0f0f0',
-                      color: time.format('HH:mm') === currentSelectedTime ? 'white' : 'black',
                     }}
-                    onClick={() => handleTimeClick(time.format('HH:mm'), timesForSelectedTheater[j].cinemaRoomId)}
+                    onClick={() => handleTimeClick(time.format('HH:mm'), selectedDate || '', timesForSelectedTheater[j].cinemaRoomId)}
                   >
                     {time.format('HH:mm')}
                   </Button>
@@ -142,14 +152,19 @@ const CinemaRoomBooking: React.FC = () => {
                     <div className="seat-grid" style={{ marginLeft: 200 }}>
                       {rowSeats.map(seat => (
                         <div
-                          style={{ fontFamily: 'Noto Sans JP, sans-serif' }}
-                          key={seat.id}
-                          className={`seat ${selectedSeats.has(seat.id) ? 'selected' : ''} ${seat.status === 'booked' ? 'booked' : ''}`}
-                          onClick={() => seat.status !== 'booked' && handleSeatClick(seat)}
+                          key={seat.seatId}
+                          className={`seat ${selectedSeats.has(seat.seatId) ? 'selected' : ''} ${seat.seat_showTime?.status === 'booked' ? 'booked' : ''}`}
+                          style={{
+                            cursor: seat.seat_showTime?.status === 'booked' ? 'not-allowed' : 'pointer',
+                            opacity: seat.seat_showTime?.status === 'booked' ? 0.5 : 1,
+                            fontFamily: 'Noto Sans JP, sans-serif'
+                          }}
+                          onClick={() => handleSeatClick(seat)}
                         >
                           {seat.seatNumber}
                         </div>
                       ))}
+
                     </div>
                     <span className="row-label right-label" style={{ fontFamily: 'Noto Sans JP, sans-serif' }}>{rowNumber}</span>
                   </li>
@@ -174,12 +189,12 @@ const CinemaRoomBooking: React.FC = () => {
               <strong>{selectedTheater}</strong> - {cinemaRoom ? cinemaRoom.cinemaRoomName : 'Loading...'}
             </div>
             <div style={{ marginTop: 15, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
-              Suất: <strong>{currentSelectedTime}</strong> - {dayjs(currentSelectedTime, 'HH:mm').format('dddd')}, {dayjs(currentSelectedTime, 'HH:mm').format('DD/MM/YYYY')}
+              Suất: <strong>{currentSelectedTime}</strong> - {currentSelectedDate}
             </div>
             <div className="seat-info" style={{ marginTop: 25, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
               <strong>Ghế đã chọn: </strong>
               {Array.from(selectedSeats).map(seatId => {
-                const seat = seats.find(s => s.id === seatId);
+                const seat = seats.find(s => s.seatId === seatId);
                 return seat ? (
                   <div key={seatId} className="seat-details">
                     {seat.rowNumber}{seat.seatNumber}

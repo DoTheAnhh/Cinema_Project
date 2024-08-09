@@ -1,6 +1,5 @@
 package com.example.cinema_project.dto;
 
-import com.example.cinema_project.entity.CinemaRoom;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,15 +7,21 @@ import lombok.Setter;
 @Setter
 public class SeatDTO {
 
-    private Long id;
-
     private String rowNumber;
-
     private int seatNumber;
-
     private String seatType;
-
+    private Long seatId;
+    private Long cinemaRoomId;
+    private String showTime;
     private String status;
 
-    private CinemaRoom cinemaRoom;
+    public SeatDTO(String rowNumber, int seatNumber, String seatType, Long seatId, Long cinemaRoomId, String showTime, String status) {
+        this.rowNumber = rowNumber;
+        this.seatNumber = seatNumber;
+        this.seatType = seatType;
+        this.seatId = seatId;
+        this.cinemaRoomId = cinemaRoomId;
+        this.showTime = showTime;
+        this.status = status;
+    }
 }

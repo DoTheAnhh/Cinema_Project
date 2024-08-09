@@ -62,10 +62,15 @@ export interface Customerr {
 }
 
 export interface Seatt {
-    id: number;
-    rowNumber: number;
+    seatId: number;
+    rowNumber: string;
     seatNumber: number;
     seatType: string;
-    status: 'available' | 'booked' | 'selected';
-
+    seat_showTime: Seat_ShowTimee;
 }
+
+export interface Seat_ShowTimee {
+    cinemaRoomId: number;
+    status: 'available' | 'booked' | 'selected';
+}
+

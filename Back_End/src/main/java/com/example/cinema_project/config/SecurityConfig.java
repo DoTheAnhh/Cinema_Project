@@ -66,7 +66,7 @@ public class SecurityConfig {
                                 .requestMatchers("/theaters/*").permitAll()
                                 .requestMatchers("/theaters/search-theaters").permitAll()
 
-                                .requestMatchers("/seats/cinemaRoom/*").permitAll()
+                                .requestMatchers("/seats/cinema-room/*/show-time/*").permitAll()
 
                                 //ADMIN
                                 .requestMatchers("/movies/insert-movie").hasAnyAuthority( "ADMIN")

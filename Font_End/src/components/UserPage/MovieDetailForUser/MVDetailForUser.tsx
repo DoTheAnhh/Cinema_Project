@@ -23,11 +23,8 @@ const MVDetailForUser: React.FC = () => {
 
     const [movies, setMovies] = useState<Moviee>();
     const [showTimes, setShowTimes] = useState<ShowTimee[]>([]);
-    const [selectedTheater, setSelectedTheater] = useState<string | null>(null);
 
     const [selectedDate, setSelectedDate] = useState<DateObject | null>(null);
-
-    const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
     const navigate = useNavigate();
 
@@ -64,7 +61,6 @@ const MVDetailForUser: React.FC = () => {
             const formattedDate = dayjs(date, 'DD/MM').format('YYYY-MM-DD');
             const res = await axios.get(`${LOCALHOST}${REQUEST_MAPPING.SHOW_TIME}${API.SHOW_TIME.GETALL_SHOW_TIME}/movie/${id}/date/${formattedDate}`);
             setShowTimes(res.data);
-            console.log(res.data);
         } catch (error) {
             console.error('Error fetching movie detail:', error);
         }
@@ -147,7 +143,7 @@ const MVDetailForUser: React.FC = () => {
         }
     };
 
-    const handleTimeClick = (theaterName: string, time: string, cinemaRoomId: number, movieName: string, banner: string) => {
+    const handleTimeClick = (theaterName: string, time: string, cinemaRoomId: number, movieName: string, banner: string, selectedDate: string) => {
         navigate('/cinema-room-booking', {
             state: {
                 selectedTheater: theaterName,
@@ -155,13 +151,16 @@ const MVDetailForUser: React.FC = () => {
                 selectedTime: time,
                 cinemaRoomId: cinemaRoomId,
                 movieName: movieName,
-                banner: banner
+                banner: banner,
+                selectedDate: selectedDate
             }
         });
     };
 
-
     const embedUrl = movies?.trailer ? getEmbedUrl(movies.trailer) : null;
+
+    console.log("selectedDate" ,selectedDate);
+    
 
     return (
         <>
@@ -409,19 +408,19 @@ const MVDetailForUser: React.FC = () => {
                                                     fontSize: '14px',
                                                     margin: '4px'
                                                 }}
-                                                onClick={() => handleTimeClick(theaterName, time.format('HH:mm'), times[j].cinemaRoomId, movies?.movieName || '', movies?.banner || '')}
+                                                onClick={() => handleTimeClick(theaterName, time.format('HH:mm'), times[j].cinemaRoomId, movies?.movieName || '', movies?.banner || '', selectedDate?.date || '')}
                                             >
-                                    {time.format('HH:mm')}
-                                </Button>
+                                                {time.format('HH:mm')}
+                                            </Button>
                                         ))}
-                            </div>
+                                </div>
                             </div>
                         ))}
-                </div>
+                    </div>
 
-            </Content>
-            <UserFooter />
-        </Layout >
+                </Content>
+                <UserFooter />
+            </Layout >
         </>
     );
 };

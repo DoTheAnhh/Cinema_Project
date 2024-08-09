@@ -1,32 +1,29 @@
 package com.example.cinema_project.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.Set;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Data
 @Table(name = "seat")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Seat {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String rowNumber; //Số hàng của ghế
+    private String rowNumber;
 
-    private int seatNumber; //Số ghế trong hàng
+    private int seatNumber;
 
     private String seatType;
 
-    private String status;
-
-    @ManyToOne
-    @JoinColumn(name = "cinemaRoom_id")
-    private CinemaRoom cinemaRoom;
+    @OneToMany(mappedBy = "seat", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Set<Seat_Cinema_Room> seatCinemaRooms;
 }
+

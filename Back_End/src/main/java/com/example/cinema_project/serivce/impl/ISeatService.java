@@ -1,5 +1,6 @@
 package com.example.cinema_project.serivce.impl;
 
+import com.example.cinema_project.dto.SeatDTO;
 import com.example.cinema_project.entity.Seat;
 import com.example.cinema_project.repository.SeatRepository;
 import com.example.cinema_project.serivce.SeatService;
@@ -15,7 +16,7 @@ public class ISeatService implements SeatService {
     SeatRepository seatRepository;
 
     @Override
-    public List<Seat> getSeatsByCinemaRoomId(Long cinemaRoomId) {
-        return seatRepository.findByCinemaRoomId(cinemaRoomId);
+    public List<SeatDTO> findSeatCinemaRoomsByCinemaRoomIdAndShowTime(Long cinemaRoomId, String showTime) {
+        return seatRepository.findSeatCinemaRoomsByCinemaRoomIdAndShowTime(cinemaRoomId, showTime);
     }
 }

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Date;
-import java.util.HashSet;
+
 import java.util.Set;
 
 @Entity
@@ -20,14 +20,17 @@ public class Movie {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "movie_name")
     private String movieName;
 
     private String banner;
 
     private String duration;
 
+    @Column(name = "release_date")
     private Date releaseDate;
 
+    @Column(name = "director_name")
     private String directorName;
 
     private String trailer;
