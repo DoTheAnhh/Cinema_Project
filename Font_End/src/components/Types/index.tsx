@@ -20,6 +20,7 @@ export interface Moviee {
     duration: number
     releaseDate: string | Date
     movieTypes: MovieTypee[]
+    ticketPrice: string
     [key: string]: any
 }
 

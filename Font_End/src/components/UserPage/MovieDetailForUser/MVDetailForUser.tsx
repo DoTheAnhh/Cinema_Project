@@ -143,7 +143,7 @@ const MVDetailForUser: React.FC = () => {
         }
     };
 
-    const handleTimeClick = (theaterName: string, time: string, cinemaRoomId: number, movieName: string, banner: string, selectedDate: string) => {
+    const handleTimeClick = (theaterName: string, time: string, cinemaRoomId: number, movieName: string, banner: string, selectedDate: string, ticketPrice: string) => {
         const isLoggedIn = Boolean(localStorage.getItem('token'));
         if (!isLoggedIn) {
             navigate('/');
@@ -156,7 +156,8 @@ const MVDetailForUser: React.FC = () => {
                     cinemaRoomId: cinemaRoomId,
                     movieName: movieName,
                     banner: banner,
-                    selectedDate: selectedDate
+                    selectedDate: selectedDate,
+                    ticketPrice: ticketPrice
                 }
             });
         };
@@ -171,7 +172,7 @@ const MVDetailForUser: React.FC = () => {
         <>
             <Layout>
                 <UserHeader />
-                <Content style={{ margin: '24px 0', overflow: 'initial', marginTop: 100 }}>
+                <Content style={{ margin: '24px 0', overflow: 'initial', marginTop: 100, marginBottom: 300 }}>
                     <div
                         style={{
                             padding: 24,
@@ -203,7 +204,7 @@ const MVDetailForUser: React.FC = () => {
                             src={movies?.banner}
                             alt={movies?.movieName}
                         />
-                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 30, marginTop: -500 }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 30, marginTop: -900 }}>
                             <h1 style={{ marginBottom: 10 }}>{movies?.movieName}</h1>
                             <div style={{
                                 display: 'flex',
@@ -279,13 +280,13 @@ const MVDetailForUser: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div style={{ marginLeft: 280 }}>
+                            <div style={{ marginLeft: 280 , marginBottom: 400 }}>
                                 <Button style={{ borderColor: 'orange', width: 120, height: 40, color: 'orange' }}>Xem thêm</Button>
                             </div>
                         </div>
                     </div>
 
-                    <div style={{ marginLeft: 100, width: 700, marginTop: -500 }}>
+                    <div style={{ marginLeft: 100, width: 700, marginTop: -950 }}>
                         <h3 style={{
                             float: 'left',
                             marginTop: 50,
@@ -308,7 +309,7 @@ const MVDetailForUser: React.FC = () => {
                             Nội dung phim
                         </h3>
                     </div>
-                    <div style={{ width: 800, marginTop: 90, marginLeft: 200, gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '20px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
+                    <div style={{ width: 750, marginTop: 90, marginLeft: 200, gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '20px', padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', borderRadius: '10px', backgroundColor: '#f9f9f9' }}>
                         {movies?.content}
                     </div>
 
@@ -364,7 +365,7 @@ const MVDetailForUser: React.FC = () => {
                         <div style={{ display: 'flex', gap: '10px', marginLeft: '50px' }}>
                             <Select
                                 defaultValue="Toàn quốc"
-                                style={{ width: 145 }}
+                                style={{ width: 120 }}
                                 allowClear
                                 options={[
                                     {
@@ -375,7 +376,7 @@ const MVDetailForUser: React.FC = () => {
                             />
                             <Select
                                 defaultValue="Tất cả rạp"
-                                style={{ width: 145 }}
+                                style={{ width: 120 }}
                                 allowClear
                                 options={[
                                     {
@@ -386,7 +387,7 @@ const MVDetailForUser: React.FC = () => {
                             />
                         </div>
                     </div>
-                    <hr style={{ marginTop: 30, width: 800, justifyContent: 'center', marginLeft: 195, height: 2, backgroundColor: 'blue' }} />
+                    <hr style={{ marginTop: 30, width: 760, justifyContent: 'center', marginLeft: 195, height: 2, backgroundColor: 'blue' }} />
                     <div className="container table" style={{ marginLeft: 200 }}>
                         {Object.entries(groupedShowTimes).map(([theaterName, times], i) => (
                             <div key={i} className="col-12 mb-3" style={{ marginTop: 20 }}>
@@ -413,7 +414,7 @@ const MVDetailForUser: React.FC = () => {
                                                     fontSize: '14px',
                                                     margin: '4px'
                                                 }}
-                                                onClick={() => handleTimeClick(theaterName, time.format('HH:mm'), times[j].cinemaRoomId, movies?.movieName || '', movies?.banner || '', selectedDate?.date || '')}
+                                                onClick={() => handleTimeClick(theaterName, time.format('HH:mm'), times[j].cinemaRoomId, movies?.movieName || '', movies?.banner || '' , selectedDate?.date || '', movies?.ticketPrice || '')}
                                             >
                                                 {time.format('HH:mm')}
                                             </Button>

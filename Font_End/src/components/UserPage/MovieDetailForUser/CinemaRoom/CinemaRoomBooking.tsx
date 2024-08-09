@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import dayjs from 'dayjs';
 import UserFooter from '../../Footer/UserFooter';
-import { Button } from 'antd';
+import { Button, message } from 'antd';
 import UserHeader from '../../Header/UserHeader';
 import { Seatt, ShowTimee } from '../../../Types';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../../../APIs/typing';
 import './CinemaRoom.css';
 
@@ -16,34 +16,41 @@ interface LocationState {
   movieName: string;
   banner: string;
   selectedDate: string;
+  ticketPrice: string
 }
 
 const CinemaRoomBooking: React.FC = () => {
   const location = useLocation();
-  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, banner, selectedDate } = location.state as LocationState;
+  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, banner, selectedDate, ticketPrice } = location.state as LocationState;
 
   const [cinemaRoom, setCinemaRoom] = useState<any>(null);
+
   const [currentSelectedTime, setCurrentSelectedTime] = useState<string>(selectedTime);
   const [currentSelectedDate, setCurrentSelectedDate] = useState<string>(selectedDate);
   const [currentCinemaRoomId, setCurrentCinemaRoomId] = useState<number>(cinemaRoomId);
+  const [currentTicketPrice, setCurrentTicketPrice] = useState<string>(ticketPrice);
+
   const [selectedSeats, setSelectedSeats] = useState<Set<number>>(new Set());
   const [seats, setSeats] = useState<Seatt[]>([]);
+
+  const navigator = useNavigate()
 
   const groupedShowTimes = showTimes.reduce((acc, showTime) => {
     const theaterName = showTime.cinemaRoom.theaters.theaterName;
     if (!acc[theaterName]) {
       acc[theaterName] = [];
     }
-    acc[theaterName].push({ showTime: showTime.showTime, cinemaRoomId: showTime.cinemaRoom.id });
+    acc[theaterName].push({ showTime: showTime.showTime, cinemaRoomId: showTime.cinemaRoom.id, ticketPrice: showTime.movie.ticketPrice });
     return acc;
-  }, {} as { [key: string]: { showTime: string, cinemaRoomId: number }[] });
+  }, {} as { [key: string]: { showTime: string, cinemaRoomId: number, ticketPrice: string }[] });
 
   const timesForSelectedTheater = groupedShowTimes[selectedTheater] || [];
 
-  const handleTimeClick = (time: string, date: string, cinemaRoomId: number) => {
+  const handleTimeClick = (time: string, date: string, cinemaRoomId: number, ticketPrice: string) => {
     setCurrentSelectedTime(time);
     setCurrentSelectedDate(date);
     setCurrentCinemaRoomId(cinemaRoomId);
+    setCurrentTicketPrice(ticketPrice)
   };
 
   const fetchCinemaRoom = async () => {
@@ -75,14 +82,24 @@ const CinemaRoomBooking: React.FC = () => {
     if (seat.status !== 'booked') {
       setSelectedSeats(prev => {
         const newSelectedSeats = new Set(prev);
+
         if (newSelectedSeats.has(seat.seatId)) {
           newSelectedSeats.delete(seat.seatId);
         } else {
+          if (newSelectedSeats.size >= 8) {
+            message.warning('Bạn chỉ có thể chọn tối đa 8 ghế.');
+            return prev;
+          }
           newSelectedSeats.add(seat.seatId);
         }
+
         return newSelectedSeats;
       });
     }
+  };
+
+  const backToHome = () => {
+    navigator(`/user`);
   };
 
   useEffect(() => {
@@ -105,6 +122,14 @@ const CinemaRoomBooking: React.FC = () => {
     return acc;
   }, {} as { [key: string]: Seatt[] });
 
+  const handleContinue = () => {
+    if (selectedSeats.size === 0) {
+      message.error('Bạn chưa chọn ghế');
+      return;
+    }
+
+  };
+
   return (
     <>
       <UserHeader />
@@ -120,7 +145,7 @@ const CinemaRoomBooking: React.FC = () => {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
               {timesForSelectedTheater
-                .map(({ showTime, cinemaRoomId }) => dayjs(showTime, 'HH:mm'))
+                .map(({ showTime }) => dayjs(showTime, 'HH:mm'))
                 .sort((a, b) => a.isBefore(b) ? -1 : 1)
                 .map((time, j) => (
                   <Button
@@ -134,7 +159,7 @@ const CinemaRoomBooking: React.FC = () => {
                       fontSize: '14px',
                       margin: '4px',
                     }}
-                    onClick={() => handleTimeClick(time.format('HH:mm'), selectedDate || '', timesForSelectedTheater[j].cinemaRoomId)}
+                    onClick={() => handleTimeClick(time.format('HH:mm'), selectedDate || '', timesForSelectedTheater[j].cinemaRoomId, timesForSelectedTheater[j].ticketPrice)}
                   >
                     {time.format('HH:mm')}
                   </Button>
@@ -162,8 +187,6 @@ const CinemaRoomBooking: React.FC = () => {
                           {seat.seatNumber}
                         </div>
                       ))}
-
-
                     </div>
                     <span className="row-label right-label" style={{ fontFamily: 'Noto Sans JP, sans-serif' }}>{rowNumber}</span>
                   </li>
@@ -174,6 +197,19 @@ const CinemaRoomBooking: React.FC = () => {
           <div>
             <div style={{ margin: '10px 360px', fontFamily: 'Noto Sans JP, sans-serif' }}>Màn hình</div>
             <div style={{ backgroundColor: 'orange', width: 765, height: 10, marginBottom: 20 }}></div>
+          </div>
+          <div style={{ display: 'flex' }}>
+            <div style={{ width: '20px', height: '20px', backgroundColor: '#D4D4D4D4', marginRight: '10px', borderRadius: 5 }}></div>
+            <div>Ghế đã bán</div>
+            <div style={{ width: '20px', height: '20px', backgroundColor: '#034EA2', marginRight: '10px', marginLeft: 20, borderRadius: 5 }}></div>
+            <div>Ghế đang chọn</div>
+            <div style={{ marginLeft: 190 }}></div>
+            <div style={{ width: '20px', height: '20px', border: '1px solid #FFA500', marginRight: '10px', marginLeft: 20, borderRadius: 5 }}></div>
+            <div>Ghế vip</div>
+            <div style={{ width: '20px', height: '20px', border: '1px solid #D4D4D4D4', marginRight: '10px', marginLeft: 20, borderRadius: 5 }}></div>
+            <div>Ghế đơn</div>
+            <div style={{ width: '40px', height: '20px', border: '1px solid #034EA2', marginRight: '10px', marginLeft: 20, borderRadius: 5 }}></div>
+            <div>Ghế đôi</div>
           </div>
         </div>
         <div style={{ flex: 1, marginLeft: -200 }}>
@@ -201,8 +237,29 @@ const CinemaRoomBooking: React.FC = () => {
                 ) : null;
               })}
             </div>
-            <div style={{ marginTop: 30, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
-              <strong>Tổng cộng: </strong>
+            <div>
+              <div style={{ marginTop: '30px', width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
+                <strong>
+                  Tổng cộng:
+                  <p style={{ marginLeft: 150, marginTop: -23, color: 'red' }}>
+                    {Number(selectedSeats.size * Number(currentTicketPrice)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                  </p>
+                </strong>
+              </div>
+              <div>
+                <Button
+                  style={{ backgroundColor: 'white', color: '#FF953F', width: 150, marginLeft: -100, marginTop: 30, marginBottom: 50 }}
+                  onClick={backToHome}
+                >
+                  Quay lại
+                </Button>
+                <Button
+                  style={{ backgroundColor: '#FF953F', color: 'white', width: 150, marginLeft: 100, marginTop: 30, marginBottom: 50 }}
+                  onClick={handleContinue}
+                >
+                  Tiếp tục
+                </Button>
+              </div>
             </div>
           </div>
         </div>
