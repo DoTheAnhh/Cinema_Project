@@ -64,17 +64,15 @@ const CinemaRoomBooking: React.FC = () => {
 
       setSeats(data.map((item: any) => ({
         ...item,
-        status: item.seat_showTime ? item.seat_showTime.status : 'available',
+        status: item.status ? item.status : 'available',
       })));
     } catch (error) {
       console.error('Failed to fetch seats:', error);
     }
   };
 
-
-
   const handleSeatClick = (seat: Seatt) => {
-    if (seat.seat_showTime?.status !== 'booked') {
+    if (seat.status !== 'booked') {
       setSelectedSeats(prev => {
         const newSelectedSeats = new Set(prev);
         if (newSelectedSeats.has(seat.seatId)) {
@@ -153,17 +151,18 @@ const CinemaRoomBooking: React.FC = () => {
                       {rowSeats.map(seat => (
                         <div
                           key={seat.seatId}
-                          className={`seat ${selectedSeats.has(seat.seatId) ? 'selected' : ''} ${seat.seat_showTime?.status === 'booked' ? 'booked' : ''}`}
+                          className={`seat ${selectedSeats.has(seat.seatId) ? 'selected' : ''} ${seat.status === 'booked' ? 'booked' : ''}`}
                           style={{
-                            cursor: seat.seat_showTime?.status === 'booked' ? 'not-allowed' : 'pointer',
-                            opacity: seat.seat_showTime?.status === 'booked' ? 0.5 : 1,
+                            cursor: seat.status === 'booked' ? 'not-allowed' : 'pointer',
+                            opacity: seat.status === 'booked' ? 0.5 : 1,
                             fontFamily: 'Noto Sans JP, sans-serif'
                           }}
-                          onClick={() => handleSeatClick(seat)}
+                          onClick={() => seat.status !== 'booked' && handleSeatClick(seat)}
                         >
                           {seat.seatNumber}
                         </div>
                       ))}
+
 
                     </div>
                     <span className="row-label right-label" style={{ fontFamily: 'Noto Sans JP, sans-serif' }}>{rowNumber}</span>

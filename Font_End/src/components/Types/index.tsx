@@ -66,11 +66,6 @@ export interface Seatt {
     rowNumber: string;
     seatNumber: number;
     seatType: string;
-    seat_showTime: Seat_ShowTimee;
-}
-
-export interface Seat_ShowTimee {
-    cinemaRoomId: number;
     status: 'available' | 'booked' | 'selected';
 }
 
