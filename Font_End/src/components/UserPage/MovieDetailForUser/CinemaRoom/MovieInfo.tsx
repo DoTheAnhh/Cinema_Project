@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button } from 'antd';
 import dayjs from 'dayjs';
+import './css/MovieInfo.css'
 
 interface MovieInfoProps {
   banner: string;
@@ -15,7 +16,6 @@ interface MovieInfoProps {
   handleContinue: () => void;
 }
 
-
 const MovieInfo: React.FC<MovieInfoProps> = ({
   banner,
   movieName,
@@ -29,76 +29,24 @@ const MovieInfo: React.FC<MovieInfoProps> = ({
   handleContinue,
 }) => {
   return (
-    <div style={{ flex: 1, marginLeft: -200, position: 'relative' }}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          position: 'relative',
-          top: '0',
-          marginTop: 100,
-        }}
-      >
-        <div style={{ display: 'flex', marginTop: 10 }}>
-          <div
-            style={{
-              height: 10,
-              width: 400,
-              marginLeft: '-190px',
-              backgroundColor: '#FFA500',
-              borderRadius: '10px 10px 0 0',
-            }}
-          ></div>
-          <img
-            style={{ height: 200, width: 140, padding: 10, marginLeft: -410 }}
-            src={banner}
-            alt="Movie Banner"
-          />
-          <div
-            style={{
-              marginLeft: 10,
-              fontFamily: 'Noto Sans JP, sans-serif',
-              fontWeight: 'bold',
-              marginTop: 20,
-              maxWidth: '180px',
-              wordWrap: 'break-word',
-              overflow: 'hidden',
-              textAlign: 'center',
-            }}
-          >
-            {movieName}
+    <div className="movie-info-container">
+      <div className="movie-info-content">
+        <div className="movie-header">
+          <div className="movie-banner">
+            <img src={banner} alt="Movie Banner" />
           </div>
+          <div className="movie-title">{movieName}</div>
         </div>
-        <div
-          style={{
-            marginTop: 20,
-            width: '100%',
-            fontFamily: 'Noto Sans JP, sans-serif',
-          }}
-        >
+        <div className="movie-details">
           <strong>{selectedTheater}</strong> -{' '}
           {cinemaRoom ? cinemaRoom.cinemaRoomName : 'Loading...'}
         </div>
-        <div
-          style={{
-            marginTop: 15,
-            width: '100%',
-            fontFamily: 'Noto Sans JP, sans-serif',
-          }}
-        >
+        <div className="showtime">
           Suất: <strong>{currentSelectedTime}</strong> -{' '}
           {dayjs(currentSelectedTime, 'HH:mm').format('dddd')},{' '}
           {dayjs(currentSelectedTime, 'HH:mm').format('DD/MM/YYYY')}
         </div>
-        <div
-          className="seat-info"
-          style={{
-            marginTop: 25,
-            width: '100%',
-            fontFamily: 'Noto Sans JP, sans-serif',
-          }}
-        >
+        <div className="seat-info">
           <strong>Ghế đã chọn: </strong>
           {Array.from(selectedSeats).map((seatId) => {
             const seat = seats.find((s) => s.seatId === seatId);
@@ -110,74 +58,28 @@ const MovieInfo: React.FC<MovieInfoProps> = ({
             ) : null;
           })}
         </div>
-        <div>
-          <div
-            style={{
-              marginTop: '30px',
-              width: '100%',
-              fontFamily: 'Noto Sans JP, sans-serif',
-            }}
-          >
-            <hr
-              style={{
-                marginLeft: -100,
-                marginBottom: 15,
-                borderTop: '1px dashed black',
-              }}
-            />
-            <strong>
-              Tổng cộng:
-              <p
-                style={{
-                  marginLeft: 150,
-                  marginTop: -23,
-                  color: 'red',
-                }}
-              >
-                {Number(
-                  selectedSeats.size * Number(currentTicketPrice)
-                ).toLocaleString('vi-VN', {
-                  style: 'currency',
-                  currency: 'VND',
-                })}
-              </p>
-            </strong>
-            <hr
-              style={{
-                marginLeft: -100,
-                marginTop: 15,
-                borderTop: '1px dashed black',
-              }}
-            />
-          </div>
-          <div>
-            <Button
-              style={{
-                backgroundColor: 'white',
-                color: '#FF953F',
-                width: 150,
-                marginLeft: -100,
-                marginTop: 50,
-                marginBottom: 50,
-              }}
-              onClick={backToHome}
-            >
-              Quay lại
-            </Button>
-            <Button
-              style={{
-                backgroundColor: '#FF953F',
-                color: 'white',
-                width: 150,
-                marginLeft: 100,
-                marginTop: 50,
-                marginBottom: 50,
-              }}
-              onClick={handleContinue}
-            >
-              Tiếp tục
-            </Button>
-          </div>
+        <div className="total-price">
+          <hr className="divider" />
+          <strong>
+            Tổng cộng:
+            <p className="price">
+              {Number(
+                selectedSeats.size * Number(currentTicketPrice)
+              ).toLocaleString('vi-VN', {
+                style: 'currency',
+                currency: 'VND',
+              })}
+            </p>
+          </strong>
+          <hr className="divider" />
+        </div>
+        <div className="buttons">
+          <Button className="back-button" onClick={backToHome}>
+            Quay lại
+          </Button>
+          <Button className="continue-button" onClick={handleContinue}>
+            Tiếp tục
+          </Button>
         </div>
       </div>
     </div>

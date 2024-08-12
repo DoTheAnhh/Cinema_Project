@@ -4,9 +4,16 @@ import UserFooter from '../../../Footer/UserFooter'
 import { Foodd } from '../../../../Types'
 import axios from 'axios'
 import { API, LOCALHOST, REQUEST_MAPPING } from '../../../../APIs/typing'
+import MovieInfo from '../MovieInfo'
+import { useNavigate } from 'react-router-dom'
+
 
 const FoodSelected: React.FC = () => {
     const [foods, setFoods] = useState<Foodd[]>([]);
+
+    const [movieData, setMovieData] = useState<any>(null);
+
+    const navigator = useNavigate()
 
     // Tạo một mảng chứa số lượng cho từng món ăn
     const [quantities, setQuantities] = useState<number[]>([]);
@@ -30,6 +37,10 @@ const FoodSelected: React.FC = () => {
     };
 
     useEffect(() => {
+        const storedData = sessionStorage.getItem('movieBookingData');
+        if (storedData) {
+            setMovieData(JSON.parse(storedData));
+        }
         fetchFoods();
     }, []);
 
@@ -38,7 +49,7 @@ const FoodSelected: React.FC = () => {
             <UserHeader />
             <div style={{ display: 'flex', marginLeft: 150, marginTop: 120, fontFamily: 'Noto Sans JP, sans-serif' }}>
                 <div style={{ marginTop: 50, marginRight: 1000 }}>
-                    <h3 style={{ paddingBottom: 20 }}>Chọn đồ ăn, uống</h3>
+                    <h3 style={{ paddingBottom: 20, width: 200 }}>Chọn đồ ăn, uống</h3>
                     <div>
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             {foods.map((food, index) => (
@@ -64,7 +75,7 @@ const FoodSelected: React.FC = () => {
                                         width: '100px',
                                         justifyContent: 'space-between',
                                         marginLeft: 'auto',
-                                        marginRight: -600
+                                        marginRight: -550
                                     }}>
                                         <button onClick={() => handleDecrease(index)} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
                                             -
@@ -78,6 +89,20 @@ const FoodSelected: React.FC = () => {
                             ))}
                         </div>
                     </div>
+                </div>
+                <div style={{ marginLeft: -350}}>
+                    <MovieInfo
+                        banner={movieData?.banner}
+                        movieName={movieData?.movieName}
+                        selectedTheater={movieData?.selectedTheater}
+                        cinemaRoom={movieData?.cinemaRoom}
+                        currentSelectedTime={movieData?.currentSelectedTime}
+                        selectedSeats={new Set(movieData?.selectedSeats)}
+                        seats={movieData?.seats}
+                        currentTicketPrice={movieData?.currentTicketPrice}
+                        backToHome={() => navigator('/user')}
+                        handleContinue={() => { }}
+                    />
                 </div>
             </div>
             <UserFooter />

@@ -128,7 +128,19 @@ const CinemaRoomBooking: React.FC = () => {
       message.error('Bạn chưa chọn ghế');
       return;
     }
+    
+    sessionStorage.setItem('movieBookingData', JSON.stringify({
+      banner,
+      movieName,
+      selectedTheater,
+      cinemaRoom,
+      currentSelectedTime,
+      selectedSeats: Array.from(selectedSeats),
+      seats,
+      currentTicketPrice,
+    }));
 
+    navigator('/food-selected');
   };
 
   return (
