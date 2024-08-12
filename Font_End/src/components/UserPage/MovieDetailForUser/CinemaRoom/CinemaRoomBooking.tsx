@@ -6,7 +6,8 @@ import UserHeader from '../../Header/UserHeader';
 import { Seatt, ShowTimee } from '../../../Types';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../../../APIs/typing';
-import './CinemaRoom.css';
+import './css/CinemaRoom.css';
+import MovieInfo from './MovieInfo';
 
 interface LocationState {
   showTimes: ShowTimee[];
@@ -16,7 +17,7 @@ interface LocationState {
   movieName: string;
   banner: string;
   selectedDate: string;
-  ticketPrice: string
+  ticketPrice: number
 }
 
 const CinemaRoomBooking: React.FC = () => {
@@ -28,7 +29,7 @@ const CinemaRoomBooking: React.FC = () => {
   const [currentSelectedTime, setCurrentSelectedTime] = useState<string>(selectedTime);
   const [currentSelectedDate, setCurrentSelectedDate] = useState<string>(selectedDate);
   const [currentCinemaRoomId, setCurrentCinemaRoomId] = useState<number>(cinemaRoomId);
-  const [currentTicketPrice, setCurrentTicketPrice] = useState<string>(ticketPrice);
+  const [currentTicketPrice, setCurrentTicketPrice] = useState<number>(ticketPrice);
 
   const [selectedSeats, setSelectedSeats] = useState<Set<number>>(new Set());
   const [seats, setSeats] = useState<Seatt[]>([]);
@@ -46,7 +47,7 @@ const CinemaRoomBooking: React.FC = () => {
 
   const timesForSelectedTheater = groupedShowTimes[selectedTheater] || [];
 
-  const handleTimeClick = (time: string, date: string, cinemaRoomId: number, ticketPrice: string) => {
+  const handleTimeClick = (time: string, date: string, cinemaRoomId: number, ticketPrice: number) => {
     setCurrentSelectedTime(time);
     setCurrentSelectedDate(date);
     setCurrentCinemaRoomId(cinemaRoomId);
@@ -159,7 +160,7 @@ const CinemaRoomBooking: React.FC = () => {
                       fontSize: '14px',
                       margin: '4px',
                     }}
-                    onClick={() => handleTimeClick(time.format('HH:mm'), selectedDate || '', timesForSelectedTheater[j].cinemaRoomId, timesForSelectedTheater[j].ticketPrice)}
+                    onClick={() => handleTimeClick(time.format('HH:mm'), selectedDate || '', timesForSelectedTheater[j].cinemaRoomId, Number(timesForSelectedTheater[j].ticketPrice))}
                   >
                     {time.format('HH:mm')}
                   </Button>
@@ -203,7 +204,7 @@ const CinemaRoomBooking: React.FC = () => {
             <div>Ghế đã bán</div>
             <div style={{ width: '20px', height: '20px', backgroundColor: '#034EA2', marginRight: '10px', marginLeft: 20, borderRadius: 5 }}></div>
             <div>Ghế đang chọn</div>
-            <div style={{ marginLeft: 190 }}></div>
+            <div style={{ marginLeft: 150 }}></div>
             <div style={{ width: '20px', height: '20px', border: '1px solid #FFA500', marginRight: '10px', marginLeft: 20, borderRadius: 5 }}></div>
             <div>Ghế vip</div>
             <div style={{ width: '20px', height: '20px', border: '1px solid #D4D4D4D4', marginRight: '10px', marginLeft: 20, borderRadius: 5 }}></div>
@@ -212,57 +213,18 @@ const CinemaRoomBooking: React.FC = () => {
             <div>Ghế đôi</div>
           </div>
         </div>
-        <div style={{ flex: 1, marginLeft: -200 }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', position: 'relative', top: '0', marginTop: 100 }}>
-            <div style={{ display: 'flex', marginTop: 10 }}>
-              <img style={{ height: 200, width: 140, padding: 10, marginLeft: -200 }} src={banner} alt="Movie Banner" />
-              <div style={{ marginLeft: 10, fontFamily: 'Noto Sans JP, sans-serif', fontWeight: 'bold', marginTop: 20 }}>
-                {movieName}
-              </div>
-            </div>
-            <div style={{ marginTop: 20, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
-              <strong>{selectedTheater}</strong> - {cinemaRoom ? cinemaRoom.cinemaRoomName : 'Loading...'}
-            </div>
-            <div style={{ marginTop: 15, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
-              Suất: <strong>{currentSelectedTime}</strong> - {currentSelectedDate}
-            </div>
-            <div className="seat-info" style={{ marginTop: 25, width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
-              <strong>Ghế đã chọn: </strong>
-              {Array.from(selectedSeats).map(seatId => {
-                const seat = seats.find(s => s.seatId === seatId);
-                return seat ? (
-                  <div key={seatId} className="seat-details">
-                    {seat.rowNumber}{seat.seatNumber}
-                  </div>
-                ) : null;
-              })}
-            </div>
-            <div>
-              <div style={{ marginTop: '30px', width: '100%', fontFamily: 'Noto Sans JP, sans-serif' }}>
-                <strong>
-                  Tổng cộng:
-                  <p style={{ marginLeft: 150, marginTop: -23, color: 'red' }}>
-                    {Number(selectedSeats.size * Number(currentTicketPrice)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
-                  </p>
-                </strong>
-              </div>
-              <div>
-                <Button
-                  style={{ backgroundColor: 'white', color: '#FF953F', width: 150, marginLeft: -100, marginTop: 30, marginBottom: 50 }}
-                  onClick={backToHome}
-                >
-                  Quay lại
-                </Button>
-                <Button
-                  style={{ backgroundColor: '#FF953F', color: 'white', width: 150, marginLeft: 100, marginTop: 30, marginBottom: 50 }}
-                  onClick={handleContinue}
-                >
-                  Tiếp tục
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <MovieInfo
+          banner={banner}
+          movieName={movieName}
+          selectedTheater={selectedTheater}
+          cinemaRoom={cinemaRoom}
+          currentSelectedTime={currentSelectedTime}
+          selectedSeats={selectedSeats}
+          seats={seats}
+          currentTicketPrice={currentTicketPrice}
+          backToHome={backToHome}
+          handleContinue={handleContinue}
+        />
       </div>
       <UserFooter />
     </>

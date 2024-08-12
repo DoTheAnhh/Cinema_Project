@@ -95,7 +95,7 @@ const Login: React.FC = () => {
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>
-          Log in
+          Sign in
         </Button>
         <div style={{ marginTop: 10 }}>
           Or <a href="">register now!</a>

@@ -68,6 +68,8 @@ public class SecurityConfig {
 
                                 .requestMatchers("/seats/cinema-room/*/show-time/*").permitAll()
 
+                                .requestMatchers("/foods").permitAll()
+
                                 //ADMIN
                                 .requestMatchers("/movies/insert-movie").hasAnyAuthority( "ADMIN")
                                 .requestMatchers("/movies/edit-movie/*").hasAnyAuthority( "ADMIN")
@@ -89,6 +91,9 @@ public class SecurityConfig {
 
                                 .requestMatchers("/theaters/insert-theater").hasAnyAuthority( "ADMIN")
                                 .requestMatchers("/theaters/edit-theater/*").hasAnyAuthority( "ADMIN")
+
+                                .requestMatchers("/foods/insert-food").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/foods/edit-food/*").hasAnyAuthority( "ADMIN")
 
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

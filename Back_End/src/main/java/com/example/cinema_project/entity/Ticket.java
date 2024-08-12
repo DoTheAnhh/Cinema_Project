@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,4 +31,12 @@ public class Ticket {
     private Seat seat;
 
     private String bookingTime;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "ticket_food",
+            joinColumns = @JoinColumn(name = "ticket_id"),
+            inverseJoinColumns = @JoinColumn(name = "food_id")
+    )
+    private Set<Food> foods;
 }

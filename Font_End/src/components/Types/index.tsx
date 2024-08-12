@@ -70,3 +70,12 @@ export interface Seatt {
     status: 'available' | 'booked' | 'selected';
 }
 
+export interface Foodd {
+    foodId: number;
+    foodName: string;
+    price: string;
+    quantity: number;
+    image: string;
+
+}
+
