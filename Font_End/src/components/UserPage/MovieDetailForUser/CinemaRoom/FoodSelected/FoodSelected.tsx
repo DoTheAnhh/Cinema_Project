@@ -6,17 +6,13 @@ import axios from 'axios'
 import { API, LOCALHOST, REQUEST_MAPPING } from '../../../../APIs/typing'
 import MovieInfo from '../MovieInfo'
 import { useNavigate } from 'react-router-dom'
-
+import './css/FoodSelected.css'
 
 const FoodSelected: React.FC = () => {
     const [foods, setFoods] = useState<Foodd[]>([]);
-
     const [movieData, setMovieData] = useState<any>(null);
-
-    const navigator = useNavigate()
-
-    // Tạo một mảng chứa số lượng cho từng món ăn
     const [quantities, setQuantities] = useState<number[]>([]);
+    const navigator = useNavigate()
 
     const handleIncrease = (index: number) => {
         setQuantities(prevQuantities =>
@@ -33,7 +29,7 @@ const FoodSelected: React.FC = () => {
     const fetchFoods = async () => {
         const res = await axios.get(LOCALHOST + REQUEST_MAPPING.FOOD + API.FOOD.GET_ALL_FOOD);
         setFoods(res.data);
-        setQuantities(res.data.map(() => 0)); // Khởi tạo số lượng ban đầu cho từng món ăn là 0
+        setQuantities(res.data.map(() => 0));
     };
 
     useEffect(() => {
@@ -54,14 +50,20 @@ const FoodSelected: React.FC = () => {
                         <div style={{ display: 'flex', flexDirection: 'column' }}>
                             {foods.map((food, index) => (
                                 <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '20px', flexWrap: 'nowrap' }}>
-                                    <img src={food.image} style={{ height: 100, width: 120, marginRight: '20px' }} alt={food.foodName} />
+                                    <img src={food.image} style={{ height: 100, width: 100, marginRight: '20px' }} alt={food.foodName} />
                                     <div style={{ marginTop: -30 }}>
                                         <div style={{ marginTop: 20 }}>
                                             <strong style={{ fontSize: 20 }}>{food.foodName}</strong>
                                         </div>
                                         <div style={{ marginTop: 10 }}>
-                                            <strong>Giá: {food.price}</strong>
+                                            <strong>
+                                                Giá: {parseFloat(food.price).toLocaleString('vi-VN', {
+                                                    minimumFractionDigits: 0,
+                                                    maximumFractionDigits: 0
+                                                })} VNĐ
+                                            </strong>
                                         </div>
+
                                         <div style={{ marginTop: 10 }}>
                                             Số lượng còn: {food.quantity}
                                         </div>
@@ -90,7 +92,7 @@ const FoodSelected: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <div style={{ marginLeft: -350}}>
+                <div style={{ marginLeft: -350 }}>
                     <MovieInfo
                         banner={movieData?.banner}
                         movieName={movieData?.movieName}
@@ -100,6 +102,8 @@ const FoodSelected: React.FC = () => {
                         selectedSeats={new Set(movieData?.selectedSeats)}
                         seats={movieData?.seats}
                         currentTicketPrice={movieData?.currentTicketPrice}
+                        foods={foods}
+                        quantities={quantities}
                         backToHome={() => navigator('/user')}
                         handleContinue={() => { }}
                     />

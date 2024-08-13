@@ -1,88 +1,96 @@
 /* MovieInfo.css */
 .movie-info-container {
-    display: flex;
-    justify-content: flex-start; /* Căn lề trái cho container chính */
-    align-items: center;
-    padding: 20px;
-    width: 400px;
-    margin-right: 80px;
-    height: 800px;
-  }
-  
-  .movie-info-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start; /* Căn lề trái cho nội dung */
-    width: 100%;
-    max-width: 800px;
-  }
-  
-  .movie-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .movie-banner img {
-    height: 200px;
-    width: 140px;
-    padding: 10px;
-    margin-left: -10px;
-  }
-  
-  .movie-title {
-    font-family: 'Noto Sans JP', sans-serif;
-    font-weight: bold;
-    margin-left: 20px;
-    max-width: 180px;
-    word-wrap: break-word;
-    margin-top:  -150px;
-  }
-  
-  .movie-details,
-  .showtime,
-  .seat-info {
-    width: 100%;
-    font-family: 'Noto Sans JP', sans-serif;
-    margin-top: 15px;
-    text-align: left; /* Căn trái cho các thông tin chi tiết */
-  }
-  
-  .total-price {
-    width: 100%;
-    margin-top: 30px;
-  }
-  
-  .divider {
-    border-top: 1px dashed black;
-    margin: 15px 0;
-  }
-  
-  .price {
-    color: red;
-  }
-  
-  .buttons {
-    display: flex;
-    justify-content: flex-start; /* Căn lề trái cho các nút */
-    width: 100%;
-    margin-top: 50px;
-  }
-  
-  .back-button,
-  .continue-button {
-    margin-right: 50px; /* Thêm khoảng cách giữa các nút */
-  }
-  
-  .back-button {
-    background-color: white;
-    color: #FF953F;
-    width: 150px;
-  }
-  
-  .continue-button {
-    background-color: #FF953F;
-    color: white;
-    width: 150px;
-  }
-  
+  display: flex;
+  justify-content: flex-start; /* Căn lề trái cho container chính */
+  align-items: center;
+  padding: 20px;
+  width: 400px;
+  margin-right: 80px;
+  height: 800px;
+}
+
+.movie-info-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* Căn lề trái cho nội dung */
+  width: 100%;
+  max-width: 800px;
+}
+
+.movie-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.movie-banner img {
+  height: 200px;
+  width: 140px;
+  padding: 10px;
+  margin-left: -10px;
+}
+
+.movie-title {
+  font-family: "Noto Sans JP", sans-serif;
+  font-weight: bold;
+  margin-left: 20px;
+  max-width: 180px;
+  word-wrap: break-word;
+  margin-top: -150px;
+}
+
+.movie-details,
+.showtime,
+.seat-info {
+  width: 100%;
+  font-family: "Noto Sans JP", sans-serif;
+  margin-top: 15px;
+  text-align: left; /* Căn trái cho các thông tin chi tiết */
+}
+
+.total-price {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.divider {
+  border-top: 1px dashed black;
+  margin: 15px 0;
+}
+
+.price {
+  color: red;
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-start; /* Căn lề trái cho các nút */
+  width: 100%;
+  margin-top: 50px;
+}
+
+.back-button,
+.continue-button {
+  margin-right: 50px; /* Thêm khoảng cách giữa các nút */
+}
+
+.back-button {
+  background-color: white;
+  color: #ff953f;
+  width: 150px;
+  margin-left: 50px;
+}
+
+.continue-button {
+  background-color: #ff953f;
+  color: white;
+  width: 150px;
+}
+
+.movie-info-container {
+  position: relative;
+}
+
+.food-selected {
+  width: 100%;
+}

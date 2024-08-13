@@ -1,10 +1,7 @@
 package com.example.cinema_project.controller;
 
 import com.example.cinema_project.dto.FoodDTO;
-import com.example.cinema_project.dto.MovieTypeDTO;
 import com.example.cinema_project.entity.Food;
-import com.example.cinema_project.entity.MovieType;
-import com.example.cinema_project.repository.SeatRepository;
 import com.example.cinema_project.serivce.FoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

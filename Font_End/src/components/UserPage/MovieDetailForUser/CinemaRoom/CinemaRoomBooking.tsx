@@ -234,8 +234,11 @@ const CinemaRoomBooking: React.FC = () => {
           selectedSeats={selectedSeats}
           seats={seats}
           currentTicketPrice={currentTicketPrice}
+          foods={[]}
+          quantities={[]}
           backToHome={backToHome}
           handleContinue={handleContinue}
+          
         />
       </div>
       <UserFooter />
