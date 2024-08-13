@@ -1,28 +1,23 @@
-import React, { useEffect, useState } from 'react'
-import UserHeader from '../../../Header/UserHeader'
-import UserFooter from '../../../Footer/UserFooter'
-import { Foodd } from '../../../../Types'
-import axios from 'axios'
-import { API, LOCALHOST, REQUEST_MAPPING } from '../../../../APIs/typing'
-import MovieInfo from '../MovieInfo'
-import { useNavigate } from 'react-router-dom'
-import './css/FoodSelected.css'
+import React, { useEffect, useState } from 'react';
+import UserHeader from '../../../Header/UserHeader';
+import UserFooter from '../../../Footer/UserFooter';
+import { Foodd } from '../../../../Types';
+import axios from 'axios';
+import { API, LOCALHOST, REQUEST_MAPPING } from '../../../../APIs/typing';
+import MovieInfo from '../MovieInfo';
+import { useNavigate } from 'react-router-dom';
+import { InputNumber } from 'antd';
+import './css/FoodSelected.css';
 
 const FoodSelected: React.FC = () => {
     const [foods, setFoods] = useState<Foodd[]>([]);
     const [movieData, setMovieData] = useState<any>(null);
     const [quantities, setQuantities] = useState<number[]>([]);
-    const navigator = useNavigate()
+    const navigator = useNavigate();
 
-    const handleIncrease = (index: number) => {
+    const handleQuantityChange = (index: number, value: number | null) => {
         setQuantities(prevQuantities =>
-            prevQuantities.map((quantity, i) => i === index ? quantity + 1 : quantity)
-        );
-    };
-
-    const handleDecrease = (index: number) => {
-        setQuantities(prevQuantities =>
-            prevQuantities.map((quantity, i) => (i === index && quantity > 0) ? quantity - 1 : quantity)
+            prevQuantities.map((quantity, i) => i === index ? (value || 0) : quantity)
         );
     };
 
@@ -63,7 +58,6 @@ const FoodSelected: React.FC = () => {
                                                 })} VNĐ
                                             </strong>
                                         </div>
-
                                         <div style={{ marginTop: 10 }}>
                                             Số lượng còn: {food.quantity}
                                         </div>
@@ -71,21 +65,20 @@ const FoodSelected: React.FC = () => {
                                     <div style={{
                                         display: 'flex',
                                         alignItems: 'center',
-                                        border: '1px solid #ddd',
-                                        borderRadius: '5px',
-                                        padding: '5px',
-                                        width: '100px',
+                                        width: '120px',
                                         justifyContent: 'space-between',
                                         marginLeft: 'auto',
                                         marginRight: -550
                                     }}>
-                                        <button onClick={() => handleDecrease(index)} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
-                                            -
-                                        </button>
-                                        <span>{quantities[index]}</span>
-                                        <button onClick={() => handleIncrease(index)} style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
-                                            +
-                                        </button>
+                                        <InputNumber
+                                            min={0}
+                                            max={10}
+                                            value={quantities[index]}
+                                            onChange={(value) => handleQuantityChange(index, value)}
+                                            style={{ width: '100px' }}
+                                            formatter={(value) => value ? value.toString() : '0'}
+                                            parser={(value) => parseFloat(value || '0')}
+                                        />
                                     </div>
                                 </div>
                             ))}
