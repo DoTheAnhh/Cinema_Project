@@ -6,6 +6,7 @@ import MovieInfo from '../../MovieInfo';
 import { Foodd } from '../../../../../Types';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { LOCALHOST, REQUEST_MAPPING } from '../../../../../APIs/typing';
 
 const Payment: React.FC = () => {
     const [movieData, setMovieData] = useState<any>(null);
@@ -38,7 +39,19 @@ const Payment: React.FC = () => {
         setErrorMessage(null);
     };
 
-    const handleContinue = async (totalPrice: number) => {
+    const calculateTotalPrice = () => {
+        const totalFoodPrice = foods.reduce((total, food, index) => {
+            return quantities[index] > 0 ? total + (quantities[index] * parseFloat(food.price)) : total;
+        }, 0);
+
+        const totalTicketPrice = (movieData?.selectedSeats?.length || 0) * (movieData?.currentTicketPrice || 0);
+
+        return totalTicketPrice + totalFoodPrice;
+    };
+
+    const handleContinue = async () => {
+        const totalPrice = calculateTotalPrice();
+
         if (!selectedPaymentMethod) {
             setErrorMessage('Vui lòng chọn phương thức thanh toán!');
             return;
@@ -60,17 +73,13 @@ const Payment: React.FC = () => {
             }
         }
     };
-
-
+    
     const backToHome = () => {
         sessionStorage.removeItem('selectedFoods');
         sessionStorage.removeItem('selectedQuantities');
         navigate('/food-selected');
     };
-
-    console.log(movieData);
     
-
     return (
         <>
             <UserHeader />

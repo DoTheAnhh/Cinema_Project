@@ -6,7 +6,7 @@ import { Moviee, ShowTimee } from '../../Types';
 import { Button, Layout, Select, Tag, theme } from 'antd';
 import { Content } from 'antd/es/layout/layout';
 import { FieldTimeOutlined, CalendarOutlined } from "@ant-design/icons";
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -143,7 +143,7 @@ const MVDetailForUser: React.FC = () => {
         }
     };
 
-    const handleTimeClick = (theaterName: string, time: string, cinemaRoomId: number, movieName: string, banner: string, selectedDate: string, ticketPrice: string) => {
+    const handleTimeClick = (theaterName: string, time: string, timeEnd: string, cinemaRoomId: number, movieName: string, banner: string, selectedDate: string, ticketPrice: string) => {
         const isLoggedIn = Boolean(localStorage.getItem('token'));
         if (!isLoggedIn) {
             navigate('/');
@@ -153,6 +153,7 @@ const MVDetailForUser: React.FC = () => {
                     selectedTheater: theaterName,
                     showTimes: showTimes.filter(st => st.cinemaRoom.theaters.theaterName === theaterName),
                     selectedTime: time,
+                    selectedTimeEnd: timeEnd,
                     cinemaRoomId: cinemaRoomId,
                     movieName: movieName,
                     banner: banner,
@@ -165,8 +166,17 @@ const MVDetailForUser: React.FC = () => {
 
     const embedUrl = movies?.trailer ? getEmbedUrl(movies.trailer) : null;
 
-    console.log("selectedDate", selectedDate);
+    const roundUpToNearestHalfHour = (date: Dayjs) => {
+        const minutes = date.minute();
+        const roundedMinutes = Math.ceil(minutes / 30) * 30;
+        return date.minute(roundedMinutes).second(0);
+    }
 
+    const calculateEndTime = (startTime: string, duration: number): string => {
+        const start = dayjs(startTime, 'HH:mm');
+        const end = start.add(duration, 'minute');
+        return roundUpToNearestHalfHour(end).format('HH:mm');
+    };
 
     return (
         <>
@@ -280,7 +290,7 @@ const MVDetailForUser: React.FC = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div style={{ marginLeft: 280 , marginBottom: 400 }}>
+                            <div style={{ marginLeft: 280, marginBottom: 400 }}>
                                 <Button style={{ borderColor: 'orange', width: 120, height: 40, color: 'orange' }}>Xem thêm</Button>
                             </div>
                         </div>
@@ -414,8 +424,16 @@ const MVDetailForUser: React.FC = () => {
                                                     fontSize: '14px',
                                                     margin: '4px'
                                                 }}
-                                                onClick={() => handleTimeClick(theaterName, time.format('HH:mm'), times[j].cinemaRoomId, movies?.movieName || '', movies?.banner || '' , selectedDate?.date || '', movies?.ticketPrice || '')}
-                                            >
+                                                onClick={() => handleTimeClick(
+                                                    theaterName,
+                                                    time.format('HH:mm'),  // Thời gian bắt đầu đã định dạng
+                                                    calculateEndTime(time.format('HH:mm'), movies?.duration || 0), // Thời gian kết thúc từ dữ liệu showTimes
+                                                    times[j].cinemaRoomId,  // ID của phòng chiếu
+                                                    movies?.movieName || '', // Tên phim
+                                                    movies?.banner || '',   // Banner phim
+                                                    selectedDate?.date || '', // Ngày đã chọn
+                                                    movies?.ticketPrice || '' // Giá vé
+                                                )}                                            >
                                                 {time.format('HH:mm')}
                                             </Button>
                                         ))}

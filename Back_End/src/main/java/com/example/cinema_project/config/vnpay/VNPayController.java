@@ -28,7 +28,7 @@ public class VNPayController {
         return ResponseEntity.ok(vnpayUrl);
     }
 
-    @GetMapping("/vnpay-payment-return")
+    @PostMapping("/vnpay-payment-return")
     public ResponseEntity<Map<String, String>> paymentCompleted(HttpServletRequest request) {
         Map<String, String> response = new HashMap<>();
 

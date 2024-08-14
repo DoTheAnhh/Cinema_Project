@@ -71,7 +71,9 @@ public class SecurityConfig {
                                 .requestMatchers("/foods").permitAll()
 
                                 .requestMatchers("/submitOrder").permitAll()
+                                .requestMatchers("/submitOrder/*").permitAll()
                                 .requestMatchers("/vnpay-payment-return").permitAll()
+                                .requestMatchers("/vnpay-payment-return/*").permitAll()
 
                                 //ADMIN
                                 .requestMatchers("/movies/insert-movie").hasAnyAuthority( "ADMIN")

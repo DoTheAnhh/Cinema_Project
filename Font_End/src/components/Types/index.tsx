@@ -49,6 +49,7 @@ export interface ShowTimee {
     cinemaRoom: CinemaRoomm
     showDate: Date
     showTime: string
+    showTimeEnd: string
 }
 
 export interface Customerr {

@@ -13,6 +13,7 @@ interface LocationState {
   showTimes: ShowTimee[];
   selectedTheater: string;
   selectedTime: string;
+  selectedTimeEnd: string
   cinemaRoomId: number;
   movieName: string;
   banner: string;
@@ -22,11 +23,12 @@ interface LocationState {
 
 const CinemaRoomBooking: React.FC = () => {
   const location = useLocation();
-  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, banner, selectedDate, ticketPrice } = location.state as LocationState;
+  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, banner, selectedDate, ticketPrice, selectedTimeEnd } = location.state as LocationState;
 
   const [cinemaRoom, setCinemaRoom] = useState<any>(null);
 
   const [currentSelectedTime, setCurrentSelectedTime] = useState<string>(selectedTime);
+  const [currentSelectedTimeEnd, setCurrentSelectedTimeEnd] = useState<string>(selectedTimeEnd);
   const [currentSelectedDate, setCurrentSelectedDate] = useState<string>(selectedDate);
   const [currentCinemaRoomId, setCurrentCinemaRoomId] = useState<number>(cinemaRoomId);
   const [currentTicketPrice, setCurrentTicketPrice] = useState<number>(ticketPrice);
@@ -46,6 +48,9 @@ const CinemaRoomBooking: React.FC = () => {
   }, {} as { [key: string]: { showTime: string, cinemaRoomId: number, ticketPrice: string }[] });
 
   const timesForSelectedTheater = groupedShowTimes[selectedTheater] || [];
+
+  console.log("currentSelectedDate", currentSelectedDate);
+
 
   const handleTimeClick = (time: string, date: string, cinemaRoomId: number, ticketPrice: number) => {
     setCurrentSelectedTime(time);
@@ -128,7 +133,7 @@ const CinemaRoomBooking: React.FC = () => {
       message.error('Bạn chưa chọn ghế');
       return;
     }
-    
+
     sessionStorage.setItem('movieBookingData', JSON.stringify({
       banner,
       movieName,
@@ -138,6 +143,9 @@ const CinemaRoomBooking: React.FC = () => {
       selectedSeats: Array.from(selectedSeats),
       seats,
       currentTicketPrice,
+      showTime: currentSelectedTime,
+      showDate: currentSelectedDate,
+      showTimeEnd: currentSelectedTimeEnd
     }));
 
     navigator('/food-selected');
@@ -238,7 +246,7 @@ const CinemaRoomBooking: React.FC = () => {
           quantities={[]}
           backToHome={backToHome}
           handleContinue={handleContinue}
-          
+
         />
       </div>
       <UserFooter />

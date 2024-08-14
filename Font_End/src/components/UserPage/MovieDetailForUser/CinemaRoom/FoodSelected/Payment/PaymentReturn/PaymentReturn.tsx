@@ -65,29 +65,32 @@ const PaymentReturn: React.FC = () => {
                 console.error('Không có dữ liệu đặt vé trong sessionStorage.');
                 return;
             }
-    
+
             const movieData = JSON.parse(storedData);
-    
+
             if (!movieData.cinemaRoom || !Array.isArray(movieData.selectedSeats)) {
                 console.error('Dữ liệu không hợp lệ hoặc thiếu.');
                 return;
             }
 
-            const seatUpdatePromises = movieData.selectedSeats.map((seatId: string) =>
-                axios.put(LOCALHOST + REQUEST_MAPPING.SEAT + '/update-status', {
-                    cinemaRoomId: movieData.cinemaRoomId,
-                    seatId: seatId,
-                    status: 'booked',
-                })
-            );
+            const seatUpdatePromises = movieData.selectedSeats.map((seatId: string) => {
+                return axios.put(`${LOCALHOST}${REQUEST_MAPPING.SEAT}/update-status`, null, {
+                    params: {
+                        cinemaRoomId: movieData.cinemaRoom.id,
+                        seatId: seatId,
+                        status: 'booked',
+                    },
+                });
+            });
 
             await Promise.all(seatUpdatePromises);
-            
+
+            console.log('Cập nhật trạng thái ghế thành công!');
         } catch (error) {
             console.error('Lỗi khi cập nhật trạng thái ghế:', error);
         }
     };
-    
+
 
     useEffect(() => {
         const params = extractParamsFromUrl();
