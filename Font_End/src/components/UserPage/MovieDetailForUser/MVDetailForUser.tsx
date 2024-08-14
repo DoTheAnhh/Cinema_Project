@@ -33,7 +33,10 @@ const MVDetailForUser: React.FC = () => {
 
     const handleTagClick = async (dateObj: DateObject) => {
         setSelectedDate(dateObj);
-        await fetchShowTime(dateObj.date); // Gọi fetchShowTime với ngày được chọn
+
+        sessionStorage.setItem('selectedDate', JSON.stringify(dateObj));
+
+        await fetchShowTime(dateObj.date);
     };
 
     const {
@@ -69,15 +72,18 @@ const MVDetailForUser: React.FC = () => {
     useEffect(() => {
         if (id) {
             fetchMovie();
-            // Gọi fetchShowTime với ngày mặc định hoặc ngày được chọn
-            if (selectedDate) {
-                fetchShowTime(selectedDate.date);
+    
+            // Kiểm tra xem có giá trị ngày được lưu trữ trong sessionStorage không
+            const storedDate = sessionStorage.getItem('selectedDate');
+            if (storedDate) {
+                const parsedDate: DateObject = JSON.parse(storedDate);
+                setSelectedDate(parsedDate);
+                fetchShowTime(parsedDate.date);
             } else {
-                // Nếu chưa có ngày được chọn, có thể sử dụng ngày hôm nay hoặc một giá trị mặc định khác
                 fetchShowTime(dayjs().format('DD/MM'));
             }
         }
-    }, [id, selectedDate]);
+    }, [id]);
 
     const generateNextDays = (days: number) => {
         const today = dayjs();

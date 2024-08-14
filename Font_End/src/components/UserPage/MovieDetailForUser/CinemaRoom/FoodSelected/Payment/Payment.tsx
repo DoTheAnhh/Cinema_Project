@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import UserHeader from '../../../../Header/UserHeader';
 import UserFooter from '../../../../Footer/UserFooter';
-import { Button, Input } from 'antd';
+import { Button, Input, message } from 'antd';
 import MovieInfo from '../../MovieInfo';
 import { Foodd } from '../../../../../Types';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { LOCALHOST, REQUEST_MAPPING } from '../../../../../APIs/typing';
-
 const Payment: React.FC = () => {
     const [movieData, setMovieData] = useState<any>(null);
     const [foods, setFoods] = useState<Foodd[]>([]);
@@ -53,7 +51,7 @@ const Payment: React.FC = () => {
         const totalPrice = calculateTotalPrice();
 
         if (!selectedPaymentMethod) {
-            setErrorMessage('Vui lòng chọn phương thức thanh toán!');
+            message.error('Vui lòng chọn phương thức thanh toán!');
             return;
         }
 
