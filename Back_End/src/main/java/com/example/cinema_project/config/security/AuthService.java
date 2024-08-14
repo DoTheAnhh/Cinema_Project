@@ -1,12 +1,10 @@
-package com.example.cinema_project.config.security_service;
+package com.example.cinema_project.config.security;
 
 import com.example.cinema_project.dto.ReqRes;
 import com.example.cinema_project.entity.Customer;
 import com.example.cinema_project.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

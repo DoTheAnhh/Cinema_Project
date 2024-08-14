@@ -24,4 +24,9 @@ public class SeatController {
             @PathVariable String showTime) {
         return seatService.findSeatCinemaRoomsByCinemaRoomIdAndShowTime(cinemaRoomId, showTime);
     }
+
+    @PutMapping("/update-status")
+    public void updateStatus(@RequestParam Long cinemaRoomId, @RequestParam Long seatId, @RequestParam String status) {
+        seatService.updateStatus(cinemaRoomId, seatId, status);
+    }
 }

@@ -16,6 +16,7 @@ const UserHeader: React.FC = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('refreshToken');
     localStorage.removeItem('user');
+    sessionStorage.removeItem('movieBookingData');
     setUser(null);
     navigate('/');
   };

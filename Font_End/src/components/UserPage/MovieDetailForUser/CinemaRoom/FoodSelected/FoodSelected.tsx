@@ -11,8 +11,9 @@ import './css/FoodSelected.css';
 
 const FoodSelected: React.FC = () => {
     const [foods, setFoods] = useState<Foodd[]>([]);
-    const [movieData, setMovieData] = useState<any>(null);
     const [quantities, setQuantities] = useState<number[]>([]);
+    const [movieData, setMovieData] = useState<any>(null);
+    
     const navigator = useNavigate();
 
     const handleQuantityChange = (index: number, value: number | null) => {
@@ -34,6 +35,17 @@ const FoodSelected: React.FC = () => {
         }
         fetchFoods();
     }, []);
+
+    const backToHome = () => {
+        sessionStorage.removeItem('movieBookingData');
+        navigator('/user')
+    }
+
+    const handleContinue = () => {
+        sessionStorage.setItem('selectedFoods', JSON.stringify(foods));
+        sessionStorage.setItem('selectedQuantities', JSON.stringify(quantities));
+        navigator('/payment');
+    };
 
     return (
         <>
@@ -97,8 +109,8 @@ const FoodSelected: React.FC = () => {
                         currentTicketPrice={movieData?.currentTicketPrice}
                         foods={foods}
                         quantities={quantities}
-                        backToHome={() => navigator('/user')}
-                        handleContinue={() => { }}
+                        backToHome={backToHome}
+                        handleContinue={handleContinue}
                     />
                 </div>
             </div>

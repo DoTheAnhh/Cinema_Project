@@ -1,4 +1,4 @@
-package com.example.cinema_project.config;
+package com.example.cinema_project.config.schedule;
 
 import com.example.cinema_project.entity.ShowTime;
 import com.example.cinema_project.repository.ShowTimeRepository;

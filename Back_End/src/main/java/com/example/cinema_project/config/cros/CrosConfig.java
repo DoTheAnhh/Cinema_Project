@@ -1,4 +1,4 @@
-package com.example.cinema_project.config;
+package com.example.cinema_project.config.cros;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

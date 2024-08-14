@@ -1,4 +1,4 @@
-package com.example.cinema_project.config.security_service;
+package com.example.cinema_project.config.security;
 
 import com.example.cinema_project.entity.Customer;
 import io.jsonwebtoken.Claims;

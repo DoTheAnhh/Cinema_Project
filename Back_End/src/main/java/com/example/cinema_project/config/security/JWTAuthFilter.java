@@ -1,7 +1,5 @@
-package com.example.cinema_project.config;
+package com.example.cinema_project.config.security;
 
-import com.example.cinema_project.config.security_service.CustomerDetailService;
-import com.example.cinema_project.config.security_service.JWTUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

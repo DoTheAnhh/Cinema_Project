@@ -1,6 +1,5 @@
-package com.example.cinema_project.config;
+package com.example.cinema_project.config.security;
 
-import com.example.cinema_project.config.security_service.CustomerDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,8 +66,12 @@ public class SecurityConfig {
                                 .requestMatchers("/theaters/search-theaters").permitAll()
 
                                 .requestMatchers("/seats/cinema-room/*/show-time/*").permitAll()
+                                .requestMatchers("/seats/update-status").permitAll()
 
                                 .requestMatchers("/foods").permitAll()
+
+                                .requestMatchers("/submitOrder").permitAll()
+                                .requestMatchers("/vnpay-payment-return").permitAll()
 
                                 //ADMIN
                                 .requestMatchers("/movies/insert-movie").hasAnyAuthority( "ADMIN")

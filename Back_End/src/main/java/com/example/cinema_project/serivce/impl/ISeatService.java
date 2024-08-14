@@ -19,4 +19,8 @@ public class ISeatService implements SeatService {
     public List<SeatDTO> findSeatCinemaRoomsByCinemaRoomIdAndShowTime(Long cinemaRoomId, String showTime) {
         return seatRepository.findSeatCinemaRoomsByCinemaRoomIdAndShowTime(cinemaRoomId, showTime);
     }
+
+    public void updateStatus(Long cinemaRoomId, Long seatId, String status) {
+        seatRepository.updateStatus(status, cinemaRoomId, seatId);
+    }
 }

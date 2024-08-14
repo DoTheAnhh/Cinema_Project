@@ -11,6 +11,8 @@ import { UserProvider } from './components/Context/UserContext';
 import './App.css'
 import CinemaRoomBooking from './components/UserPage/MovieDetailForUser/CinemaRoom/CinemaRoomBooking';
 import FoodSelected from './components/UserPage/MovieDetailForUser/CinemaRoom/FoodSelected/FoodSelected';
+import Payment from './components/UserPage/MovieDetailForUser/CinemaRoom/FoodSelected/Payment/Payment';
+import PaymentReturn from './components/UserPage/MovieDetailForUser/CinemaRoom/FoodSelected/Payment/PaymentReturn/PaymentReturn';
 interface RouteComponent {
   path: string;
   element: React.ReactElement;
@@ -49,6 +51,14 @@ function App() {
     {
       path: 'food-selected',
       element: <FoodSelected />
+    },
+    {
+      path: 'payment',
+      element: <Payment />
+    },
+    {
+      path: 'vnpay-payment-return/*',
+      element: <PaymentReturn />
     },
     {
       path: '*',

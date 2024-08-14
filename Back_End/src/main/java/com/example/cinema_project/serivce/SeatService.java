@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SeatService {
     List<SeatDTO> findSeatCinemaRoomsByCinemaRoomIdAndShowTime(Long cinemaRoomId, String showTime);
+
+    void updateStatus(Long cinemaRoomId, Long seatId, String status);
 }

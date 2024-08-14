@@ -21,6 +21,7 @@
   display: flex;
   align-items: center;
   margin-bottom: 20px;
+  
 }
 
 .movie-banner img {
@@ -28,6 +29,7 @@
   width: 140px;
   padding: 10px;
   margin-left: -10px;
+  
 }
 
 .movie-title {
@@ -39,6 +41,20 @@
   margin-top: -150px;
 }
 
+.color-top{
+  width: 100%;
+  height: 8px;
+  background-color: #ff953f;
+  border-radius: 10px 10px 0 0;
+}
+
+.color-bot{
+  width: 100%;
+  height: 8px;
+  background-color: #ff953f;
+  border-radius: 0 0 10px 10px;
+}
+
 .movie-details,
 .showtime,
 .seat-info {
@@ -46,6 +62,10 @@
   font-family: "Noto Sans JP", sans-serif;
   margin-top: 15px;
   text-align: left; /* Căn trái cho các thông tin chi tiết */
+}
+
+.movie-details{
+  margin-top: 5px;
 }
 
 .total-price {
@@ -66,7 +86,7 @@
   display: flex;
   justify-content: flex-start; /* Căn lề trái cho các nút */
   width: 100%;
-  margin-top: 50px;
+  margin-top: 40px;
 }
 
 .back-button,

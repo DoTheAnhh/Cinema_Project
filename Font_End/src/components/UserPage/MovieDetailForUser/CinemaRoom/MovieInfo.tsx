@@ -42,6 +42,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({
   return (
     <div className="movie-info-container">
       <div className="movie-info-content">
+        <div className='color-top'></div>
         <div className="movie-header">
           <div className="movie-banner">
             <img src={banner} alt="Movie Banner" />
@@ -74,7 +75,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({
             <hr className="divider" />
             <strong>Đồ ăn, uống đã chọn:</strong>
             <div>
-              {foods.map((food, index) => 
+              {foods.map((food, index) =>
                 quantities[index] > 0 && (
                   <div key={food.foodId}>
                     <span><strong>- {food.foodName}</strong></span>
@@ -92,7 +93,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({
           </div>
         )}
         <div className="total-price">
-        <hr className="divider" />
+          <hr className="divider" />
           <strong>
             Tổng cộng:
             <p className="price">
@@ -104,6 +105,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({
           </strong>
           <hr className="divider" />
         </div>
+        <div className='color-bot'></div>
 
         <div className="buttons">
           <Button className="back-button" onClick={backToHome}>

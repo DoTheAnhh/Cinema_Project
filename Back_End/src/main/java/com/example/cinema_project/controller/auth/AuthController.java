@@ -1,6 +1,6 @@
 package com.example.cinema_project.controller.auth;
 
-import com.example.cinema_project.config.security_service.AuthService;
+import com.example.cinema_project.config.security.AuthService;
 import com.example.cinema_project.dto.ReqRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
