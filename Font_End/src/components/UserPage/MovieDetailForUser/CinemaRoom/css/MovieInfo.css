@@ -7,6 +7,7 @@
   width: 400px;
   margin-right: 80px;
   height: 800px;
+  font-family: "Noto Sans JP", sans-serif;
 }
 
 .movie-info-content {
@@ -33,7 +34,7 @@
 }
 
 .movie-title {
-  font-family: "Noto Sans JP", sans-serif;
+  font-family: "Noto Sans JP", ;
   font-weight: bold;
   margin-left: 20px;
   max-width: 180px;

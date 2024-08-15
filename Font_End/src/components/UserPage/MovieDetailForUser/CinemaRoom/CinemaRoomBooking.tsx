@@ -8,6 +8,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../../../APIs/typing';
 import './css/CinemaRoom.css';
 import MovieInfo from './MovieInfo';
+import axios from 'axios';
 
 interface LocationState {
   showTimes: ShowTimee[];
@@ -16,6 +17,7 @@ interface LocationState {
   selectedTimeEnd: string
   cinemaRoomId: number;
   movieName: string;
+  movieId: number;
   banner: string;
   selectedDate: string;
   ticketPrice: number
@@ -23,7 +25,7 @@ interface LocationState {
 
 const CinemaRoomBooking: React.FC = () => {
   const location = useLocation();
-  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, banner, selectedDate, ticketPrice, selectedTimeEnd } = location.state as LocationState;
+  const { showTimes, selectedTheater, selectedTime, cinemaRoomId, movieName, movieId, banner, selectedDate, ticketPrice, selectedTimeEnd } = location.state as LocationState;
 
   const [cinemaRoom, setCinemaRoom] = useState<any>(null);
 
@@ -84,11 +86,10 @@ const CinemaRoomBooking: React.FC = () => {
     }
   };
 
-  const handleSeatClick = (seat: Seatt) => {
+  const handleSeatClick = async (seat: Seatt) => {
     if (seat.status !== 'booked') {
       setSelectedSeats(prev => {
         const newSelectedSeats = new Set(prev);
-
         if (newSelectedSeats.has(seat.seatId)) {
           newSelectedSeats.delete(seat.seatId);
         } else {
@@ -101,6 +102,89 @@ const CinemaRoomBooking: React.FC = () => {
 
         return newSelectedSeats;
       });
+    }
+  };
+
+  const updateStatusSeat = async (cinemaRoomId: string, seatId: string, status: string) => {
+    try {
+      await axios.put(`${LOCALHOST}${REQUEST_MAPPING.SEAT}/update-status`, null, {
+        params: {
+          cinemaRoomId: cinemaRoomId,
+          seatId: seatId,
+          status: status,
+        }
+      });
+      console.log(`Cập nhật trạng thái ghế ${seatId} thành ${status} thành công`);
+    } catch (error) {
+      console.error('Lỗi khi cập nhật trạng thái ghế:', error);
+    }
+  };
+
+  const checkSeatsStatus = async (seatIds: number[], cinemaRoomId: number) => {
+    try {
+      const statusPromises = seatIds.map(seatId =>
+        axios.get(`${LOCALHOST}${REQUEST_MAPPING.SEAT}/check-status`, {
+          params: { cinemaRoomId, seatId }
+        })
+      );
+      const responses = await Promise.all(statusPromises);
+
+      return responses.map(response => response.data);
+    } catch (error) {
+      console.error('Lỗi khi kiểm tra trạng thái ghế:', error);
+      return [];
+    }
+  };
+
+
+  const handleContinue = async () => {
+    if (selectedSeats.size === 0) {
+      message.error('Bạn chưa chọn ghế');
+      return;
+    }
+
+    const seatIds = Array.from(selectedSeats);
+    const cinemaRoomId = cinemaRoom.id;
+
+    try {
+      const seatDetails = await checkSeatsStatus(seatIds, cinemaRoomId);
+
+      const conflictingSeats = seatDetails.filter(seat =>
+        seat.status === 'pending' || seat.status === 'booked'
+      );
+
+      if (conflictingSeats.length > 0) {
+        const conflictingSeatsList = conflictingSeats.map(seat =>
+          `Ghế ${seat.rowNumber}${seat.seatNumber}`
+        ).join(', ');
+        message.error(`Các ghế ${conflictingSeatsList} đã được đặt hoặc đang chờ xử lý.`);
+        return;
+      }
+
+      await Promise.all(seatIds.map(seatId =>
+        updateStatusSeat(cinemaRoomId.toString(), seatId.toString(), 'pending')
+      ));
+
+      sessionStorage.setItem('movieBookingData', JSON.stringify({
+        banner,
+        movieName,
+        movieId: currentCinemaRoomId,
+        selectedTheater,
+        cinemaRoom,
+        currentSelectedTime,
+        selectedSeats: Array.from(selectedSeats),
+        seats,
+        currentTicketPrice,
+        showTime: currentSelectedTime,
+        showDate: currentSelectedDate,
+        showTimeEnd: currentSelectedTimeEnd
+      }));
+
+      navigator('/food-selected');
+
+    } catch (error) {
+      console.error('Đã xảy ra lỗi:', error);
+      message.error('Đã xảy ra lỗi khi xử lý ghế. Vui lòng thử lại.');
     }
   };
 
@@ -128,33 +212,10 @@ const CinemaRoomBooking: React.FC = () => {
     return acc;
   }, {} as { [key: string]: Seatt[] });
 
-  const handleContinue = () => {
-    if (selectedSeats.size === 0) {
-      message.error('Bạn chưa chọn ghế');
-      return;
-    }
-
-    sessionStorage.setItem('movieBookingData', JSON.stringify({
-      banner,
-      movieName,
-      selectedTheater,
-      cinemaRoom,
-      currentSelectedTime,
-      selectedSeats: Array.from(selectedSeats),
-      seats,
-      currentTicketPrice,
-      showTime: currentSelectedTime,
-      showDate: currentSelectedDate,
-      showTimeEnd: currentSelectedTimeEnd
-    }));
-
-    navigator('/food-selected');
-  };
-
   return (
     <>
       <UserHeader />
-      <div className="container" style={{ display: 'flex', marginLeft: 150, marginTop: 120 }}>
+      <div className="container" style={{ display: 'flex', marginLeft: 150, marginTop: 120, fontFamily: 'Noto Sans JP, sans-serif'}}>
         <div className="table" style={{ flex: 2, marginRight: 20 }}>
           <div className="col-12 mb-3" style={{ marginTop: 20 }}>
             <div style={{
@@ -199,16 +260,24 @@ const CinemaRoomBooking: React.FC = () => {
                           key={seat.seatId}
                           className={`seat ${selectedSeats.has(seat.seatId) ? 'selected' : ''} ${seat.status === 'booked' ? 'booked' : ''}`}
                           style={{
-                            cursor: seat.status === 'booked' ? 'not-allowed' : 'pointer',
-                            opacity: seat.status === 'booked' ? 0.5 : 1,
+                            cursor: seat.status === 'booked' || seat.status === 'pending' ? 'not-allowed' : 'pointer',
+                            opacity: seat.status === 'booked' || seat.status === 'pending' ? 0.5 : 1,
                             fontFamily: 'Noto Sans JP, sans-serif'
                           }}
-                          onClick={() => seat.status !== 'booked' && handleSeatClick(seat)}
+                          onClick={() => {
+                            if (seat.status === 'booked') return;
+                            if (seat.status === 'pending') {
+                              message.error('Có người đang chọn ghế này');
+                              return;
+                            }
+                            handleSeatClick(seat);
+                          }}
                         >
                           {seat.seatNumber}
                         </div>
                       ))}
                     </div>
+
                     <span className="row-label right-label" style={{ fontFamily: 'Noto Sans JP, sans-serif' }}>{rowNumber}</span>
                   </li>
                 ))}

@@ -1,7 +1,7 @@
 package com.example.cinema_project.serivce.impl;
 
 import com.example.cinema_project.dto.SeatDTO;
-import com.example.cinema_project.entity.Seat;
+import com.example.cinema_project.dto.SeatStatusDTO;
 import com.example.cinema_project.repository.SeatRepository;
 import com.example.cinema_project.serivce.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,13 @@ public class ISeatService implements SeatService {
         return seatRepository.findSeatCinemaRoomsByCinemaRoomIdAndShowTime(cinemaRoomId, showTime);
     }
 
+    @Override
     public void updateStatus(Long cinemaRoomId, Long seatId, String status) {
         seatRepository.updateStatus(status, cinemaRoomId, seatId);
+    }
+
+    @Override
+    public SeatStatusDTO getSeatStatus(Long cinemaRoomId, Long seatId) {
+        return seatRepository.findStatusByCinemaRoomIdAndSeatId(cinemaRoomId, seatId);
     }
 }

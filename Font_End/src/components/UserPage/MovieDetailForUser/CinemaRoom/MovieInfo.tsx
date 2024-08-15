@@ -41,6 +41,7 @@ const MovieInfo: React.FC<MovieInfoProps> = ({
 
   return (
     <div className="movie-info-container">
+      
       <div className="movie-info-content">
         <div className='color-top'></div>
         <div className="movie-header">

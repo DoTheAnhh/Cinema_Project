@@ -61,4 +61,8 @@ public interface ShowTimeRepository extends JpaRepository<ShowTime, Long> {
     );
 
     List<ShowTime> findByShowDateBefore(LocalDate date);
+
+    @Query("SELECT s.movie.id, s.showTimeEnd FROM ShowTime s WHERE s.showDate = :showDate")
+
+    List<Object[]> findMovieIdAndShowTimeEndByShowDate(@Param("showDate") Date showDate);
 }

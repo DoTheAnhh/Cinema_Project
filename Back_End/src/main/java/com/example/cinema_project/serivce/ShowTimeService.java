@@ -22,4 +22,5 @@ public interface ShowTimeService {
 
     ShowTime editShowTime(Long id, ShowTimeDTO showTimeDTO);
 
+    List<Object[]> getMovieIdAndShowTimeEndByDate(Date showDate);
 }

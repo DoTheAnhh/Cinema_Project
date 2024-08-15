@@ -122,5 +122,10 @@ public class IShowTimeService implements ShowTimeService {
         }
     }
 
+    @Override
+    public List<Object[]> getMovieIdAndShowTimeEndByDate(Date showDate) {
+        return showTimeRepository.findMovieIdAndShowTimeEndByShowDate(showDate);
+    }
+
 }
 

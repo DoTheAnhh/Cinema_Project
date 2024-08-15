@@ -57,6 +57,7 @@ public class SecurityConfig {
                                 .requestMatchers("/movie-types/search-movie-types").permitAll()
 
                                 .requestMatchers("/show-times").permitAll()
+                                .requestMatchers("/show-times/find-show-time-by-date").permitAll()
                                 .requestMatchers("/show-times/*").permitAll()
                                 .requestMatchers("/show-times/movie/*/date/*").permitAll()
                                 .requestMatchers("/show-times/search-show-times").permitAll()
@@ -67,6 +68,7 @@ public class SecurityConfig {
 
                                 .requestMatchers("/seats/cinema-room/*/show-time/*").permitAll()
                                 .requestMatchers("/seats/update-status").permitAll()
+                                .requestMatchers("/seats/check-status").permitAll()
 
                                 .requestMatchers("/foods").permitAll()
 
@@ -74,6 +76,8 @@ public class SecurityConfig {
                                 .requestMatchers("/submitOrder/*").permitAll()
                                 .requestMatchers("/vnpay-payment-return").permitAll()
                                 .requestMatchers("/vnpay-payment-return/*").permitAll()
+
+
 
                                 //ADMIN
                                 .requestMatchers("/movies/insert-movie").hasAnyAuthority( "ADMIN")

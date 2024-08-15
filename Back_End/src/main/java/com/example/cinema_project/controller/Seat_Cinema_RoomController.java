@@ -13,7 +13,5 @@ import java.util.List;
 public class Seat_Cinema_RoomController {
     @Autowired
     private Seat_Cinema_RoomService seatCinemaRoomService;
-
-
 }
 

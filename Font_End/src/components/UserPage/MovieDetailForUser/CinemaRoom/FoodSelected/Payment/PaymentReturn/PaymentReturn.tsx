@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../../../../../../APIs/typing';
-import dayjs from 'dayjs';
 
 const PaymentReturn: React.FC = () => {
     const [message, setMessage] = useState('');
@@ -11,6 +10,8 @@ const PaymentReturn: React.FC = () => {
     const [totalPrice, setTotalPrice] = useState('');
     const [responseCode, setResponseCode] = useState('');
     const [transactionStatus, setTransactionStatus] = useState('');
+
+    const [movieData, setMovieData] = useState<any>(null);
 
 
     const extractParamsFromUrl = () => {
@@ -45,6 +46,12 @@ const PaymentReturn: React.FC = () => {
                 responseCode: params.vnpResponseCode,
                 transactionStatus: params.vnpTransactionStatus,
             })
+                .then(response => {
+                    console.log('Xử lý thanh toán thành công:', response.data);
+                })
+                .catch(error => {
+                    console.error('Lỗi khi xử lý thanh toán:', error);
+                });
         } else {
             setMessage('Thanh toán không thành công. Vui lòng thử lại.');
         }
@@ -52,21 +59,13 @@ const PaymentReturn: React.FC = () => {
 
     const updateStatusSeat = async () => {
         try {
-            // Lấy dữ liệu từ sessionStorage
             const storedData = sessionStorage.getItem('movieBookingData');
-            const dateData = sessionStorage.getItem('selectedDate');
             if (!storedData) {
                 console.error('Không có dữ liệu đặt vé trong sessionStorage.');
                 return;
             }
 
-            if (!dateData) {
-                console.error('Không có dữ liệu date trong sessionStorage.');
-                return;
-            }
-
             const movieData = JSON.parse(storedData);
-            const dateeData = JSON.parse(dateData);
 
             if (!movieData.cinemaRoom || !Array.isArray(movieData.selectedSeats)) {
                 console.error('Dữ liệu không hợp lệ hoặc thiếu.');
@@ -85,33 +84,7 @@ const PaymentReturn: React.FC = () => {
 
             await Promise.all(seatUpdatePromises);
 
-            console.log("Ghế đã được đặt thành công vào giờ:", movieData.showTime, "ngày:", dateeData.date);
-
-            // Tính thời gian bắt đầu và kết thúc phim
-            const startTime = dayjs(`${dateeData.date} ${movieData.showTime}`, 'DD/MM HH:mm');
-            const endTime = dayjs(`${dateeData.date} ${movieData.showTimeEnd}`, 'DD/MM HH:mm');
-
-            // Tính thời gian chờ trước khi cập nhật trạng thái ghế thành "available"
-            const delay = endTime.diff(startTime);
-
-            console.log("Thời gian chờ trước khi cập nhật trạng thái ghế là (milliseconds):", delay);
-
-            setTimeout(async () => {
-                const seatUpdateAvailablePromises = movieData.selectedSeats.map((seatId: string) => {
-                    return axios.put(`${LOCALHOST}${REQUEST_MAPPING.SEAT}/update-status`, null, {
-                        params: {
-                            cinemaRoomId: movieData.cinemaRoom.id,
-                            seatId: seatId,
-                            status: 'available',
-                        },
-                    });
-                });
-
-                await Promise.all(seatUpdateAvailablePromises);
-
-                console.log("Ghế đã được cập nhật trạng thái thành available vào giờ:", movieData.showTimeEnd, "ngày:", dateeData.date);
-            }, delay);
-
+            console.log('Cập nhật trạng thái ghế thành công!');
         } catch (error) {
             console.error('Lỗi khi cập nhật trạng thái ghế:', error);
         }

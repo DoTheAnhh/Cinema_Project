@@ -64,4 +64,9 @@ public class ShowTimeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/find-show-time-by-date")
+    public List<Object[]> getShowTimes(@RequestParam("date") Date showDate) {
+        return showTimeService.getMovieIdAndShowTimeEndByDate(showDate);
+    }
 }

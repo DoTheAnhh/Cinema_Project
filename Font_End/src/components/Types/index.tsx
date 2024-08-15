@@ -37,9 +37,9 @@ export interface Theaterr {
 }
 
 export interface CinemaRoomm {
-    id: number
-    cinemaRoomName: string
-    theaters: Theaterr
+    id: number;
+    cinemaRoomName: string;
+    theaters: Theaterr;
 }
 
 export interface ShowTimee {
@@ -68,7 +68,8 @@ export interface Seatt {
     rowNumber: string;
     seatNumber: number;
     seatType: string;
-    status: 'available' | 'booked' | 'selected';
+    status: 'available' | 'booked' | 'pending';
+    cinemaRoomId: number
 }
 
 export interface Foodd {
