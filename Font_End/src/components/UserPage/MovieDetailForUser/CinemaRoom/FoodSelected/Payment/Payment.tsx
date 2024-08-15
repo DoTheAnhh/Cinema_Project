@@ -58,7 +58,7 @@ const Payment: React.FC = () => {
         if (selectedPaymentMethod === 'VNPAY') {
             try {
                 const amount = totalPrice;
-                const orderInfo = 'Thanh toán vé xem phim';
+                const orderInfo = 'Thanh toan ve xem phim';
                 const url = `http://localhost:8080/submitOrder?amount=${encodeURIComponent(amount)}&orderInfo=${orderInfo}`;
 
                 const response = await axios.post(url);

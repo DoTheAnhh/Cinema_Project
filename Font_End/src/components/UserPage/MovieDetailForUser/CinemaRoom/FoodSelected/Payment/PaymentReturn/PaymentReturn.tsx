@@ -7,7 +7,7 @@ const PaymentReturn: React.FC = () => {
     const [orderInfo, setOrderInfo] = useState('');
     const [paymentTime, setPaymentTime] = useState('');
     const [transactionId, setTransactionId] = useState('');
-    const [totalPrice, setTotalPrice] = useState('');
+    const [totalPrice, setTotalPrice] = useState<number>(0);
     const [responseCode, setResponseCode] = useState('');
     const [transactionStatus, setTransactionStatus] = useState('');
 
@@ -45,7 +45,7 @@ const PaymentReturn: React.FC = () => {
             })
                 .then(response => {
                     console.log('Xử lý thanh toán thành công:', response.data);
-                    
+
                 })
                 .catch(error => {
                     console.error('Lỗi khi xử lý thanh toán:', error);
@@ -123,6 +123,15 @@ const PaymentReturn: React.FC = () => {
         handlePaymentStatus(params.vnpTransactionStatus, params);
         updateStatusSeat();
         updateFoodQuantities();
+        sessionStorage.removeItem('bookingExpireTime');
+        sessionStorage.removeItem('selectedFoods');
+        sessionStorage.removeItem('movieBookingData');
+        sessionStorage.removeItem('selectedDate');
+        sessionStorage.removeItem('selectedQuantities');
+
+        localStorage.removeItem('user');
+        localStorage.removeItem('endTime');
+        localStorage.removeItem('timeLeft');
     }, []);
 
     const styles: { [key: string]: React.CSSProperties } = {
@@ -159,6 +168,10 @@ const PaymentReturn: React.FC = () => {
         },
     };
 
+    const formatCurrency = (amount: number) => {
+        return new Intl.NumberFormat('vi-VN', { currency: 'VND' }).format(amount / 100);
+    };
+
     return (
         <div style={styles.container}>
             <h1 style={styles.successMessage}>{message}</h1>
@@ -166,9 +179,9 @@ const PaymentReturn: React.FC = () => {
                 <p><strong>Thông tin đơn hàng:</strong> {orderInfo}</p>
                 <p><strong>Thời gian thanh toán:</strong> {paymentTime}</p>
                 <p><strong>Mã giao dịch:</strong> {transactionId}</p>
-                <p><strong>Tổng số tiền:</strong> {totalPrice} VNĐ</p>
+                <p><strong>Tổng số tiền:</strong> {formatCurrency(totalPrice)} VND</p>
                 <p><strong>Mã phản hồi:</strong> {responseCode}</p>
-                <p><strong>Trạng thái giao dịch:</strong> {transactionStatus}</p>
+                <p><strong>Trạng thái giao dịch:</strong> {transactionStatus == "00" ? "Success" : ""}</p>
             </div>
             <a href="/user" style={styles.button}>Quay lại trang chủ</a>
         </div>
