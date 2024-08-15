@@ -71,6 +71,7 @@ public class SecurityConfig {
                                 .requestMatchers("/seats/check-status").permitAll()
 
                                 .requestMatchers("/foods").permitAll()
+                                .requestMatchers("/foods/update-quantity-food/*").permitAll()
 
                                 .requestMatchers("/submitOrder").permitAll()
                                 .requestMatchers("/submitOrder/*").permitAll()

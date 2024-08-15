@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API, LOCALHOST, REQUEST_MAPPING } from '../../../../../../APIs/typing';
+import { LOCALHOST, REQUEST_MAPPING } from '../../../../../../APIs/typing';
 
 const PaymentReturn: React.FC = () => {
     const [message, setMessage] = useState('');
@@ -10,9 +10,6 @@ const PaymentReturn: React.FC = () => {
     const [totalPrice, setTotalPrice] = useState('');
     const [responseCode, setResponseCode] = useState('');
     const [transactionStatus, setTransactionStatus] = useState('');
-
-    const [movieData, setMovieData] = useState<any>(null);
-
 
     const extractParamsFromUrl = () => {
         const urlParams = new URLSearchParams(window.location.search);
@@ -48,6 +45,7 @@ const PaymentReturn: React.FC = () => {
             })
                 .then(response => {
                     console.log('Xử lý thanh toán thành công:', response.data);
+                    
                 })
                 .catch(error => {
                     console.error('Lỗi khi xử lý thanh toán:', error);
@@ -56,6 +54,34 @@ const PaymentReturn: React.FC = () => {
             setMessage('Thanh toán không thành công. Vui lòng thử lại.');
         }
     };
+
+    const updateFoodQuantities = async () => {
+        try {
+            const selectedFoods = sessionStorage.getItem('selectedFoods');
+            const selectedQuantities = sessionStorage.getItem('selectedQuantities');
+
+            if (!selectedFoods || !selectedQuantities) {
+                console.error('Không có dữ liệu đồ ăn trong sessionStorage.');
+                return;
+            }
+
+            const foods = JSON.parse(selectedFoods);
+            const quantities = JSON.parse(selectedQuantities);
+
+            const foodUpdatePromises = foods.map((food: any, index: number) => {
+                const newQuantity = Math.max(0, food.quantity - quantities[index]); // Ensure quantity does not go below zero
+                return axios.put(`${LOCALHOST}${REQUEST_MAPPING.FOOD}/update-quantity-food/${food.id}`, {
+                    quantity: newQuantity,
+                });
+            });
+
+            await Promise.all(foodUpdatePromises);
+            console.log('Cập nhật số lượng đồ ăn thành công!');
+        } catch (error) {
+            console.error('Lỗi khi cập nhật số lượng đồ ăn:', error);
+        }
+    };
+
 
     const updateStatusSeat = async () => {
         try {
@@ -95,7 +121,8 @@ const PaymentReturn: React.FC = () => {
         const params = extractParamsFromUrl();
         updateStateWithParams(params);
         handlePaymentStatus(params.vnpTransactionStatus, params);
-        updateStatusSeat()
+        updateStatusSeat();
+        updateFoodQuantities();
     }, []);
 
     const styles: { [key: string]: React.CSSProperties } = {
@@ -107,6 +134,7 @@ const PaymentReturn: React.FC = () => {
             boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)',
             borderRadius: '8px',
             textAlign: 'center',
+            fontFamily: 'Noto Sans JP, sans-serif'
         },
         successMessage: {
             color: '#4CAF50',

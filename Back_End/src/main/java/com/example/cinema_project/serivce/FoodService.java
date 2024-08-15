@@ -17,4 +17,6 @@ public interface FoodService {
     Food insert (FoodDTO foodDTO);
 
     Food update(Long id, FoodDTO foodDTO);
+
+    Food updateQuantity(Long id, FoodDTO foodDTO);
 }

@@ -48,7 +48,7 @@ public class ScheduledTasks {
         seatCinemaRoomRepository.saveAll(pendingSeats);
     }
 
-    @Scheduled(cron = "*/3 * * * * *")
+    @Scheduled(cron = "*/30 * * * * *")
     public void checkAndUpdateSeatStatus() {
         seatCinemaRoomService.checkAndMakeSeatsAvailable();
     }

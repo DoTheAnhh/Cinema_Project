@@ -3,6 +3,7 @@ package com.example.cinema_project.controller;
 import com.example.cinema_project.dto.FoodDTO;
 import com.example.cinema_project.entity.Food;
 import com.example.cinema_project.serivce.FoodService;
+import com.example.cinema_project.serivce.impl.IFoodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,24 @@ public class FoodController {
             return new ResponseEntity<>(foodService.update(id, foodDTO), HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PutMapping("/update-quantity-food/{id}")
+    public ResponseEntity<Food> updateQuantityFood(@PathVariable Long id, @RequestBody FoodDTO foodDTO) {
+        try {
+            // Cập nhật số lượng thực phẩm và trả về đối tượng đã cập nhật
+            Food updatedFood = foodService.updateQuantity(id, foodDTO);
+            return new ResponseEntity<>(updatedFood, HttpStatus.OK);
+        } catch (IFoodService.ResourceNotFoundException e) {
+            // Xử lý trường hợp không tìm thấy thực phẩm
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (IllegalArgumentException e) {
+            // Xử lý trường hợp số lượng không hợp lệ
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } catch (Exception e) {
+            // Xử lý các lỗi khác
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

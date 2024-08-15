@@ -78,5 +78,6 @@ export const API = {
     GET_ALL_FOOD: "",
     INSERT_FOOD: "/insert-food",
     EDIT_FOOD: "/edit-food",
+    UPDATE_QUANTITY_FOOD:'/update-quantity-food'
   },
 };

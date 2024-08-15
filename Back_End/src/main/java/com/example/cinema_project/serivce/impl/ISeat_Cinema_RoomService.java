@@ -28,7 +28,6 @@ public class ISeat_Cinema_RoomService implements Seat_Cinema_RoomService {
 
         String currentTime = now.toLocalTime().format(DateTimeFormatter.ofPattern("HH:mm"));
 
-        //Lỗi time
         List<Long> bookedSeatIds = seatCinemaRoomRepository.findSeatsToBeAvailable(formattedDate, currentTime);
 
         if (!bookedSeatIds.isEmpty()) {

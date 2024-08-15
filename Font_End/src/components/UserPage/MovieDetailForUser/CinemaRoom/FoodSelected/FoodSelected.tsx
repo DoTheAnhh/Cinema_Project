@@ -13,7 +13,7 @@ const FoodSelected: React.FC = () => {
     const [foods, setFoods] = useState<Foodd[]>([]);
     const [quantities, setQuantities] = useState<number[]>([]);
     const [movieData, setMovieData] = useState<any>(null);
-    
+
     const navigator = useNavigate();
 
     const handleQuantityChange = (index: number, value: number | null) => {

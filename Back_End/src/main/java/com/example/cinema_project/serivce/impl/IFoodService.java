@@ -13,6 +13,12 @@ import java.util.Optional;
 @Service
 public class IFoodService implements FoodService{
 
+    public class ResourceNotFoundException extends RuntimeException {
+        public ResourceNotFoundException(String message) {
+            super(message);
+        }
+    }
+
     @Autowired
     FoodRepository foodRepository;
 
@@ -48,6 +54,24 @@ public class IFoodService implements FoodService{
             return foodRepository.save(food);
         } else {
             throw new RuntimeException("Food not found with id: " + id);
+        }
+    }
+
+    @Override
+    public Food updateQuantity(Long id, FoodDTO foodDTO) {
+        Optional<Food> foodOptional = foodRepository.findById(id);
+        if (foodOptional.isPresent()) {
+            Food food = foodOptional.get();
+            int newQuantity = foodDTO.getQuantity();
+
+            if (newQuantity < 0) {
+                throw new IllegalArgumentException("Quantity cannot be negative");
+            }
+
+            food.setQuantity(newQuantity);
+            return foodRepository.save(food);
+        } else {
+            throw new ResourceNotFoundException("Food not found with id: " + id);
         }
     }
 }

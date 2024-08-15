@@ -1,7 +1,6 @@
 package com.example.cinema_project.dto;
 
 import com.example.cinema_project.entity.Customer;
-import com.example.cinema_project.entity.Movie;
 import lombok.Getter;
 import lombok.Setter;
 
