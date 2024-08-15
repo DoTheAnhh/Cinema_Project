@@ -6,6 +6,7 @@ import com.example.cinema_project.entity.ShowTime;
 import com.example.cinema_project.repository.SeatRepository;
 import com.example.cinema_project.repository.Seat_CinemaRoomRepository;
 import com.example.cinema_project.repository.ShowTimeRepository;
+import com.example.cinema_project.serivce.Seat_Cinema_RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,8 @@ public class ScheduledTasks {
     private ShowTimeRepository showTimeRepository;
     @Autowired
     private Seat_CinemaRoomRepository seatCinemaRoomRepository;
+    @Autowired
+    private Seat_Cinema_RoomService seatCinemaRoomService;
     @Autowired
     SeatRepository seatRepository;
 
@@ -45,7 +48,8 @@ public class ScheduledTasks {
         seatCinemaRoomRepository.saveAll(pendingSeats);
     }
 
-    public void updateStatusSeatAfterMovieEnd(){
-
+    @Scheduled(cron = "*/3 * * * * *")
+    public void checkAndUpdateSeatStatus() {
+        seatCinemaRoomService.checkAndMakeSeatsAvailable();
     }
 }
