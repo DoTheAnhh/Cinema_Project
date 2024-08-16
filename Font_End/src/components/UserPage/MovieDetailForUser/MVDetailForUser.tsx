@@ -12,6 +12,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import UserHeader from '../Header/UserHeader';
 import UserFooter from '../Footer/UserFooter';
+import moment from 'moment';
 
 interface DateObject {
     day: string;
@@ -20,6 +21,8 @@ interface DateObject {
 
 const MVDetailForUser: React.FC = () => {
     const { id } = useParams<string>();
+
+    const now = moment();
 
     const [movies, setMovies] = useState<Moviee>();
     const [showTimes, setShowTimes] = useState<ShowTimee[]>([]);
@@ -72,7 +75,7 @@ const MVDetailForUser: React.FC = () => {
     useEffect(() => {
         if (id) {
             fetchMovie();
-    
+
             // Kiểm tra xem có giá trị ngày được lưu trữ trong sessionStorage không
             const storedDate = sessionStorage.getItem('selectedDate');
             if (storedDate) {
@@ -414,35 +417,55 @@ const MVDetailForUser: React.FC = () => {
                                 }}>
                                     {theaterName}
                                 </div>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20 }}>
-                                    {times
-                                        .map(({ showTime }) => dayjs(showTime, 'HH:mm'))
-                                        .sort((a, b) => a.isBefore(b) ? -1 : 1)
-                                        .map((time, j) => (
-                                            <Button
-                                                key={j}
-                                                style={{
-                                                    width: 90,
-                                                    height: 35,
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    justifyContent: 'center',
-                                                    fontSize: '14px',
-                                                    margin: '4px'
-                                                }}
-                                                onClick={() => handleTimeClick(
-                                                    theaterName,
-                                                    time.format('HH:mm'),  // Thời gian bắt đầu đã định dạng
-                                                    calculateEndTime(time.format('HH:mm'), movies?.duration || 0), // Thời gian kết thúc từ dữ liệu showTimes
-                                                    times[j].cinemaRoomId,  // ID của phòng chiếu
-                                                    movies?.movieName || '', // Tên phim
-                                                    movies?.banner || '',   // Banner phim
-                                                    selectedDate?.date || '', // Ngày đã chọn
-                                                    movies?.ticketPrice || '' // Giá vé
-                                                )}                                            >
-                                                {time.format('HH:mm')}
-                                            </Button>
-                                        ))}
+                                <div className="container table" style={{ marginLeft: 200 }}>
+                                    {Object.entries(groupedShowTimes).map(([theaterName, times], i) => (
+                                        <div key={i} className="col-12 mb-3" style={{ marginTop: 20 }}>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: 20, marginLeft: -200 }}>
+                                                {times
+                                                    .map(({ showTime }) => dayjs(showTime, 'HH:mm'))
+                                                    .sort((a, b) => a.isBefore(b) ? -1 : 1)
+                                                    .map((time, j) => {
+                                                        const now = dayjs();
+                                                        const isPast = now.isAfter(time, 'minute');
+
+                                                        return (
+                                                            <Button
+                                                                key={j}
+                                                                style={{
+                                                                    width: 90,
+                                                                    height: 35,
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center',
+                                                                    fontSize: '14px',
+                                                                    margin: '4px',
+                                                                    backgroundColor: isPast ? 'gray' : '#F5F5F5',
+                                                                    color: isPast ? 'white' : 'black',
+                                                                    cursor: isPast ? 'not-allowed' : 'pointer'
+                                                                }}
+                                                                onClick={() => {
+                                                                    if (!isPast) {
+                                                                        handleTimeClick(
+                                                                            theaterName,
+                                                                            time.format('HH:mm'),
+                                                                            calculateEndTime(time.format('HH:mm'), movies?.duration || 0),
+                                                                            times[j].cinemaRoomId,
+                                                                            movies?.movieName || '',
+                                                                            movies?.banner || '',
+                                                                            selectedDate?.date || '',
+                                                                            movies?.ticketPrice || ''
+                                                                        );
+                                                                    }
+                                                                }}
+                                                                disabled={isPast}
+                                                            >
+                                                                {time.format('HH:mm')}
+                                                            </Button>
+                                                        );
+                                                    })}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
                         ))}
