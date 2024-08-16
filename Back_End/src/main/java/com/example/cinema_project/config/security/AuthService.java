@@ -139,7 +139,7 @@ public class AuthService {
     }
 
     private void sendResetPasswordEmail(String email, String token) {
-        String resetPasswordLink = "http://localhost:8080/auth/reset-password?token=" + token;
+        String resetPasswordLink = "http://localhost:5173/reset-password";
         String subject = "Password Reset Request";
         String body = "To reset your password, please click the following link: " + resetPasswordLink;
 
@@ -150,7 +150,7 @@ public class AuthService {
         ReqRes response = new ReqRes();
         try {
             String cleanedToken = token.trim().replace("\n", "");
-            
+
             Optional<Customer> optionalCustomer = customerRepository.findByResetToken(cleanedToken);
 
             if (optionalCustomer.isEmpty()) {

@@ -1,0 +1,23 @@
+.reset-password-form {
+    max-width: 400px; /* Kích thước form */
+    margin: 10% auto; /* Căn giữa */
+    padding: 20px; /* Khoảng đệm */
+    border-radius: 8px; /* Bo góc */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng nhẹ */
+    background-color: #fff; /* Nền trắng */
+}
+
+.reset-password-form .reset-password-form-button {
+    width: 100%; /* Nút chiếm toàn bộ chiều rộng */
+    border-radius: 4px; /* Bo góc cho nút */
+}
+
+.reset-password-form .logo-container {
+    text-align: center; /* Căn giữa logo */
+    margin-bottom: 20px; /* Khoảng cách dưới logo */
+}
+
+.reset-password-form .logo-image {
+    width: 100px; /* Kích thước logo */
+    height: auto;
+}

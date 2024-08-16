@@ -14,6 +14,8 @@ import FoodSelected from './components/UserPage/MovieDetailForUser/CinemaRoom/Fo
 import Payment from './components/UserPage/MovieDetailForUser/CinemaRoom/FoodSelected/Payment/Payment';
 import PaymentReturn from './components/UserPage/MovieDetailForUser/CinemaRoom/FoodSelected/Payment/PaymentReturn/PaymentReturn';
 import Register from './components/Login/Register/register';
+import ForgotPassword from './components/Login/ForgotPassword/ForgotPassword';
+import ResetPassword from './components/Login/ResetPassword/ResetPassword';
 
 interface RouteComponent {
   path: string;
@@ -34,6 +36,14 @@ function App() {
     {
       path: '/register',
       element: <Register />
+    },
+    {
+      path: '/forgot-password',
+      element: <ForgotPassword />
+    },
+    {
+      path: '/reset-password',
+      element: <ResetPassword />
     },
     {
       path: 'dotheanh/*',

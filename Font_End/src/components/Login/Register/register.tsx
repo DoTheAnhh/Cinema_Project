@@ -27,7 +27,7 @@ const Register: React.FC = () => {
         password: values.password,
         role: 'USER'
       });
-
+      message.success("Register successfully !")
       navigate('/');
 
     } catch (error: any) {
