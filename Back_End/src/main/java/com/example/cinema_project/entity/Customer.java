@@ -39,6 +39,8 @@ public class Customer implements UserDetails {
 
     private String role;
 
+    private String resetToken;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role));

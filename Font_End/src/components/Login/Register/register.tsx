@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Form, Input, message, Spin } from 'antd';
+import { Button, Form, Input, message, Spin } from 'antd';
 import { LockOutlined, MailOutlined, EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';

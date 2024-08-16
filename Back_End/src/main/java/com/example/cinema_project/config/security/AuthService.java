@@ -1,14 +1,18 @@
 package com.example.cinema_project.config.security;
 
+import com.example.cinema_project.config.mail.EmailService;
 import com.example.cinema_project.dto.ReqRes;
 import com.example.cinema_project.entity.Customer;
 import com.example.cinema_project.repository.CustomerRepository;
+import com.example.cinema_project.serivce.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthService {
@@ -17,13 +21,16 @@ public class AuthService {
     CustomerRepository customerRepository;
 
     @Autowired
+    CustomerService customerService;
+
+    @Autowired
     private JWTUtils jwtUtils;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private EmailService emailService;
 
     public ReqRes signUp(ReqRes registrationRequest) {
         ReqRes resp = new ReqRes();
@@ -60,10 +67,8 @@ public class AuthService {
 
             String passwordInDatabase = customer.getPassword();
 
-            // Kiểm tra nếu mật khẩu trong cơ sở dữ liệu có thể là mã hóa
             boolean passwordMatches = passwordEncoder.matches(signInRequest.getPassword(), passwordInDatabase);
 
-            // Nếu không khớp, thử kiểm tra mật khẩu văn bản thuần
             if (!passwordMatches) {
                 passwordMatches = signInRequest.getPassword().equals(passwordInDatabase);
             }
@@ -74,7 +79,6 @@ public class AuthService {
                 return response;
             }
 
-            // Tạo JWT và refresh token
             var jwt = jwtUtils.generateToken(customer);
             var refreshToken = jwtUtils.generateRefreshToken(new HashMap<>(), customer);
 
@@ -105,6 +109,70 @@ public class AuthService {
             response.setMessage("Succesfully Refresh Token");
         }
         response.setStatusCode(500);
+        return response;
+    }
+
+    public ReqRes forgotPassword(String email) {
+        ReqRes response = new ReqRes();
+        try {
+            Customer customer = customerRepository.findByEmail(email)
+                    .orElseThrow(() -> new RuntimeException("Email không tồn tại"));
+
+            // Tạo token mới
+            String token = jwtUtils.generateToken(customer);
+
+            // Cập nhật token vào cơ sở dữ liệu
+            customer.setResetToken(token.trim());
+            customerRepository.save(customer);
+
+            // Gửi email reset password
+            sendResetPasswordEmail(customer.getEmail(), token);
+
+            response.setStatusCode(200);
+            response.setMessage("Email đặt lại mật khẩu đã được gửi.");
+            response.setToken(token);
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setError(e.getMessage());
+        }
+        return response;
+    }
+
+    private void sendResetPasswordEmail(String email, String token) {
+        String resetPasswordLink = "http://localhost:8080/auth/reset-password?token=" + token;
+        String subject = "Password Reset Request";
+        String body = "To reset your password, please click the following link: " + resetPasswordLink;
+
+        emailService.sendEmail(email, subject, body);
+    }
+
+    public ReqRes resetPassword(String token, String newPassword) {
+        ReqRes response = new ReqRes();
+        try {
+            String cleanedToken = token.trim().replace("\n", "");
+            
+            Optional<Customer> optionalCustomer = customerRepository.findByResetToken(cleanedToken);
+
+            if (optionalCustomer.isEmpty()) {
+                response.setStatusCode(400);
+                response.setToken(token);
+                response.setMessage("Token không hợp lệ.");
+                return response;
+            }
+
+            Customer customer = optionalCustomer.get();
+
+            // Cập nhật mật khẩu và xóa token
+            customer.setPassword(passwordEncoder.encode(newPassword));
+            customer.setResetToken(null);
+            customerRepository.save(customer);
+
+            response.setStatusCode(200);
+            response.setMessage("Đặt lại mật khẩu thành công.");
+        } catch (RuntimeException e) {
+            response.setStatusCode(400);
+            response.setMessage(e.getMessage());
+        }
         return response;
     }
 }

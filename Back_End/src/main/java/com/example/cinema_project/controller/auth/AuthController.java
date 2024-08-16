@@ -4,10 +4,7 @@ import com.example.cinema_project.config.security.AuthService;
 import com.example.cinema_project.dto.ReqRes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,5 +26,15 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<ReqRes> refreshToken(@RequestBody ReqRes refreshTokenRequest) {
         return ResponseEntity.ok(authService.refreshToken(refreshTokenRequest));
+    }
+
+    @PostMapping("/forgot-password")
+    public ReqRes forgotPassword(@RequestBody ReqRes request) {
+        return authService.forgotPassword(request.getEmail());
+    }
+
+    @PostMapping("/reset-password")
+    public ReqRes resetPassword(@RequestParam String token, @RequestBody ReqRes request) {
+        return authService.resetPassword(token, request.getPassword());
     }
 }
