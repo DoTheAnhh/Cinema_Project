@@ -4,73 +4,62 @@ import { LockOutlined, MailOutlined, EyeOutlined, EyeInvisibleOutlined } from '@
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './css/index.css';
-import { useUserContext } from '../Context/UserContext';
 
-interface LoginResponse {
+interface RegisterResponse {
   token: string;
   refreshToken: string;
   name: string;
 }
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(false);
-  const { setUser } = useUserContext();
-
   const [passwordVisible, setPasswordVisible] = React.useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = React.useState(false);
 
-  const decodeJwt = (token: string) => {
-    const base64Url = token.split('.')[1];
-    const base64 = decodeURIComponent(atob(base64Url).replace(/\+/g, ' '));
-    return JSON.parse(base64);
-  };
+  const [form] = Form.useForm();
 
-  const togglePasswordVisibility = () => {
-    setPasswordVisible(prev => !prev);
-  };
-
-  const onLogin = async (values: any) => {
+  const onRegister = async (values: any) => {
     setLoading(true);
     try {
-      const response = await axios.post<LoginResponse>('http://localhost:8080/auth/signin', {
+      await axios.post<RegisterResponse>('http://localhost:8080/auth/signup', {
         email: values.email,
         password: values.password,
+        role: 'USER'
       });
 
-      if (response.data.token) {
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('refreshToken', response.data.refreshToken);
+      navigate('/');
 
-        const decodedToken = decodeJwt(response.data.token);
-        const user = { name: decodedToken.name, role: decodedToken.role };
-        localStorage.setItem('user', JSON.stringify(user));
-
-        setUser(user);
-
-        if (decodedToken.role === 'ADMIN') {
-          navigate('/dotheanh/home');
-        } else {
-          navigate('/user');
-        }
-
-        message.success('Login successful!');
-      } else {
-        message.error('Login failed!');
-      }
     } catch (error: any) {
-      const errorMessage = error.response?.data?.message || 'An error occurred during login!';
+      const errorMessage = error.response?.data?.message || 'An error occurred during registration!';
       message.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
+  const validateConfirmPassword = (_: any, value: string) => {
+    if (!value || value === form.getFieldValue('password')) {
+      return Promise.resolve();
+    }
+    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+  };
+
+  const togglePasswordVisibility = () => {
+    setPasswordVisible(prev => !prev);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setConfirmPasswordVisible(prev => !prev);
+  };
+
   return (
     <Form
-      name="normal_login"
-      className="login-form"
+      form={form}
+      name="normal_register"
+      className="register-form"
       initialValues={{ remember: true }}
-      onFinish={onLogin}
+      onFinish={onRegister}
     >
       <div className="logo-container">
         <img src='https://github.githubassets.com/favicons/favicon.png' alt="Logo" className="logo-image" />
@@ -99,20 +88,33 @@ const Login: React.FC = () => {
           }
         />
       </Form.Item>
-      <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-        <a className="login-form-forgot" href="">
-          Forgot password
-        </a>
+      <Form.Item
+        name="confirmPassword"
+        rules={[
+          { required: true, message: 'Please confirm your Password!' },
+          { validator: validateConfirmPassword }
+        ]}
+      >
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type={confirmPasswordVisible ? 'text' : 'password'}
+          placeholder="Confirm Password"
+          suffix={
+            <Button
+              type="text"
+              icon={confirmPasswordVisible ? <EyeInvisibleOutlined /> : <EyeOutlined />}
+              onClick={toggleConfirmPasswordVisibility}
+              style={{height: 10}}
+            />
+          }
+        />
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button" loading={loading}>
-          Sign in
+        <Button type="primary" htmlType="submit" className="register-form-button" loading={loading}>
+          Sign up
         </Button>
         <div style={{ marginTop: 10 }}>
-          Or <a href="/register">register now!</a>
+          Or <a href="/">login now!</a>
         </div>
       </Form.Item>
       {loading && (
@@ -124,4 +126,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;

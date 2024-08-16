@@ -34,7 +34,7 @@ public class SeatController {
         seatService.updateStatus(cinemaRoomId, seatId, status);
     }
 
-    @GetMapping("/check-status")
+    @GetMapping("/check-status") //check status sau để lập schedule sau 7p nếu đặt ghế sẽ tự động chuyển về status avaiable
     public ResponseEntity<SeatStatusDTO> checkSeatStatus(@RequestParam Long cinemaRoomId, @RequestParam Long seatId) {
         SeatStatusDTO statusDTO = seatService.getSeatStatus(cinemaRoomId, seatId);
         if (statusDTO != null) {

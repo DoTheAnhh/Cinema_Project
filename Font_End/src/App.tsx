@@ -13,6 +13,7 @@ import CinemaRoomBooking from './components/UserPage/MovieDetailForUser/CinemaRo
 import FoodSelected from './components/UserPage/MovieDetailForUser/CinemaRoom/FoodSelected/FoodSelected';
 import Payment from './components/UserPage/MovieDetailForUser/CinemaRoom/FoodSelected/Payment/Payment';
 import PaymentReturn from './components/UserPage/MovieDetailForUser/CinemaRoom/FoodSelected/Payment/PaymentReturn/PaymentReturn';
+import Register from './components/Login/Register/register';
 
 interface RouteComponent {
   path: string;
@@ -29,6 +30,10 @@ function App() {
     {
       path: '/',
       element: <Login />
+    },
+    {
+      path: '/register',
+      element: <Register />
     },
     {
       path: 'dotheanh/*',
