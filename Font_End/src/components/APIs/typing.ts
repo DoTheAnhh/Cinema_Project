@@ -73,6 +73,7 @@ export const API = {
     GET_ALL_SEAT: "",
     GET_SEAT_BY_CINEMA_ROOM: "/cinema-room",
     BOOK_SEAT: "/book",
+    CHECK_STATUSS: '/check-statuss'
   },
   FOOD: {
     GET_ALL_FOOD: "",

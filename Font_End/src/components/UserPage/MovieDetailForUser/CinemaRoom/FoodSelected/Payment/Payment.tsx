@@ -6,6 +6,7 @@ import MovieInfo from '../../MovieInfo';
 import { Foodd } from '../../../../../Types';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API, LOCALHOST, REQUEST_MAPPING } from '../../../../../APIs/typing';
 const Payment: React.FC = () => {
     const [movieData, setMovieData] = useState<any>(null);
     const [foods, setFoods] = useState<Foodd[]>([]);
@@ -14,6 +15,8 @@ const Payment: React.FC = () => {
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const navigate = useNavigate();
+
+    const navigator = useNavigate();
 
     useEffect(() => {
         const storedData = sessionStorage.getItem('movieBookingData');
@@ -71,6 +74,37 @@ const Payment: React.FC = () => {
             }
         }
     };
+
+    useEffect(() => {
+        const checkSeatsStatus = async () => {
+            const seatIds = movieData?.selectedSeats || [];
+            const cinemaRoomId = movieData?.cinemaRoom?.id;
+
+            if (seatIds.length > 0 && cinemaRoomId) {
+                try {
+                    const res = await axios.post(LOCALHOST + REQUEST_MAPPING.SEAT + API.SEAT.CHECK_STATUSS, {
+                        cinemaRoomId,
+                        seatIds: Array.from(seatIds)
+                    });
+
+                    const updatedSeats = res.data;
+                    const availableSeat = updatedSeats.find((seat: any) => seat.status === 'available');
+
+                    if (availableSeat) {
+                        message.warning('Một hoặc nhiều ghế của bạn đã trở về trạng thái "available". Bạn sẽ được chuyển hướng về trang chủ.');
+                        sessionStorage.removeItem('movieBookingData');
+                        navigator('/user');
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi kiểm tra trạng thái ghế:', error);
+                }
+            }
+        };
+
+        const intervalId = setInterval(checkSeatsStatus, 30000);
+
+        return () => clearInterval(intervalId);
+    }, [movieData, navigator]);
     
     const backToHome = () => {
         sessionStorage.removeItem('selectedFoods');

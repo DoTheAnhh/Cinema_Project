@@ -69,6 +69,7 @@ public class SecurityConfig {
                                 .requestMatchers("/seats/cinema-room/*/show-time/*").permitAll()
                                 .requestMatchers("/seats/update-status").permitAll()
                                 .requestMatchers("/seats/check-status").permitAll()
+                                .requestMatchers("/seats/check-statuss").permitAll()
 
                                 .requestMatchers("/foods").permitAll()
                                 .requestMatchers("/foods/update-quantity-food/*").permitAll()

@@ -1,5 +1,7 @@
 package com.example.cinema_project.controller;
 
+import com.example.cinema_project.dto.CheckSeatStatusReqDTO;
+import com.example.cinema_project.dto.CheckSeatStatusResTO;
 import com.example.cinema_project.dto.SeatDTO;
 import com.example.cinema_project.dto.SeatStatusDTO;
 import com.example.cinema_project.entity.Seat;
@@ -42,4 +44,9 @@ public class SeatController {
         }
     }
 
+    @PostMapping("/check-statuss") //check status sau khi chon ghe neu sau 7p ma k xong se tro ve trang home
+    public ResponseEntity<List<CheckSeatStatusResTO>> checkSeatStatus(@RequestBody CheckSeatStatusReqDTO request) {
+        List<CheckSeatStatusResTO> seatStatus = seatService.checkSeatStatus(request.getCinemaRoomId(), request.getSeatIds());
+        return ResponseEntity.ok(seatStatus);
+    }
 }

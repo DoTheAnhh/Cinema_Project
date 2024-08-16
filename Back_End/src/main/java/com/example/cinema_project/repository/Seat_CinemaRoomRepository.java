@@ -26,4 +26,6 @@ public interface Seat_CinemaRoomRepository extends JpaRepository<Seat_Cinema_Roo
     List<Long> findSeatsToBeAvailable(@Param("currentDate") Date currentDate,
                                       @Param("currentTime") String currentTime);
 
+    List<Seat_Cinema_Room> findByCinemaRoomIdAndSeatIdIn(Long cinemaRoomId, List<Long> seatIds);
+
 }

@@ -161,9 +161,13 @@ const CinemaRoomBooking: React.FC = () => {
         return;
       }
 
+      // Cập nhật trạng thái của các ghế thành 'pending'
       await Promise.all(seatIds.map(seatId =>
         updateStatusSeat(cinemaRoomId.toString(), seatId.toString(), 'pending')
       ));
+
+      // Sau khi cập nhật, thiết lập trạng thái ghế là 'pending'
+      const statusSelectedSeats = seatIds.map(() => 'pending');
 
       sessionStorage.setItem('movieBookingData', JSON.stringify({
         banner,
@@ -173,6 +177,7 @@ const CinemaRoomBooking: React.FC = () => {
         cinemaRoom,
         currentSelectedTime,
         selectedSeats: Array.from(selectedSeats),
+        statusSelectedSeats,
         seats,
         currentTicketPrice,
         showTime: currentSelectedTime,
@@ -187,6 +192,7 @@ const CinemaRoomBooking: React.FC = () => {
       message.error('Đã xảy ra lỗi khi xử lý ghế. Vui lòng thử lại.');
     }
   };
+
 
   const backToHome = () => {
     navigator(`/user`);
@@ -215,7 +221,7 @@ const CinemaRoomBooking: React.FC = () => {
   return (
     <>
       <UserHeader />
-      <div className="container" style={{ display: 'flex', marginLeft: 150, marginTop: 120, fontFamily: 'Noto Sans JP, sans-serif'}}>
+      <div className="container" style={{ display: 'flex', marginLeft: 150, marginTop: 120, fontFamily: 'Noto Sans JP, sans-serif' }}>
         <div className="table" style={{ flex: 2, marginRight: 20 }}>
           <div className="col-12 mb-3" style={{ marginTop: 20 }}>
             <div style={{

@@ -1,5 +1,6 @@
 package com.example.cinema_project.serivce;
 
+import com.example.cinema_project.dto.CheckSeatStatusResTO;
 import com.example.cinema_project.dto.SeatDTO;
 import com.example.cinema_project.dto.SeatStatusDTO;
 import com.example.cinema_project.entity.Seat;
@@ -12,4 +13,6 @@ public interface SeatService {
     void updateStatus(Long cinemaRoomId, Long seatId, String status);
 
     SeatStatusDTO getSeatStatus(Long cinemaRoomId, Long seatId);
+
+    List<CheckSeatStatusResTO> checkSeatStatus(Long cinemaRoomId, List<Long> seatIds);
 }
