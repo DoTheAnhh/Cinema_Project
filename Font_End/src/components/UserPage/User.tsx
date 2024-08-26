@@ -31,12 +31,6 @@ const User: React.FC = () => {
     objectFit: 'cover'
   };
 
-  const fontStyle: React.CSSProperties = {
-    fontFamily: '"Noto Sans JP", sans-serif',
-    fontSize: '13px',
-    color: 'black'
-  };
-
   const [movies, setMovies] = useState<Moviee[]>([]);
 
   const fetchMovies = async () => {
@@ -63,6 +57,7 @@ const User: React.FC = () => {
               textAlign: 'center',
               background: colorBgContainer,
               borderRadius: borderRadiusLG,
+              height: 1800
             }}
           >
             <Carousel autoplay style={{ width: '100%' }} arrows infinite={true}>

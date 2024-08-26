@@ -51,8 +51,6 @@ const CinemaRoomBooking: React.FC = () => {
 
   const timesForSelectedTheater = groupedShowTimes[selectedTheater] || [];
 
-  console.log("currentSelectedDate", currentSelectedDate);
-
 
   const handleTimeClick = (time: string, date: string, cinemaRoomId: number, ticketPrice: number) => {
     setCurrentSelectedTime(time);
@@ -75,7 +73,6 @@ const CinemaRoomBooking: React.FC = () => {
     try {
       const response = await fetch(`${LOCALHOST}${REQUEST_MAPPING.SEAT}${API.SEAT.GET_ALL_SEAT}/cinema-room/${currentCinemaRoomId}/show-time/${currentSelectedTime}`);
       const data = await response.json();
-      console.log('Fetched seats data:', data);
 
       setSeats(data.map((item: any) => ({
         ...item,
@@ -114,7 +111,6 @@ const CinemaRoomBooking: React.FC = () => {
           status: status,
         }
       });
-      console.log(`Cập nhật trạng thái ghế ${seatId} thành ${status} thành công`);
     } catch (error) {
       console.error('Lỗi khi cập nhật trạng thái ghế:', error);
     }
@@ -235,23 +231,30 @@ const CinemaRoomBooking: React.FC = () => {
               {timesForSelectedTheater
                 .map(({ showTime }) => dayjs(showTime, 'HH:mm'))
                 .sort((a, b) => a.isBefore(b) ? -1 : 1)
-                .map((time, j) => (
-                  <Button
-                    key={j}
-                    style={{
-                      width: 90,
-                      height: 35,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontSize: '14px',
-                      margin: '4px',
-                    }}
-                    onClick={() => handleTimeClick(time.format('HH:mm'), selectedDate || '', timesForSelectedTheater[j].cinemaRoomId, Number(timesForSelectedTheater[j].ticketPrice))}
-                  >
-                    {time.format('HH:mm')}
-                  </Button>
-                ))}
+                .map((time, j) => {
+                  const formattedTime = time.format('HH:mm');
+                  const isSelected = formattedTime === currentSelectedTime;
+                  return (
+                    <Button
+                      key={j}
+                      style={{
+                        width: 90,
+                        height: 35,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '14px',
+                        margin: '4px',
+                        backgroundColor: isSelected ? '#FFA500' : '#ffffff',
+                        color: isSelected ? '#ffffff' : '#000000',
+                        border: isSelected ? '2px solid #FFA500' : '1px solid #FFA500'
+                      }}
+                      onClick={() => handleTimeClick(time.format('HH:mm'), selectedDate || '', timesForSelectedTheater[j].cinemaRoomId, Number(timesForSelectedTheater[j].ticketPrice))}
+                    >
+                      {time.format('HH:mm')}
+                    </Button>
+                  )
+                })}
             </div>
           </div>
           <div className="center-container" style={{ marginLeft: 0, width: 760 }}>
@@ -260,7 +263,7 @@ const CinemaRoomBooking: React.FC = () => {
                 {Object.entries(groupedSeats).reverse().map(([rowNumber, rowSeats]) => (
                   <li key={rowNumber} className="seat-row">
                     <span className="row-label left-label" style={{ fontFamily: 'Noto Sans JP, sans-serif' }}>{rowNumber}</span>
-                    <div className="seat-grid" style={{ marginLeft: 200 }}>
+                    <div className="seat-grid" style={{ marginLeft: 140 }}>
                       {rowSeats.map(seat => (
                         <div
                           key={seat.seatId}

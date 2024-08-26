@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './css/index.css';
 import { useUserContext } from '../Context/UserContext';
+import { LOCALHOST } from '../APIs/typing';
 
 interface LoginResponse {
   token: string;
@@ -32,7 +33,7 @@ const Login: React.FC = () => {
   const onLogin = async (values: any) => {
     setLoading(true);
     try {
-      const response = await axios.post<LoginResponse>('http://localhost:8080/auth/signin', {
+      const response = await axios.post<LoginResponse>(LOCALHOST + '/auth/signin', {
         email: values.email,
         password: values.password,
       });
@@ -73,7 +74,7 @@ const Login: React.FC = () => {
       onFinish={onLogin}
     >
       <div className="logo-container">
-        <img src='https://github.githubassets.com/favicons/favicon.png' alt="Logo" className="logo-image" />
+        <img src='/src/assets/Logo.jpg' alt="Logo" className="logo-image" />
       </div>
       <Form.Item
         name="email"

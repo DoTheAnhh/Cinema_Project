@@ -3,6 +3,7 @@ import { Button, Form, Input, message, Spin } from 'antd';
 import { MailOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import './css/index.css'
+import { LOCALHOST } from '../../APIs/typing';
 
 const ForgotPassword: React.FC = () => {
     const [loading, setLoading] = React.useState(false);
@@ -10,7 +11,7 @@ const ForgotPassword: React.FC = () => {
     const onFinish = async (values: { email: string }) => {
         setLoading(true);
         try {
-            const response = await axios.post('http://localhost:8080/auth/forgot-password', { email: values.email });
+            const response = await axios.post(LOCALHOST + '/auth/forgot-password', { email: values.email });
 
             if (response.data.statusCode === 200) {
                 message.success('Email đặt lại mật khẩu đã được gửi.');
@@ -32,7 +33,7 @@ const ForgotPassword: React.FC = () => {
             onFinish={onFinish}
         >
             <div className="logo-container">
-                <img src='https://github.githubassets.com/favicons/favicon.png' alt="Logo" className="logo-image" />
+                <img src='/src/assets/Logo.jpg' alt="Logo" className="logo-image" />
             </div>
             <Form.Item
                 name="email"
@@ -44,6 +45,9 @@ const ForgotPassword: React.FC = () => {
                 <Button type="primary" htmlType="submit" className="forgot-password-form-button" loading={loading}>
                     Forgot password
                 </Button>
+                <div style={{ marginTop: 10 }}>
+                    Or <a href="/">login now!</a>
+                </div>
             </Form.Item>
             {loading && (
                 <div style={{ textAlign: 'center', marginTop: 20 }}>

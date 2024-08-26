@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Button, Form, Input, message, Spin } from 'antd';
 import './css/index.css';
 import axios from 'axios';
+import { LOCALHOST } from '../../APIs/typing';
 
 const ResetPassword: React.FC = () => {
     const [loading, setLoading] = React.useState(false);
@@ -23,7 +24,7 @@ const ResetPassword: React.FC = () => {
         
         
         try {
-            const response = await axios.post('http://localhost:8080/auth/reset-password', { password: values.password }, {
+            const response = await axios.post(LOCALHOST + '/auth/reset-password', { password: values.password }, {
                 params: { token }
             });
 
@@ -47,7 +48,7 @@ const ResetPassword: React.FC = () => {
             onFinish={onFinish}
         >
             <div className="logo-container">
-                <img src='https://github.githubassets.com/favicons/favicon.png' alt="Logo" className="logo-image" />
+                <img src='/src/assets/Logo.jpg' alt="Logo" className="logo-image" />
             </div>
             <Form.Item
                 name="password"
