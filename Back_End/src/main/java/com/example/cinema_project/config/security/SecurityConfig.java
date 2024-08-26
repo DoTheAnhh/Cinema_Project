@@ -109,6 +109,8 @@ public class SecurityConfig {
                                 .requestMatchers("/foods/insert-food").hasAnyAuthority( "ADMIN")
                                 .requestMatchers("/foods/edit-food/*").hasAnyAuthority( "ADMIN")
 
+                                .requestMatchers("/seat-cinema-rooms/insert-seat-cinema-room").hasAnyAuthority( "ADMIN")
+
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider()).addFilterBefore(

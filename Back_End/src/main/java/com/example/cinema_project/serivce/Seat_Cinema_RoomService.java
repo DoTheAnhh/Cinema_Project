@@ -12,4 +12,6 @@ public interface Seat_Cinema_RoomService {
     void checkAndMakeSeatsAvailable();
 
     Page<SeatCinemaRoomDTO> findAll(Pageable pageable);
+
+    List<Seat_Cinema_Room> insertSeatCinemaRoom(SeatCinemaRoomDTO seatCinemaRoomDTO);
 }

@@ -1,14 +1,21 @@
 package com.example.cinema_project.controller;
 
+import com.example.cinema_project.dto.MovieDTO;
 import com.example.cinema_project.dto.SeatCinemaRoomDTO;
+import com.example.cinema_project.entity.Movie;
+import com.example.cinema_project.entity.Seat_Cinema_Room;
 import com.example.cinema_project.serivce.Seat_Cinema_RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin("*")
@@ -22,5 +29,16 @@ public class Seat_Cinema_RoomController {
         Pageable pageable = PageRequest.of(page, size);
         return seatCinemaRoomService.findAll(pageable);
     }
+
+    @PostMapping("/insert-seat-cinema-room")
+    public ResponseEntity<List<Seat_Cinema_Room>> addSeats(@RequestBody SeatCinemaRoomDTO seatCinemaRoomDTO) {
+        try {
+            List<Seat_Cinema_Room> savedSeats = seatCinemaRoomService.insertSeatCinemaRoom(seatCinemaRoomDTO);
+            return new ResponseEntity<>(savedSeats, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 }
 
