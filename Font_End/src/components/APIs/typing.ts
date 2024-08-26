@@ -12,6 +12,7 @@ export const REQUEST_MAPPING = {
   CUSTOMER: "/customers",
   SEAT: "/seats",
   FOOD: "/foods",
+  SEAT_CINEMA_ROOM: '/seat-cinema-rooms'
 };
 
 export const API = {
@@ -80,5 +81,12 @@ export const API = {
     INSERT_FOOD: "/insert-food",
     EDIT_FOOD: "/edit-food",
     UPDATE_QUANTITY_FOOD:'/update-quantity-food'
+  },
+  SEAT_CINEMA_ROOM: {
+    GETALL_SEAT_CINEMA_ROOM: "",
+    INSERT_SEAT_CINEMA_ROOM: "/insert-seat-cinema-room",
+    EDIT_SEAT_CINEMA_ROOM: "/edit-seat-cinema-room",
+    DELETE_SEAT_CINEMA_ROOM: "/delete-seat-cinema-room",
+    SEARCH_SEAT_CINEMA_ROOM: "/search-seat-cinema-rooms",
   },
 };

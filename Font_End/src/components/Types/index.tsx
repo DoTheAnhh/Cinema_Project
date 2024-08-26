@@ -81,3 +81,12 @@ export interface Foodd {
 
 }
 
+export interface seatCinemaRoomm {
+    rowNumber: string
+    seatNumber: number
+    seatType: any
+    cinemaRoomName: string
+    theaters: Theaterr
+    status: string
+}
+

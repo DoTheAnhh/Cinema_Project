@@ -17,6 +17,7 @@ import ShowTime from "../ShowTime/ShowTime";
 import ListCustomer from "../Customer/ListCustomer";
 import Customer from "../Customer/Customer";
 import { useUserContext } from "../Context/UserContext";
+import ListSeatCinemaRoom from "../SeatCinemaRoom/ListSeatCinemaRoom";
 const Layouts: React.FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);
@@ -73,6 +74,9 @@ const Layouts: React.FC = () => {
           <Menu.Item key="6" icon={<ShopOutlined />}>
             <Link to="/dotheanh/customers">Customer</Link>
           </Menu.Item>
+          <Menu.Item key="7" icon={<ShopOutlined />}>
+            <Link to="/dotheanh/seat-cinema-rooms">Customer</Link>
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout className="site-layout">
@@ -116,6 +120,8 @@ const Layouts: React.FC = () => {
             <Route path="/customers" element={<ListCustomer />} />
             <Route path="/customers/customer" element={<Customer />} />
             <Route path="/customers/customer/:id" element={<Customer />} />
+
+            <Route path="/seat-cinema-rooms" element={<ListSeatCinemaRoom />} />
           </Routes>
         </Content>
       </Layout>

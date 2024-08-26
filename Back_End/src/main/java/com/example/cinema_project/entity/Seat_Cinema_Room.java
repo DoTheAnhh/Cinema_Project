@@ -27,7 +27,5 @@ public class Seat_Cinema_Room {
     private CinemaRoom cinemaRoom;
 
     private String status;
-
-    private LocalDateTime expirationTime;
 }
 
