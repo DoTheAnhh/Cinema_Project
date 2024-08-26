@@ -1,6 +1,6 @@
 package com.example.cinema_project.serivce.impl;
 
-import com.example.cinema_project.dto.MovieDTO;
+import com.example.cinema_project.dto.Movie.MovieDTO;
 import com.example.cinema_project.entity.Actor;
 import com.example.cinema_project.entity.Movie;
 import com.example.cinema_project.entity.MovieType;

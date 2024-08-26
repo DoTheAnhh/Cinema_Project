@@ -1,6 +1,6 @@
 package com.example.cinema_project.controller;
 
-import com.example.cinema_project.dto.CustomerDTO;
+import com.example.cinema_project.dto.Customer.CustomerDTO;
 import com.example.cinema_project.entity.Customer;
 import com.example.cinema_project.serivce.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;

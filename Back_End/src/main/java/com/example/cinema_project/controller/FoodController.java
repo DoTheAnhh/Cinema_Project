@@ -1,6 +1,6 @@
 package com.example.cinema_project.controller;
 
-import com.example.cinema_project.dto.FoodDTO;
+import com.example.cinema_project.dto.Food.FoodDTO;
 import com.example.cinema_project.entity.Food;
 import com.example.cinema_project.serivce.FoodService;
 import com.example.cinema_project.serivce.impl.IFoodService;

@@ -1,8 +1,9 @@
 package com.example.cinema_project.serivce;
 
-import com.example.cinema_project.dto.CheckSeatStatusResTO;
-import com.example.cinema_project.dto.SeatDTO;
-import com.example.cinema_project.dto.SeatStatusDTO;
+import com.example.cinema_project.dto.Seat.CheckSeatStatusResDTO;
+import com.example.cinema_project.dto.Seat.SeatDTO;
+import com.example.cinema_project.dto.Seat.SeatDTOGetAllInSeatCinemaRoom;
+import com.example.cinema_project.dto.Seat.SeatStatusDTO;
 import com.example.cinema_project.entity.Seat;
 
 import java.util.List;
@@ -14,5 +15,7 @@ public interface SeatService {
 
     SeatStatusDTO getSeatStatus(Long cinemaRoomId, Long seatId);
 
-    List<CheckSeatStatusResTO> checkSeatStatus(Long cinemaRoomId, List<Long> seatIds);
+    List<CheckSeatStatusResDTO> checkSeatStatus(Long cinemaRoomId, List<Long> seatIds);
+
+    List<SeatDTOGetAllInSeatCinemaRoom> findAll();
 }

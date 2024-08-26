@@ -157,21 +157,23 @@ const MVDetailForUser: React.FC = () => {
         if (!isLoggedIn) {
             navigate('/');
         } else {
+            console.log('cinemaRoomId in handleTimeClick:', cinemaRoomId); // Debugging line
             navigate('/cinema-room-booking', {
                 state: {
                     selectedTheater: theaterName,
                     showTimes: showTimes.filter(st => st.cinemaRoom.theaters.theaterName === theaterName),
                     selectedTime: time,
                     selectedTimeEnd: timeEnd,
-                    cinemaRoomId: cinemaRoomId,
+                    cinemaRoomId: cinemaRoomId, // Ensure this is correctly passed
                     movieName: movieName,
                     banner: banner,
                     selectedDate: selectedDate,
                     ticketPrice: ticketPrice
                 }
             });
-        };
+        }
     }
+
 
     const embedUrl = movies?.trailer ? getEmbedUrl(movies.trailer) : null;
 
@@ -186,6 +188,17 @@ const MVDetailForUser: React.FC = () => {
         const end = start.add(duration, 'minute');
         return roundUpToNearestHalfHour(end).format('HH:mm');
     };
+
+    // Ví dụ sắp xếp trước khi hiển thị
+    const sortedShowTimes = showTimes.sort((a, b) => {
+        if (a.cinemaRoom.id === b.cinemaRoom.id) {
+            return a.showTime.localeCompare(b.showTime);
+        }
+        return a.cinemaRoom.id - b.cinemaRoom.id;
+    });
+    useEffect(() => {
+        setShowTimes(sortedShowTimes);
+    }, [showTimes]);
 
     return (
         <>
@@ -457,6 +470,7 @@ const MVDetailForUser: React.FC = () => {
                                                                         );
                                                                     }
                                                                 }}
+
                                                                 disabled={isPast}
                                                             >
                                                                 {time.format('HH:mm')}

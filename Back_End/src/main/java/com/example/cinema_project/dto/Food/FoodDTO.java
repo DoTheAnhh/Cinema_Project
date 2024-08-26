@@ -1,4 +1,4 @@
-package com.example.cinema_project.dto;
+package com.example.cinema_project.dto.Food;
 
 import lombok.Getter;
 import lombok.Setter;

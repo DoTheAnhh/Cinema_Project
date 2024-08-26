@@ -1,11 +1,7 @@
 package com.example.cinema_project.controller;
 
-import com.example.cinema_project.dto.CheckSeatStatusReqDTO;
-import com.example.cinema_project.dto.CheckSeatStatusResTO;
-import com.example.cinema_project.dto.SeatDTO;
-import com.example.cinema_project.dto.SeatStatusDTO;
+import com.example.cinema_project.dto.Seat.*;
 import com.example.cinema_project.entity.Seat;
-import com.example.cinema_project.repository.SeatRepository;
 import com.example.cinema_project.serivce.SeatService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +17,11 @@ public class SeatController {
 
     @Autowired
     SeatService seatService;
+
+    @GetMapping("")
+    public List<SeatDTOGetAllInSeatCinemaRoom> findAll(){
+        return seatService.findAll();
+    }
 
     @GetMapping("/cinema-room/{cinemaRoomId}/show-time/{showTime}")
     public List<SeatDTO> getSeatsByCinemaRoomAndShowTime(
@@ -45,8 +46,8 @@ public class SeatController {
     }
 
     @PostMapping("/check-statuss") //check status sau khi chon ghe neu sau 7p ma k xong se tro ve trang home
-    public ResponseEntity<List<CheckSeatStatusResTO>> checkSeatStatus(@RequestBody CheckSeatStatusReqDTO request) {
-        List<CheckSeatStatusResTO> seatStatus = seatService.checkSeatStatus(request.getCinemaRoomId(), request.getSeatIds());
+    public ResponseEntity<List<CheckSeatStatusResDTO>> checkSeatStatus(@RequestBody CheckSeatStatusReqDTO request) {
+        List<CheckSeatStatusResDTO> seatStatus = seatService.checkSeatStatus(request.getCinemaRoomId(), request.getSeatIds());
         return ResponseEntity.ok(seatStatus);
     }
 }

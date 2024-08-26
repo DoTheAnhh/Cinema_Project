@@ -1,4 +1,4 @@
-package com.example.cinema_project.dto;
+package com.example.cinema_project.dto.Login;
 
 import com.example.cinema_project.entity.Customer;
 import lombok.Getter;

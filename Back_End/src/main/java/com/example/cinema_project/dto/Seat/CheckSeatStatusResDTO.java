@@ -1,4 +1,4 @@
-package com.example.cinema_project.dto;
+package com.example.cinema_project.dto.Seat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CheckSeatStatusResTO {
+public class CheckSeatStatusResDTO {
     private Long seatId;
     private String status;
 }

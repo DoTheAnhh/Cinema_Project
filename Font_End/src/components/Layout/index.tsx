@@ -123,7 +123,8 @@ const Layouts: React.FC = () => {
             <Route path="/customers/customer/:id" element={<Customer />} />
 
             <Route path="/seat-cinema-rooms" element={<ListSeatCinemaRoom />} />
-            <Route path="/seat-cinema-rooms/:id" element={<SeatCinemaRoom />} />
+            <Route path="/seat-cinema-rooms/seat-cinema-room" element={<SeatCinemaRoom />} />
+            <Route path="/seat-cinema-rooms/seat-cinema-room/:id" element={<SeatCinemaRoom />} />
           </Routes>
         </Content>
       </Layout>

@@ -1,9 +1,7 @@
 package com.example.cinema_project.serivce.impl;
 
-import com.example.cinema_project.dto.ActorDTO;
-import com.example.cinema_project.dto.MovieTypeDTO;
+import com.example.cinema_project.dto.Actor.ActorDTO;
 import com.example.cinema_project.entity.Actor;
-import com.example.cinema_project.entity.MovieType;
 import com.example.cinema_project.repository.ActorRepository;
 import com.example.cinema_project.serivce.ActorService;
 import org.springframework.beans.factory.annotation.Autowired;

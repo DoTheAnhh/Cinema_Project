@@ -1,6 +1,6 @@
 package com.example.cinema_project.serivce.impl;
 
-import com.example.cinema_project.dto.MovieTypeDTO;
+import com.example.cinema_project.dto.MovieType.MovieTypeDTO;
 import com.example.cinema_project.entity.MovieType;
 import com.example.cinema_project.repository.MovieTypeRepository;
 import com.example.cinema_project.serivce.MovieTypeService;

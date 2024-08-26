@@ -1,6 +1,6 @@
 package com.example.cinema_project.serivce.impl;
 
-import com.example.cinema_project.dto.CinemaRoomDTO;
+import com.example.cinema_project.dto.CinemaRoom.CinemaRoomDTO;
 import com.example.cinema_project.entity.CinemaRoom;
 import com.example.cinema_project.entity.Theater;
 import com.example.cinema_project.repository.CinemaRoomRepository;

@@ -1,13 +1,14 @@
 package com.example.cinema_project.serivce.impl;
 
-import com.example.cinema_project.dto.CheckSeatStatusResTO;
-import com.example.cinema_project.dto.SeatDTO;
-import com.example.cinema_project.dto.SeatStatusDTO;
+import com.example.cinema_project.dto.Seat.CheckSeatStatusResDTO;
+import com.example.cinema_project.dto.Seat.SeatDTO;
+import com.example.cinema_project.dto.Seat.SeatDTOGetAllInSeatCinemaRoom;
+import com.example.cinema_project.dto.Seat.SeatStatusDTO;
+import com.example.cinema_project.entity.Seat;
 import com.example.cinema_project.entity.Seat_Cinema_Room;
 import com.example.cinema_project.repository.SeatRepository;
 import com.example.cinema_project.repository.Seat_CinemaRoomRepository;
 import com.example.cinema_project.serivce.SeatService;
-import com.example.cinema_project.serivce.Seat_Cinema_RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,13 +40,30 @@ public class ISeatService implements SeatService {
     }
 
     @Override
-    public List<CheckSeatStatusResTO> checkSeatStatus(Long cinemaRoomId, List<Long> seatIds) {
+    public List<CheckSeatStatusResDTO> checkSeatStatus(Long cinemaRoomId, List<Long> seatIds) {
         // Tìm các ghế theo cinemaRoomId và seatIds
         List<Seat_Cinema_Room> seats = seatCinemaRoomRepository.findByCinemaRoomIdAndSeatIdIn(cinemaRoomId, seatIds);
 
         // Chuyển đổi kết quả thành danh sách SeatStatusResponse
         return seats.stream()
-                .map(seat -> new CheckSeatStatusResTO(seat.getId(), seat.getStatus()))
+                .map(seat -> new CheckSeatStatusResDTO(seat.getId(), seat.getStatus()))
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<SeatDTOGetAllInSeatCinemaRoom> findAll() {
+        // Lấy danh sách ghế từ repository
+        List<Seat> seats = seatRepository.findAll();
+
+        // Ánh xạ danh sách ghế sang danh sách SeatDTO
+        return seats.stream()
+                .map(seat -> new SeatDTOGetAllInSeatCinemaRoom(
+                        seat.getSeatType(),
+                        seat.getId(),
+                        seat.getSeatNumber(),
+                        seat.getRowNumber()
+                ))
+                .collect(Collectors.toList());
+    }
+
 }

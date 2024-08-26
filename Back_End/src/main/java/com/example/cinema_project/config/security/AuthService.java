@@ -1,18 +1,16 @@
 package com.example.cinema_project.config.security;
 
 import com.example.cinema_project.config.mail.EmailService;
-import com.example.cinema_project.dto.ReqRes;
+import com.example.cinema_project.dto.Login.ReqRes;
 import com.example.cinema_project.entity.Customer;
 import com.example.cinema_project.repository.CustomerRepository;
 import com.example.cinema_project.serivce.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class AuthService {

@@ -1,4 +1,4 @@
-package com.example.cinema_project.dto;
+package com.example.cinema_project.dto.Seat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

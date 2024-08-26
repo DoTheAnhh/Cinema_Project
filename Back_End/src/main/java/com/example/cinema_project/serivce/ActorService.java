@@ -1,6 +1,6 @@
 package com.example.cinema_project.serivce;
 
-import com.example.cinema_project.dto.ActorDTO;
+import com.example.cinema_project.dto.Actor.ActorDTO;
 import com.example.cinema_project.entity.Actor;
 
 import java.util.List;

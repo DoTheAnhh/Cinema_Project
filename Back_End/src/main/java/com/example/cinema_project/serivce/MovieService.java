@@ -1,6 +1,6 @@
 package com.example.cinema_project.serivce;
 
-import com.example.cinema_project.dto.MovieDTO;
+import com.example.cinema_project.dto.Movie.MovieDTO;
 import com.example.cinema_project.entity.Movie;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

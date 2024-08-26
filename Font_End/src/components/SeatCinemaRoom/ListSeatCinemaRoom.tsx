@@ -3,8 +3,8 @@ import { seatCinemaRoomm } from '../Types';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 import axios from 'axios';
 import { EditFilled } from "@ant-design/icons"
-import { Button, Pagination, Table, Tooltip } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Button, Col, Pagination, Row, Table, Tooltip } from 'antd';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ListSeatCinemaRoom: React.FC = () => {
 
@@ -36,7 +36,7 @@ const ListSeatCinemaRoom: React.FC = () => {
 
     const editSeatCinemaRoom = (id: number) => {
         navigator(`/dotheanh/seat-cinema-rooms/seat-cinema-room/${id}`);
-      };
+    };
 
     const columns = [
         {
@@ -109,6 +109,13 @@ const ListSeatCinemaRoom: React.FC = () => {
 
     return (
         <>
+            <Row style={{float: 'right', marginBottom: 10}}>
+                <Col xs={24} md={12} lg={3} style={{ marginLeft: 500 }}>
+                    <Button type="primary" style={{ marginLeft: 10 }}>
+                        <Link to="/dotheanh/seat-cinema-rooms/seat-cinema-room">New seat cinema room</Link>
+                    </Button>
+                </Col>
+            </Row>
             <Table
                 className="table table-striped mt-3"
                 columns={columns}

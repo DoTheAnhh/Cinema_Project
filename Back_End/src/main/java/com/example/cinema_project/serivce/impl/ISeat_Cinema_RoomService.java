@@ -1,8 +1,8 @@
 package com.example.cinema_project.serivce.impl;
 
-import com.example.cinema_project.dto.SeatCinemaRoomDTO;
+import com.example.cinema_project.dto.SeatCinemaRoom.GetByIdSeatCinemaRoomDTO;
+import com.example.cinema_project.dto.SeatCinemaRoom.SeatCinemaRoomDTO;
 import com.example.cinema_project.entity.CinemaRoom;
-import com.example.cinema_project.entity.MovieType;
 import com.example.cinema_project.entity.Seat;
 import com.example.cinema_project.entity.Seat_Cinema_Room;
 import com.example.cinema_project.repository.CinemaRoomRepository;
@@ -16,15 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class ISeat_Cinema_RoomService implements Seat_Cinema_RoomService {
@@ -81,6 +75,22 @@ public class ISeat_Cinema_RoomService implements Seat_Cinema_RoomService {
         return seatCinemaRoomRepository.saveAll(seatCinemaRooms);
     }
 
+    @Override
+    public Optional<GetByIdSeatCinemaRoomDTO> getSeatCinemaRoomById(Long id) {
+        Optional<Seat_Cinema_Room> seatCinemaRoomOptional = seatCinemaRoomRepository.findById(id);
+
+        return seatCinemaRoomOptional.map(seatCinemaRoom -> {
+            GetByIdSeatCinemaRoomDTO dto = new GetByIdSeatCinemaRoomDTO();
+            dto.setStatus(seatCinemaRoom.getStatus());
+            Long seatId = seatCinemaRoom.getSeat().getId();
+            dto.setSeats(Arrays.asList(seatId));
+            dto.setCinemaRoomId(seatCinemaRoom.getCinemaRoom().getId());
+            dto.setCinemaRoomName(seatCinemaRoom.getCinemaRoom().getCinemaRoomName());
+            dto.setSeatNumber(seatCinemaRoom.getSeat().getSeatNumber());
+            dto.setRowNumber(seatCinemaRoom.getSeat().getRowNumber());
+            return dto;
+        });
+    }
 
     @Override
     public void checkAndMakeSeatsAvailable() {

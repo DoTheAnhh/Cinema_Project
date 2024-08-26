@@ -1,6 +1,6 @@
 package com.example.cinema_project.controller;
 
-import com.example.cinema_project.dto.ShowTimeDTO;
+import com.example.cinema_project.dto.ShowTime.ShowTimeDTO;
 import com.example.cinema_project.entity.ShowTime;
 import com.example.cinema_project.serivce.SeatService;
 import com.example.cinema_project.serivce.ShowTimeService;

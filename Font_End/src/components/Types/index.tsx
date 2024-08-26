@@ -89,5 +89,7 @@ export interface seatCinemaRoomm {
     cinemaRoomName: string
     theaters: Theaterr
     status: string
+    seats: number[]
+    cinemaRoom: number
 }
 

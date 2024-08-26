@@ -1,8 +1,7 @@
 package com.example.cinema_project.controller;
 
-import com.example.cinema_project.dto.MovieDTO;
-import com.example.cinema_project.dto.SeatCinemaRoomDTO;
-import com.example.cinema_project.entity.Movie;
+import com.example.cinema_project.dto.SeatCinemaRoom.GetByIdSeatCinemaRoomDTO;
+import com.example.cinema_project.dto.SeatCinemaRoom.SeatCinemaRoomDTO;
 import com.example.cinema_project.entity.Seat_Cinema_Room;
 import com.example.cinema_project.serivce.Seat_Cinema_RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("*")
@@ -30,6 +28,11 @@ public class Seat_Cinema_RoomController {
         return seatCinemaRoomService.findAll(pageable);
     }
 
+    @GetMapping("/{id}")
+    public Optional<GetByIdSeatCinemaRoomDTO> findSeatCinemaRoomById(@PathVariable Long id) {
+        return seatCinemaRoomService.getSeatCinemaRoomById(id);
+    }
+
     @PostMapping("/insert-seat-cinema-room")
     public ResponseEntity<List<Seat_Cinema_Room>> addSeats(@RequestBody SeatCinemaRoomDTO seatCinemaRoomDTO) {
         try {
@@ -39,6 +42,5 @@ public class Seat_Cinema_RoomController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
-
 }
 

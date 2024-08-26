@@ -1,6 +1,5 @@
 package com.example.cinema_project.config.schedule;
 
-import com.example.cinema_project.dto.SeatCinemaRoomDTO;
 import com.example.cinema_project.entity.Seat_Cinema_Room;
 import com.example.cinema_project.entity.ShowTime;
 import com.example.cinema_project.repository.SeatRepository;
@@ -12,7 +11,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Component

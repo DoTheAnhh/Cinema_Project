@@ -1,14 +1,9 @@
 package com.example.cinema_project.serivce.impl;
 
-import com.example.cinema_project.dto.ShowTimeDTO;
-import com.example.cinema_project.entity.CinemaRoom;
-import com.example.cinema_project.entity.Seat_Cinema_Room;
+import com.example.cinema_project.dto.ShowTime.ShowTimeDTO;
 import com.example.cinema_project.entity.ShowTime;
-import com.example.cinema_project.entity.Theater;
 import com.example.cinema_project.repository.CinemaRoomRepository;
-import com.example.cinema_project.repository.Seat_CinemaRoomRepository;
 import com.example.cinema_project.repository.ShowTimeRepository;
-import com.example.cinema_project.serivce.CinemaRoomService;
 import com.example.cinema_project.serivce.ShowTimeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,11 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class IShowTimeService implements ShowTimeService {
