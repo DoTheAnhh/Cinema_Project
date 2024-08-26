@@ -7,6 +7,7 @@ import com.example.cinema_project.repository.Seat_CinemaRoomRepository;
 import com.example.cinema_project.serivce.Seat_Cinema_RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -25,23 +26,24 @@ public class ISeat_Cinema_RoomService implements Seat_Cinema_RoomService {
     Seat_CinemaRoomRepository seatCinemaRoomRepository;
 
     @Override
-    public List<SeatCinemaRoomDTO> findAll() {
-        List<Seat_Cinema_Room> seatCinemaRoomPage = seatCinemaRoomRepository.findAll();
+    public Page<SeatCinemaRoomDTO> findAll(Pageable pageable) {
+        Page<Seat_Cinema_Room> seatCinemaRoomPage = seatCinemaRoomRepository.findAll(pageable);
         List<SeatCinemaRoomDTO> dtos = new ArrayList<>();
 
         for (Seat_Cinema_Room seatCinemaRoom : seatCinemaRoomPage) {
             SeatCinemaRoomDTO dto = new SeatCinemaRoomDTO();
+            dto.setId(seatCinemaRoom.getId());
             dto.setRowNumber(seatCinemaRoom.getSeat().getRowNumber());
             dto.setSeatNumber(seatCinemaRoom.getSeat().getSeatNumber());
             dto.setSeatType(seatCinemaRoom.getSeat().getSeatType());
             dto.setCinemaRoomName(seatCinemaRoom.getCinemaRoom().getCinemaRoomName());
-            dto.setTheaters(seatCinemaRoom.getCinemaRoom().getTheaters());
+            dto.setTheaters(seatCinemaRoom.getCinemaRoom().getTheaters()); // Đảm bảo kiểu dữ liệu Theater hợp lệ
             dto.setStatus(seatCinemaRoom.getStatus());
 
             dtos.add(dto);
         }
 
-        return dtos;
+        return new PageImpl<>(dtos, pageable, seatCinemaRoomPage.getTotalElements());
     }
 
     @Override

@@ -3,24 +3,40 @@ import { seatCinemaRoomm } from '../Types';
 import { API, LOCALHOST, REQUEST_MAPPING } from '../APIs/typing';
 import axios from 'axios';
 import { EditFilled } from "@ant-design/icons"
-import { Button, Table, Tooltip } from 'antd';
+import { Button, Pagination, Table, Tooltip } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const ListSeatCinemaRoom: React.FC = () => {
 
     const [seatCinemaRooms, setSeatCinemaRooms] = useState<seatCinemaRoomm[]>([]);
+    const [total, setTotal] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
 
-    const fetchSeatCinemaRooms = async () => {
+    const navigator = useNavigate()
+
+    const fetchSeatCinemaRooms = async (page: number, size: number) => {
         try {
-            const res = await axios.get(LOCALHOST + REQUEST_MAPPING.SEAT_CINEMA_ROOM + API.SEAT_CINEMA_ROOM.GETALL_SEAT_CINEMA_ROOM)
-            setSeatCinemaRooms(res.data);
+            const res = await axios.get(`${LOCALHOST + REQUEST_MAPPING.SEAT_CINEMA_ROOM + API.SEAT_CINEMA_ROOM.GETALL_SEAT_CINEMA_ROOM}?page=${page}&size=${size}`);
+            setSeatCinemaRooms(res.data.content)
+            setTotal(res.data.totalElements);
         } catch (e) {
             console.error(e);
         }
     }
 
     useEffect(() => {
-        fetchSeatCinemaRooms()
-    })
+        fetchSeatCinemaRooms(currentPage - 1, pageSize);
+    }, [currentPage, pageSize]);
+
+    const handlePageChange = (page: number, pageSize: number) => {
+        setCurrentPage(page);
+        setPageSize(pageSize);
+    };
+
+    const editSeatCinemaRoom = (id: number) => {
+        navigator(`/dotheanh/seat-cinema-rooms/seat-cinema-room/${id}`);
+      };
 
     const columns = [
         {
@@ -81,7 +97,7 @@ const ListSeatCinemaRoom: React.FC = () => {
                         <Button
                             type="primary"
                             style={{ marginLeft: 10 }}
-                            //onClick={() => editCinemaRoom(record.id)}
+                            onClick={() => editSeatCinemaRoom(record.id)}
                             icon={<EditFilled />}
                         >
                         </Button>
@@ -100,6 +116,16 @@ const ListSeatCinemaRoom: React.FC = () => {
                 rowKey="id"
                 pagination={false}
                 bordered
+            />
+            <Pagination
+                style={{ marginTop: 20, float: 'right' }}
+                current={currentPage}
+                pageSize={pageSize}
+                total={total}
+                onChange={handlePageChange}
+                showSizeChanger
+                pageSizeOptions={[10, 20, 50, 75, 100, total]}
+                showTotal={(total) => `Total ${total} items`}
             />
         </>
     )

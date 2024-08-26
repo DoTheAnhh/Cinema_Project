@@ -18,6 +18,7 @@ import ListCustomer from "../Customer/ListCustomer";
 import Customer from "../Customer/Customer";
 import { useUserContext } from "../Context/UserContext";
 import ListSeatCinemaRoom from "../SeatCinemaRoom/ListSeatCinemaRoom";
+import SeatCinemaRoom from "../SeatCinemaRoom/SeatCinemaRoom";
 const Layouts: React.FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);
@@ -75,7 +76,7 @@ const Layouts: React.FC = () => {
             <Link to="/dotheanh/customers">Customer</Link>
           </Menu.Item>
           <Menu.Item key="7" icon={<ShopOutlined />}>
-            <Link to="/dotheanh/seat-cinema-rooms">Customer</Link>
+            <Link to="/dotheanh/seat-cinema-rooms">Seat cinema room</Link>
           </Menu.Item>
         </Menu>
       </Sider>
@@ -122,6 +123,7 @@ const Layouts: React.FC = () => {
             <Route path="/customers/customer/:id" element={<Customer />} />
 
             <Route path="/seat-cinema-rooms" element={<ListSeatCinemaRoom />} />
+            <Route path="/seat-cinema-rooms/:id" element={<SeatCinemaRoom />} />
           </Routes>
         </Content>
       </Layout>

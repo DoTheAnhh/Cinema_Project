@@ -10,6 +10,8 @@ import lombok.Setter;
 @Setter
 public class SeatCinemaRoomDTO {
 
+    private Long id;
+
     private String rowNumber;
 
     private int seatNumber;
