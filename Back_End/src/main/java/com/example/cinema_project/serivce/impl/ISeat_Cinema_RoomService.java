@@ -100,6 +100,7 @@ public class ISeat_Cinema_RoomService implements Seat_Cinema_RoomService {
         return seatCinemaRoomRepository.saveAll(updatedSeatCinemaRooms);
     }
 
+
     @Override
     public Optional<GetByIdSeatCinemaRoomDTO> getSeatCinemaRoomById(Long id) {
         Optional<Seat_Cinema_Room> seatCinemaRoomOptional = seatCinemaRoomRepository.findById(id);

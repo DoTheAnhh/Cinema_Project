@@ -71,13 +71,13 @@ const CinemaRoomBooking: React.FC = () => {
 
   const fetchSeats = async () => {
     try {
-      const response = await fetch(`${LOCALHOST}${REQUEST_MAPPING.SEAT}${API.SEAT.GET_ALL_SEAT}/cinema-room/${currentCinemaRoomId}/show-time/${currentSelectedTime}`);
-      const data = await response.json();
-
-      setSeats(data.map((item: any) => ({
+      const response = await axios.get(`${LOCALHOST}${REQUEST_MAPPING.SEAT}${API.SEAT.GET_ALL_SEAT}/cinema-room/${currentCinemaRoomId}/show-time/${currentSelectedTime}`);
+      const sortedSeats = response.data.map((item: any) => ({
         ...item,
         status: item.status ? item.status : 'available',
-      })));
+      })).sort((a: Seatt, b: Seatt) => a.seatNumber - b.seatNumber); // Sắp xếp theo seatNumber
+      
+      setSeats(sortedSeats);
     } catch (error) {
       console.error('Failed to fetch seats:', error);
     }
