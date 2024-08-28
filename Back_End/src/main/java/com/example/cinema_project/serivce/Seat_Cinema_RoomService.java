@@ -17,5 +17,7 @@ public interface Seat_Cinema_RoomService {
 
     List<Seat_Cinema_Room> insertSeatCinemaRoom(SeatCinemaRoomDTO seatCinemaRoomDTO);
 
+    List<Seat_Cinema_Room> editSeatCinemaRoom(SeatCinemaRoomDTO seatCinemaRoomDTO, Long id);
+
     Optional<GetByIdSeatCinemaRoomDTO> getSeatCinemaRoomById(Long id);
 }

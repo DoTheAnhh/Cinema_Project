@@ -112,6 +112,7 @@ public class SecurityConfig {
                                 .requestMatchers("/foods/edit-food/*").hasAnyAuthority( "ADMIN")
 
                                 .requestMatchers("/seat-cinema-rooms/insert-seat-cinema-room").hasAnyAuthority( "ADMIN")
+                                .requestMatchers("/seat-cinema-rooms/edit-seat-cinema-room/*").hasAnyAuthority( "ADMIN")
 
                                 .anyRequest().authenticated())
                 .sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

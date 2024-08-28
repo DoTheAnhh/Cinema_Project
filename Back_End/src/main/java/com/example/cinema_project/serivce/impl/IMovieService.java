@@ -77,6 +77,7 @@ public class IMovieService implements MovieService {
         return movieRepo.save(movie);
     }
 
+    @Override
     public Movie edit(MovieDTO movieDTO, Long id) {
         Optional<Movie> movieOptional = movieRepo.findById(id);
         if (movieOptional.isPresent()) {

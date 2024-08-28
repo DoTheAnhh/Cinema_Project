@@ -3,6 +3,7 @@ package com.example.cinema_project.serivce.impl;
 import com.example.cinema_project.dto.SeatCinemaRoom.GetByIdSeatCinemaRoomDTO;
 import com.example.cinema_project.dto.SeatCinemaRoom.SeatCinemaRoomDTO;
 import com.example.cinema_project.entity.CinemaRoom;
+import com.example.cinema_project.entity.MovieType;
 import com.example.cinema_project.entity.Seat;
 import com.example.cinema_project.entity.Seat_Cinema_Room;
 import com.example.cinema_project.repository.CinemaRoomRepository;
@@ -73,6 +74,30 @@ public class ISeat_Cinema_RoomService implements Seat_Cinema_RoomService {
         }
 
         return seatCinemaRoomRepository.saveAll(seatCinemaRooms);
+    }
+
+    @Override
+    public List<Seat_Cinema_Room> editSeatCinemaRoom(SeatCinemaRoomDTO seatCinemaRoomDTO, Long id) {
+        CinemaRoom cinemaRoom = cinemaRoomRepository.findById(seatCinemaRoomDTO.getCinemaRoom())
+                .orElseThrow(() -> new RuntimeException("Cinema room not found: " + seatCinemaRoomDTO.getCinemaRoom()));
+
+        List<Seat_Cinema_Room> updatedSeatCinemaRooms = new ArrayList<>();
+
+        for (Long seatId : seatCinemaRoomDTO.getSeats()) {
+            Seat seat = seatRepository.findById(seatId)
+                    .orElseThrow(() -> new RuntimeException("Seat not found: " + seatId));
+
+            Seat_Cinema_Room seatCinemaRoom = seatCinemaRoomRepository.findBySeatAndCinemaRoom(seat, cinemaRoom)
+                    .orElse(new Seat_Cinema_Room());
+
+            seatCinemaRoom.setCinemaRoom(cinemaRoom);
+            seatCinemaRoom.setSeat(seat);
+            seatCinemaRoom.setStatus(seatCinemaRoomDTO.getStatus());
+
+            updatedSeatCinemaRooms.add(seatCinemaRoom);
+        }
+
+        return seatCinemaRoomRepository.saveAll(updatedSeatCinemaRooms);
     }
 
     @Override

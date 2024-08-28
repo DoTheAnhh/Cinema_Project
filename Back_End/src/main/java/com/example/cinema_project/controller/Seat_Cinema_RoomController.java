@@ -42,5 +42,17 @@ public class Seat_Cinema_RoomController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @PutMapping("/edit-seat-cinema-room/{id}")
+    public ResponseEntity<List<Seat_Cinema_Room>> editSeatCinemaRoom(@RequestBody SeatCinemaRoomDTO seatCinemaRoomDTO, @PathVariable Long id) {
+        try {
+            List<Seat_Cinema_Room> updatedSeatCinemaRooms = seatCinemaRoomService.editSeatCinemaRoom(seatCinemaRoomDTO, id);
+            return ResponseEntity.ok(updatedSeatCinemaRooms);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(404).body(null);
+        } catch (Exception ex) {
+            return ResponseEntity.status(500).body(null);
+        }
+    }
 }
 

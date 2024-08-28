@@ -12,7 +12,6 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import UserHeader from '../Header/UserHeader';
 import UserFooter from '../Footer/UserFooter';
-import moment from 'moment';
 
 interface DateObject {
     day: string;
@@ -21,8 +20,6 @@ interface DateObject {
 
 const MVDetailForUser: React.FC = () => {
     const { id } = useParams<string>();
-
-    const now = moment();
 
     const [movies, setMovies] = useState<Moviee>();
     const [showTimes, setShowTimes] = useState<ShowTimee[]>([]);
@@ -189,7 +186,6 @@ const MVDetailForUser: React.FC = () => {
         return roundUpToNearestHalfHour(end).format('HH:mm');
     };
 
-    // Ví dụ sắp xếp trước khi hiển thị
     const sortedShowTimes = showTimes.sort((a, b) => {
         if (a.cinemaRoom.id === b.cinemaRoom.id) {
             return a.showTime.localeCompare(b.showTime);
