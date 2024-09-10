@@ -19,6 +19,7 @@ import Customer from "../Customer/Customer";
 import { useUserContext } from "../Context/UserContext";
 import ListSeatCinemaRoom from "../SeatCinemaRoom/ListSeatCinemaRoom";
 import SeatCinemaRoom from "../SeatCinemaRoom/SeatCinemaRoom";
+
 const Layouts: React.FC = () => {
 
   const [collapsed, setCollapsed] = useState(false);
